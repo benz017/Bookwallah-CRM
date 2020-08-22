@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Bookwallah | MailChimp</title>
+  {%load static %}
+    {% load customfilters %}
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!--external css-->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+     <link href="{% static 'lib/bootstrap-wysihtml5/bootstrap-wysihtml5.css' %}" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/gritter/css/jquery.gritter.css' %}" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+    Template Name: Dashio
+    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+  <section id="container">
+    <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      <!--logo start-->
+      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <!--  notification start -->
+        <ul class="nav top-menu">
+          <!-- settings start -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-tasks"></i>
+              <span class="badge bg-theme">4</span>
+              </a>
+            <ul class="dropdown-menu extended tasks-bar">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 4 pending tasks</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Dashio Admin Panel</div>
+                    <div class="percent">40%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                      <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Database Update</div>
+                    <div class="percent">60%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                      <span class="sr-only">60% Complete (warning)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Product Development</div>
+                    <div class="percent">80%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                      <span class="sr-only">80% Complete</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Payments Sent</div>
+                    <div class="percent">70%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                      <span class="sr-only">70% Complete (Important)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="external">
+                <a href="#">See All Tasks</a>
+              </li>
+            </ul>
+          </li>
+          <!-- settings end -->
+          <!-- inbox dropdown start-->
+          <li id="header_inbox_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-envelope-o"></i>
+              <span class="badge bg-theme">5</span>
+              </a>
+            <ul class="dropdown-menu extended inbox">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 5 new messages</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-zac.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Zac Snider</span>
+                  <span class="time">Just now</span>
+                  </span>
+                  <span class="message">
+                  Hi mate, how is everything?
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-divya.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Divya Manian</span>
+                  <span class="time">40 mins.</span>
+                  </span>
+                  <span class="message">
+                  Hi, I need your help with this.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Dan Rogers</span>
+                  <span class="time">2 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Love your new Dashboard.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-sherman.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Dj Sherman</span>
+                  <span class="time">4 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Please, answer asap.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all messages</a>
+              </li>
+            </ul>
+          </li>
+          <!-- inbox dropdown end -->
+          <!-- notification dropdown start-->
+          <li id="header_notification_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-bell-o"></i>
+              <span class="badge bg-warning">7</span>
+              </a>
+            <ul class="dropdown-menu extended notification">
+              <div class="notify-arrow notify-arrow-yellow"></div>
+              <li>
+                <p class="yellow">You have 7 new notifications</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Server Overloaded.
+                  <span class="small italic">4 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-warning"><i class="fa fa-bell"></i></span>
+                  Memory #2 Not Responding.
+                  <span class="small italic">30 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Disk Space Reached 85%.
+                  <span class="small italic">2 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-success"><i class="fa fa-plus"></i></span>
+                  New User Registered.
+                  <span class="small italic">3 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all notifications</a>
+              </li>
+            </ul>
+          </li>
+          <!-- notification dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          <li><a class="logout" href="login.html">Logout</a></li>
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+          <li class="sub-menu">
+            <a  href="javascript:;">
+              <i class="fa fa-dashboard"></i>
+              <span>Dashboard</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
+                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+                <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
+                <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
+              <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
+            </ul>
+          </li>
+            {% if user.is_authenticated %}
+          <li class="sub-menu">
+            <a  href="javascript:;">
+              <i class="fa fa-book"></i>
+              <span>My Account</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'calender' %}">Calender</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-comments-o"></i>
+              <span>Chat Room</span>
+              </a>
+            <ul class="sub">
+              <li><a href="{% url 'lobby' %}">Lobby</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a  href="javascript:;">
+              <i class="fa fa-picture-o"></i>
+              <span>Gallery</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'session_gallery' %}">Session</a></li>
+              <li><a href="{% url 'project_gallery' %}">Project</a></li>
+              <li><a href="{% url 'donor_gallery' %}">Donor</a></li>
+              <li><a href="{% url 'kid_gallery' %}">Kid</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a class="active" href="{% url 'mailchimp' %}">
+              <i class="fa fa-envelope"></i>
+              <span>MailChimp</span>
+              </a>
+          </li>
+            {% else %}
+            <li class="mt">
+            <a href="{% url 'signin' %}">
+              <i class="fa fa-book"></i>
+              <span>Sign In</span>
+              </a>
+            </ul>
+          </li>
+            {% endif %}
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <!-- page start-->
+        <div class="row mt">
+          <div class="col-sm-3" style="height:920px;">
+            <section class="panel" style="background: #e9f0f4; height:100%;">
+              <div class="panel-body">
+
+<div class="container-fluid mb">
+  <div class="btn-group pull-right" >
+    <a class="btn mini btn-default" href="javascript:;">
+      <i class="fa fa-plus"></i>
+    </a>
+  </div>
+  <h4><u>Contact Lists</u></h4>
+
+    <div class="row">
+        <div class="col-2 collapse show d-md-flex bg-light pt-2 pl-0 min-vh-100" id="contact-sidebar">
+            <ul class="nav flex-column flex-nowrap overflow-hidden">
+              {% for k,v in members.items %}
+                <li class="nav-item">
+                    <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><i class="fa fa-users"></i> <span class="d-none d-sm-inline">{{k}}</span></a>
+                    <div class="collapse show" id="submenu1" aria-expanded="false">
+                        <ul class="flex-column pl-2 nav">
+                          {% for i in v %}
+                            <li class="nav-item " ><a class="nav-link collapsed text-truncate" href="#{{i.id}}"  style="margin-left:30px;" data-toggle="collapse" data-target="#{{i.id}}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">{{i.merge_fields.FNAME}} {{i.merge_fields.LNAME}}</span></a>
+                            <div class="collapse" id="{{i.id}}" aria-expanded="false">
+                            <div class="flex-column pl-2 nav" style="margin-left:70px;">
+                            <h5>Email ID: {{i.email_address}}</h5>
+                              <h5 class="ws">Ph No.: {{i.merge_fields.PHONE}}</h5>
+                            <h5 class="ws">Address: {{i.merge_fields.addr1}} {{i.merge_fields.addr2}}</h5>
+                              <h5 class="ws">Address: {{i.merge_fields.ADDRESS.city}}, {{i.merge_fields.ADDRESS.state}}, {{i.merge_fields.ADDRESS.country}}</h5>
+                            </div>
+                            </div>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+              </div>
+            </section>
+          </div>
+          <div class="col-sm-9" >
+            <section class="panel" id="all" style="background: #e9f0f4;height:800px;">
+              <header class="panel-heading wht-bg">
+                <h4 class="gen-case">
+                    Campaigns
+                  </h4>
+              </header>
+              <div class="panel-body minimal">
+                <div class="mail-option">
+                  <div class="chk-all">
+                    <div class="pull-left mail-checkbox">
+                      <input type="checkbox" class="">
+                    </div>
+                    <div class="btn-group">
+                      <a data-toggle="dropdown" href="#" class="btn mini all">
+                        All
+                        <i class="fa fa-angle-down "></i>
+                        </a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#"> None</a></li>
+                        <li><a href="#"> Read</a></li>
+                        <li><a href="#"> Unread</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="btn-group">
+                    <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
+                      <i class=" fa fa-refresh"></i>
+                      </a>
+                  </div>
+                  <div class="btn-group hidden-phone">
+                    <a data-toggle="dropdown" href="#" class="btn mini blue">
+                      More
+                      <i class="fa fa-angle-down "></i>
+                      </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
+                      <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
+                    </ul>
+                  </div>
+                  <div class="btn-group">
+                    <a data-toggle="dropdown" href="#" class="btn mini blue">
+                      Move to
+                      <i class="fa fa-angle-down "></i>
+                      </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
+                      <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
+                    </ul>
+                  </div>
+                  <ul class="unstyled inbox-pagination">
+                    <li><span>1-50 of 99</span></li>
+                    <li>
+                      <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                    </li>
+                    <li>
+                      <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                    </li>
+                  </ul>
+                </div>
+                  <table class="table table-inbox table-hover" >
+                    <tbody>
+                    {% for c in campaigns %}
+                      <tr class="unread campaign" id="{{c.id}}">
+                        <td class="inbox-small-cells">
+                          <input type="checkbox" class="mail-checkbox">
+                        </td>
+                        <td class="view-message  dont-show"><a href="mail_view.html">{{c.settings.title}}<span class="label label-success pull-right">{{c.status}}</span></a></td>
+                          <td class="view-message "><a href="mail_view.html">{{c.settings.subject_line}}</a></td>
+                          {% if c.settings.preview_text %}
+                          <td class="view-message "><a href="mail_view.html">{{c.settings.preview_text}}</a></td>
+                          {% else %}
+                          <td class="view-message "><a href="mail_view.html"></a></td>
+                          {% endif %}
+                          <td class="view-message "><a href="mail_view.html"><span class="label label-theme pull-right inbox-notification">{{c.emails_sent}}</span></a></td>
+                          <td class="view-message  inbox-small-cells"><i class="fa fa-facebook" style="margin-right:10px;"></i><i class="fa fa-twitter"></i></i></td>
+                        <td class="view-message  text-right">{{c.create_time|convert_iso}}</td>
+                          <td class="view-message  inbox-small-cells"><span class="label label-theme pull-right" style="font-size:100%;"><i class="fa fa-eye read" style="margin-right:10px;"></i><i class="fa fa-edit edit" style="margin-right:10px;"></i><i class="fa fa-trash delete"></i></i></span></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+
+              </div>
+            </section>
+              <section class="panel" id="view"  style="background: #e9f0f4;" hidden>
+              <header class="panel-heading wht-bg">
+                <h4 class="gen-case">
+                    Compose Mail
+                    <form action="#" class="pull-right mail-src-position">
+                      <div class="input-append">
+                        <input type="text" class="form-control fc1 " placeholder="Search Mail" style="margin-left:0px;">
+                      </div>
+                    </form>
+                  </h4>
+              </header>
+              <div class="panel-body">
+
+                <div class="compose-mail">
+                  <form  role="form" class="form-horizontal form1" method="POST" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
+                      <div class="row mb" style="border:1px solid black;margin-right:0px;margin-left:0px;">
+                      <div class="col-md-6 col-sm-6 mb">
+                          <h4 class="centered" style="font-size:20px;"><u>Settings</u></h4>
+                        <input id="id" name="id" value="" hidden>
+                        <input id="tempid" name="tempid" value="" hidden>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                            <label class="control-label cl">Type: </label>
+                            </div>
+                            <div class="col-md-6 pull-right">
+                              <select id="type" name="type"  class="form-control fc1" style="text-align:center; padding: .375rem .75rem;">
+                              <option value="Regular">Regular</option>
+                                <option value="Plain Text">Plain Text</option>
+                              </select>
+                            </div>
+                        </div>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class="control-label">Audience: </label>
+                              </div>
+                            <div class="col-md-6 pull-right">
+                              <select id="recipients" name="recipients"  class="form-control fc1" style="text-align:center; padding: .375rem .75rem;">
+                              </select>
+                            </div>
+                        </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                            <label class="control-label" >Title: </label>
+                                </div>
+                            <div class="col-md-6 pull-right" >
+                              <input id="title" type="text" placeholder=""  name="title" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class=" control-label" >From Name: </label>
+                              </div>
+                            <div class="col-md-6 pull-right" >
+                              <input id="from" type="text" placeholder=""  name="from" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class="control-label" >Reply To: </label>
+                              </div>
+                            <div class="col-md-6 pull-right" >
+                              <input id="to" type="text" placeholder=""  name="to" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 mb" >
+                          <h4 class="centered" style="font-size:20px;"><u>Social Card</u></h4>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class="control-label" >Image URL: <a id="imgurl" href="#" class="pull-right"><i class="fa fa-eye"></i></a></label>
+                            </div>
+                                  <div class="col-md-6 pull-right" >
+                              <input id="url" type="text" placeholder=""  name="url" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class="col-md-6  control-label" >Title: </label>
+                              </div>
+                                  <div class="col-md-6 pull-right" >
+                              <input id="s_title" type="text" placeholder=""  name="s_title" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                              <div class="col-md-6">
+                            <label class="col-md-6  control-label" >Description: </label>
+                              </div>
+                                  <div class="col-md-6 pull-right" >
+                              <textarea rows="4" cols="30" class="form-control fc1" id="desc" name="desc" ></textarea>
+                            </div>
+                          </div>
+                      </div>
+                          </div>
+                      <div class="form-group row" style="margin-right:0px;margin-left:0px;">
+                          <div class="col-md-4">
+                          <label class="control-label" >Subject: </label>
+                          </div>
+                              <div class="col-md-8 pull-right" >
+                              <input id="subject" type="text" placeholder=""  name="subject" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                      <div class="form-group row" style="margin-right:0px;margin-left:0px;">
+
+                          <div class="col-md-4">
+                          <label class="control-label" >Preview Text: </label>
+                          </div>
+                              <div class="col-md-8 pull-right" >
+                              <input id="preview" type="text" placeholder=""  name="preview" class="form-control fc1" value="" >
+                            </div>
+                          </div>
+                      <div class="form-group row" style="margin-right:0px;margin-left:0px;">
+                          <div class="col-md-6">
+                          <label class="control-label" >Content: </label>
+                              </div>
+                          <div class="col-md-6" >
+                              <span class="pull-right"><a href="#"><i class="fa fa-th-list"> </i></a>  Merge tag cheat-sheet</span>
+                          </div>
+                            <div class="col-md-12 pull-right" >
+                              <textarea id="content" rows="12" cols="30" class="form-control fc1" name="content" style="font-size:18px;" ></textarea>
+                            </div>
+                          </div>
+                          <div id="template" class="mt">
+
+                          </div>
+                      <div class="compose-btn pull-right">
+                  <button class="btn btn-theme btn-sm fbtn" type="submit"><i class="fa fa-check"></i> Save</button>
+                  <button class="btn btn-sm fbtn"><i class="fa fa-times"></i> Discard</button>
+                  <button class="btn btn-sm fbtn">Draft</button>
+                </div>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <!-- /wrapper -->
+    </section>
+    <!-- /MAIN CONTENT -->
+    <!--main content end-->
+    <!--footer start-->
+    <!--footer end-->
+  </section>
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+  <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+  <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+  <!--common script for all pages-->
+  <script src="{% static 'lib/common-scripts.js' %}"></script>
+   <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
+  <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
+  <script type="text/javascript" src="{% static 'lib/bootstrap-wysihtml5/wysihtml5-0.3.0.js' %}"></script>
+  <script type="text/javascript" src="{% static 'lib/bootstrap-wysihtml5/bootstrap-wysihtml5.js' %}"></script>
+
+  <script type="text/javascript">
+    //wysihtml5 start
+
+    $('.wysihtml5').wysihtml5();
+
+    //wysihtml5 end
+  </script>
+  <!--script for this page-->
+<script>
+    $(document).on('click','.read',function(e){
+    $id = $(this).closest('.campaign').attr("id");
+
+    $.ajax({
+        type:'POST',
+        url: "{% url 'mailchimp' %}",
+        data: { id: $id, action: 'read' },
+        success: function(resp){
+            $('#all').hide();
+            $('#view').fadeIn();
+            $('#type').val(resp.type);
+            $.each(resp.lists,function(index, value)
+        {
+            $("#recipients").append('<option class="filter_value" value=' + value.id + '>' + value.name + '</option>');
+        });
+            $(".form1 :input").attr("disabled", true);
+            $('#title').val(resp.settings.title);
+            $('#from').val(resp.settings.from_name);
+            $('#to').val(resp.settings.reply_to);
+            //$('#desc').val(JSON.parse(resp.content));
+            $('#url').val(resp.social_card.image_url);
+            $('#imgurl').attr('href', resp.social_card.image_url);
+            $('#s_title').val(resp.social_card.title);
+            $('#desc').val(resp.social_card.description);
+            $('#subject').val(resp.settings.subject_line);
+            $('#preview').val(resp.settings.preview_text);
+            $('#content').val(resp.content);
+            $('.fbtn').hide();
+            $('.compose-btn').append('<button class="btn btn-theme btn-sm"><i class="fa fa-plus"></i> Edit</button>');
+        },
+        });
+    });
+</script>
+  <script>
+    $(document).on('click','.edit',function(e){
+    $id = $(this).closest('.campaign').attr("id");
+
+    $.ajax({
+        type:'POST',
+        url: "{% url 'mailchimp' %}",
+        data: { id: $id,action: 'edit' },
+        success: function(resp){
+            $('#all').hide();
+            $('#view').fadeIn();
+            $('#type').val(resp.type);
+            $('#id').attr('value',$id);
+            $.each(resp.lists,function(index, value)
+        {
+            $("#recipients").append('<option class="filter_value" value=' + value.id + '>' + value.name + '</option>');
+        });
+            $('#title').val(resp.settings.title);
+            $('#from').val(resp.settings.from_name);
+            $('#to').val(resp.settings.reply_to);
+            //$('#url').val(resp.social_card.image_url);
+            //$('#imgurl').attr('href', resp.social_card.image_url);
+            //$('#s_title').val(resp.social_card.title);
+            //$('#desc').val(resp.social_card.description);
+            $('#subject').val(resp.settings.subject_line);
+            $('#preview').val(resp.settings.preview_text);
+            $('#content').val(resp.content);
+            alert(resp.type);
+            if (resp.type === "Regular"){
+            for (i=1;i<(resp.templates.length/4)+1;i++){
+              $('#template').append('<div class="row mt r'+i+'"></div>');
+            }
+            for (j=0;j<resp.templates.length;j++){
+               //alert(resp.templates[j].thumbnail);
+               if (j===0){i=1;}
+               else {i= parseInt(j/4)+1;}
+               $('.r'+i).append('<div class="col-sm-3" style="padding-top: 15px;"><a href="#" class="template" id="'+resp.templates[j].id+'"><img class="thumbnail" src="'+resp.templates[j].thumbnail+'" width="280px" height="300px"></a></div>');
+            }
+            }
+             if (resp.type === "Regular"){
+              $('#'+resp.settings.template_id).closest('.col-sm-3').addClass("a-selected");
+              $('#tempid').attr('value',resp.settings.template_id);
+             }
+            },
+
+        });
+    });
+</script>
+   <script>
+    $(document).on('click','.delete',function(e){
+    $id = $(this).closest('.campaign').attr("id");
+
+    $.ajax({
+        type:'POST',
+        url: "{% url 'mailchimp' %}",
+        data: { id: $id, action: 'delete' },
+        success: function(resp){
+        $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title: 'Notification!',
+        // (string | mandatory) the text inside the notification
+        text: resp.notify,
+        // (string | optional) the image to display on the left
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky: false,
+        // (int | optional) the time you want it to be alive for before fading out
+        time: 8000,
+        // (string | optional) the class name you want to apply to that specific message
+      });
+      }
+        });
+    });
+</script>
+  <script>
+    $(document).on('click','.thumbnail',function(e){
+      e.preventDefault();
+      $('.col-sm-3').removeClass("a-selected");
+      $(this).closest('.col-sm-3').addClass("a-selected");
+      $id =  $(this).closest('.template').attr('id');
+      $('#tempid').attr('value',$id);
+    });
+  </script>
+<script>
+$(document).ready(function() {
+  $("#url").on('change', function(){
+     $('#imgurl').attr('href', $(this).val());
+  });
+  });
+</script>
+<script>
+var toggler = document.getElementsByClassName("caret");
+var i;
+
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    this.parentElement.querySelector(".nested").classList.toggle("active");
+    this.classList.toggle("caret-down");
+  });
+}
+</script>
+<script>
+  $('.form1').submit(function(e) {
+    e.preventDefault();
+    msg = '';
+    $body = $("body");
+    var $myForm = $('.form1');
+    var $formData = $(this).serialize();
+    var $thisURL = $myForm.attr('data-url') || window.location.href;
+    $.ajax({
+        type:'POST',
+        url:$thisURL,
+        data: $formData,
+        success:formSuccess1,
+    });
+    });
+    function formSuccess1(data){
+    $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title: 'Notification!',
+        // (string | mandatory) the text inside the notification
+        text: 'Personal Information saved successfully.',
+        // (string | optional) the image to display on the left
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky: false,
+        // (int | optional) the time you want it to be alive for before fading out
+        time: 8000,
+        // (string | optional) the class name you want to apply to that specific message
+      });
+      }
+</script>
+
+</body>
+
+</html>

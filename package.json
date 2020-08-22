@@ -1,0 +1,17 @@
+{
+  "name": "bookwallah",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "chartjs-plugin-datalabels": "file:chartjs-plugin-datalabels",
+    "croppie": "^2.6.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ayan",
+  "license": "ISC"
+}

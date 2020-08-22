@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Bookwallah | Dashboard</title>
+    {% load static %}
+  {% load customfilters %}
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!--external css-->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+    <link href="{% static 'lib/fancybox/jquery.fancybox.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/to-do.css' %}">
+
+    <script src="{% static 'lib/chart-master/Chart.js' %}"></script>
+  <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'lib/gritter/css/jquery.gritter.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-timepicker/css/timepicker.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/zabuto_calendar.css' %}">
+
+  <!-- =======================================================
+    Template Name: Dashio
+    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+{% block body %}
+  <section id="container">
+    <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      <!--logo start-->
+      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <!--  notification start -->
+        <ul class="nav top-menu">
+          <!-- settings start -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-tasks"></i>
+              <span class="badge bg-theme">4</span>
+              </a>
+            <ul class="dropdown-menu extended tasks-bar">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 4 pending tasks</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Dashio Admin Panel</div>
+                    <div class="percent">40%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                      <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Database Update</div>
+                    <div class="percent">60%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                      <span class="sr-only">60% Complete (warning)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Product Development</div>
+                    <div class="percent">80%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                      <span class="sr-only">80% Complete</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Payments Sent</div>
+                    <div class="percent">70%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                      <span class="sr-only">70% Complete (Important)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="external">
+                <a href="#">See All Tasks</a>
+              </li>
+            </ul>
+          </li>
+          <!-- settings end -->
+          <!-- inbox dropdown start-->
+          <li id="header_inbox_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-envelope-o"></i>
+              <span class="badge bg-theme">5</span>
+              </a>
+            <ul class="dropdown-menu extended inbox">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 5 new messages</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="image" src="{% static 'img/ui-zac.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Zac Snider</span>
+                  <span class="time">Just now</span>
+                  </span>
+                  <span class="message">
+                  Hi mate, how is everything?
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="image" src="{% static 'img/ui-divya.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Divya Manian</span>
+                  <span class="time">40 mins.</span>
+                  </span>
+                  <span class="message">
+                  Hi, I need your help with this.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="image" src="{% static 'img/ui-danro.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Dan Rogers</span>
+                  <span class="time">2 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Love your new Dashboard.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="image" src="{% static 'img/ui-sherman.jpg' %}"></span>
+                  <span class="subject">
+                  <span class="from">Dj Sherman</span>
+                  <span class="time">4 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Please, answer asap.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all messages</a>
+              </li>
+            </ul>
+          </li>
+          <!-- inbox dropdown end -->
+          <!-- notification dropdown start-->
+          <li id="header_notification_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-bell-o"></i>
+              <span class="badge bg-warning">7</span>
+              </a>
+            <ul class="dropdown-menu extended notification">
+              <div class="notify-arrow notify-arrow-yellow"></div>
+              <li>
+                <p class="yellow">You have 7 new notifications</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Server Overloaded.
+                  <span class="small italic">4 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-warning"><i class="fa fa-bell"></i></span>
+                  Memory #2 Not Responding.
+                  <span class="small italic">30 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Disk Space Reached 85%.
+                  <span class="small italic">2 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-success"><i class="fa fa-plus"></i></span>
+                  New User Registered.
+                  <span class="small italic">3 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all notifications</a>
+              </li>
+            </ul>
+          </li>
+          <!-- notification dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          <li><a class="logout" href="{% url 'signout' %}">Sign Out</a></li>
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+         <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+          <li class="sub-menu">
+            <a class="active" href="javascript:;">
+              <i class="fa fa-dashboard"></i>
+              <span>Dashboard</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
+                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+                <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
+                <li class="active"><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
+              <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
+            </ul>
+          </li>
+            {% if user.is_authenticated %}
+          <li class="sub-menu">
+            <a  href="javascript:;">
+              <i class="fa fa-book"></i>
+              <span>My Account</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'calender' %}">Calender</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-comments-o"></i>
+              <span>Chat Room</span>
+              </a>
+            <ul class="sub">
+              <li><a href="{% url 'lobby' %}">Lobby</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a  href="javascript:;">
+              <i class="fa fa-picture-o"></i>
+              <span>Gallery</span>
+              </a>
+            <ul class="sub">
+              <li ><a href="{% url 'session_gallery' %}">Session</a></li>
+              <li><a href="{% url 'project_gallery' %}">Project</a></li>
+              <li><a href="{% url 'donor_gallery' %}">Donor</a></li>
+              <li><a href="{% url 'kid_gallery' %}">Kid</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="{% url 'mailchimp' %}">
+              <i class="fa fa-envelope"></i>
+              <span>MailChimp</span>
+              </a>
+          </li>
+            {% else %}
+            <li class="mt">
+            <a href="{% url 'signin' %}">
+              <i class="fa fa-book"></i>
+              <span>Sign In</span>
+              </a>
+            </ul>
+          </li>
+            {% endif %}
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-9 main-chart">
+            <!--CUSTOM CHART START -->
+              <div class="row">
+                  <div class="col-md-5 col-sm-5" >
+            <div class="border-head">
+              <h3>CHILD DETAILS</h3>
+            </div>
+                  </div>
+                      <div class="col-md-6 col-sm-6 goright" >
+            <form role="form" class="form-horizontal" method="POST" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 " >
+                        <select id="field" name="field"  class="form-control" style="text-align:center; padding: .375rem .75rem;">
+                            <option value="0">Filter with...</option>
+                            <option value="1">All</option>
+                            <option value="2">Project</option>
+                            <option value="3">Chapter</option>
+                            <option value="4">Country</option>
+                        </select>
+                    </div>
+                        <div class="col-md-6 col-sm-6 " >
+                        <select id="value" name="value"  class="form-control" style="text-align:center; padding: .375rem .75rem;">
+                        </select>
+                        </div>
+                </div>
+              </form>
+                  </div>
+                  </div>
+             <div class="row">
+
+              <div class="col-md-6 col-sm-6 mb" >
+                <div class="blue-panel pn" style="height:350px;">
+                  <div class="blue-header">
+                    <h5>TOTAL NO. OF KIDS ATTENDING</h5>
+                  </div>
+                  <h1 style="font-size:60px;"><i class="fa fa-user fa-3x" style="color:#2980b9;"></i></h1>
+                    <p>+ <span id="no_nk">{{no_nk}}</span> NEW KIDS (since last month)</p>
+                  <footer>
+                    <div class="centered">
+                        <h3><i class="fa fa-trophy"></i> <span id="no_k">{{no_k}}</span></h3>
+                    </div>
+                  </footer>
+                </div>
+                <!--  /darkblue panel -->
+              </div>
+              <div class="col-md-6 mb">
+                <!-- WHITE PANEL - TOP USER -->
+                 <div class="blue-panel pn donut-chart" style="height:350px;">
+                  <div class="blue-header">
+                    <h5>CHILD ATTENDANCE</h5>
+                  </div>
+                   <div id="graph" style="margin-top:30px;">
+                  <canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-5 col-xs-6">
+                      <p>Total<br/>Attendance:</p>
+                    </div>
+                    <div class="col-sm-6 col-xs-6 goright">
+                      <h2>21%</h2>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+            </div>
+            <!--custom chart end-->
+            <div class="row mt">
+              <!-- SERVER STATUS PANELS -->
+              <div class="col-md-6 col-sm-6 mb">
+                <div class="blue-panel pn" style="height:350px;">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>NO. OF YEARS KIDS ATTENDING</h5>
+                  </div>
+                    <div id="graph1">
+                  <canvas id="barchart2" height="300" width="550" style="margin:0 auto;"></canvas>
+                  </div>
+                </div>
+                <!-- /blue-panel -->
+              </div>
+                <div class="col-md-6 col-sm-6 mb">
+                    <div class="blue-panel pn" style="height:350px;">
+                  <div class="blue-header ">
+                      <h5>KID STATISTICS (<small><span>by Age group/Gender</span></small>)</h5>
+                  </div>
+                  <div id="graph2" >
+                  <canvas id="serverstatus03" height="220" width="600" style="margin:0 auto;"></canvas>
+                  </div>
+                  <footer class="mt">
+                    <div class="pull-left" style="margin-left:20px;">
+                      <h4>Male: <span id="male">{{k_m}}</span></h4>
+                    </div>
+                    <div class="pull-right" style="margin-right:20px;">
+                      <h4>Female: <span id="female">{{k_f }}</span></h4>
+                    </div>
+                  </footer>
+                </div>
+
+                <!-- /blue-panel -->
+              </div>
+              <!-- /col-md-4-->
+              <!-- /col-md-4 -->
+              <!-- /col-md-4 -->
+            </div>
+
+            <!-- /row -->
+            <!-- /row -->
+          </div>
+          <!-- /col-lg-9 END SECTION MIDDLE -->
+          <!-- **********************************************************************************************************************************************************
+              RIGHT SIDEBAR CONTENT
+              *********************************************************************************************************************************************************** -->
+          <div class="col-lg-3 ds">
+            <!--COMPLETED ACTIONS DONUTS CHART-->
+                <!-- WHITE PANEL - TOP USER -->
+              <form role="form" id="filter" class="form-horizontal" method="POST" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
+                <div class="form-group">
+                            <label class="col-lg-2 control-label">Child:</label>
+                            <div class="col-lg-7" >
+                               <input id="search" type="text" placeholder="Filter using name.." name="volunteer" class="form-control" value="" style="background-color:#ffffff;" autocomplete="off">
+                                <ul id="toggle-menu" class="dropdown-menu search-menu" role="menu" style="margin-left:85px;width: 90%;" >
+                              </ul>
+
+                            </div>
+                          </div>
+              </form>
+
+                <div class="blue-panel pn mb">
+                  <div class="blue-header">
+                    <h5>TOP CHILD</h5>
+                  </div>
+                  <p><img src="{% static 'img/friends/fr-05.jpg' %}" class="img-circle" width="90"></p>
+                  <p><b>Zac Snider</b></p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p>MEMBER SINCE</p>
+                      <p>2012</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p>TOTAL SESSIONS</p>
+                      <p>41</p>
+                    </div>
+                  </div>
+                </div>
+            <!--new earning end-->
+            <!-- RECENT ACTIVITIES SECTION -->
+
+            <!-- USERS ONLINE SECTION -->
+            <div class="blue-panel pn mb" style="height:100%;">
+                  <div class="blue-header" style="margin-bottom:0px;">
+                <h5>UPCOMING BIRTHDAYS</h5>
+                  </div>
+                      <div style="overflow:auto; height:200px;">
+            <!-- First Member -->
+            {% for k,v in k_bday.items %}
+            <div class="desc">
+              <div class="thumb">
+                <img class="img-circle" src="{{v.0}}" width="35px" height="35px" align="">
+              </div>
+              <div class="details">
+                <p style="margin-bottom:0px;">
+                  <a href="#">{{k}}</a><br/>
+                  <muted>{{v.1}}</muted>
+                </p>
+              </div>
+            </div>
+             {% endfor %}
+            <!-- Second Member -->
+                      </div>
+              </div>
+            <!-- Fourth Member -->
+            <!-- CALENDAR-->
+            <div class="blue-panel pn mb" style="height:100%;">
+                  <div class="blue-header" style="margin-bottom:0px;">
+                <h5>UPCOMING MEMBERSHIP ANNIVERSARIES</h5>
+                  </div>
+                      <div style="overflow:auto; height:150px;">
+            <!-- First Member -->
+            {% for k,v in k_mem.items %}
+            <div class="desc">
+              <div class="thumb">
+                <img class="img-circle" src="{{v.0}}" width="35px" height="35px" align="">
+              </div>
+              <div class="details">
+                <p style="margin-bottom:0px;">
+                  <a href="#">{{k}}</a><br/>
+                  <muted>{{v.1}}</muted>
+                </p>
+              </div>
+            </div>
+             {% endfor %}
+                      </div>
+              </div>
+            <!-- Third Member -->
+
+            <!-- / calendar -->
+          </div>
+          <!-- /col-lg-3 -->
+        </div>
+        <!-- /row -->
+      </section>
+    </section>
+    <!--main content end-->
+    <!--footer start-->
+    <footer class="site-footer">
+      <div class="text-center">
+        <p>
+          &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+        </p>
+        <div class="credits">
+          <!--
+            You are NOT allowed to delete the credit link to TemplateMag with free version.
+            You can delete the credit link only if you bought the pro version.
+            Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
+            Licensing information: https://templatemag.com/license/
+          -->
+          Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
+        </div>
+        <a href="index.html#" class="go-top">
+          <i class="fa fa-angle-up"></i>
+          </a>
+      </div>
+    </footer>
+    <!--footer end-->
+  </section>
+  <!-- js placed at the end of the document so the pages load faster -->
+   <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+  <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+  <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+  <!--common script for all pages-->
+     <script src="{% static 'lib/common-scripts.js' %}"></script>
+  <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
+  <script src="{% static 'lib/sparkline-chart.js' %}"></script>
+    <script src="{% static 'lib/raphael/raphael.min.js' %}"></script>
+  <script src="{% static 'lib/morris/morris.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
+  <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
+  <script src="{% static 'lib/zabuto_calendar.js' %}"></script>
+  <script src="{% static 'lib/fancybox/jquery.fancybox.js' %}"></script>
+ <script>
+    $(document).ready(function(){
+    function interpolateColor(color1, color2, factor) {
+    if (arguments.length < 3) {
+        factor = 0.5;
+    }
+    var result = color1.slice();
+    for (var i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+    }
+    return result;
+};
+// My function to interpolate between two colors completely, returning an array
+function interpolateColors(color1, color2, steps) {
+    var stepFactor = 1 / (steps - 1),
+        interpolatedColorArray = [];
+
+    color1 = color1.match(/\d+/g).map(Number);
+    color2 = color2.match(/\d+/g).map(Number);
+
+    for(var i = 0; i < steps; i++) {
+        interpolatedColorArray.push("rgb("+interpolateColor(color1, color2, stepFactor * i)+")");
+    }
+
+    return interpolatedColorArray;
+};
+    title = [true,""]
+    var month_list = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
+    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
+    chart([4,5],interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",2),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
+    chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+    $("#field").change(function(){
+        $(".filter_value").remove();
+        $selected= $(this).children("option:selected").text();
+        $.ajax({
+        type:"POST",
+        url: "{% url 'main_dashboard' %}",
+        data:{select: $selected},
+        success: function(resp){
+           $value_list = resp.value;
+           $("#value").attr('disabled', false);
+           $("#value").append('<option class="filter_value" value="0">Select value..</option>');
+        $.each($value_list,function(index, value)
+        {
+            $("#value").append('<option class="filter_value" value=' + (index+1) + '>' + value + '</option>');
+        });
+       }
+      });
+        });
+      $("#value").change(function(){
+
+        $value= $("#value option:selected").text();
+        $field= $("#field option:selected").text();
+        $.ajax({
+        type:"POST",
+        url: "{% url 'main_dashboard' %}",
+        data:{value: $value, field:$field},
+        success: function(resp){
+        $('#serverstatus03').remove();
+        $('#barchart2').remove();
+        $('#graph1').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;"></canvas>');
+        $('#graph2').append('<canvas id="serverstatus03" height="220" width="600" style="margin:0 auto;"></canvas>');
+        chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
+        chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+        $('#male').text(resp.k_m);
+          $('#female').text(resp.k_f);
+          $('#no_nk').text(resp.no_nk);
+          $('#no_k').text(resp.no_k);
+        }
+      });
+
+    });
+
+});
+
+    function chart(dat, bgcolor, d_label, label,title, type, id){
+            if (type === 'line'){
+                        var data = {
+                            labels: d_label,
+                            datasets: [{
+                            data: dat,
+                            borderColor:'#12b0e2',
+                            fill: false}],
+                        };
+                        var opt = {
+                    responsive: false,
+                    segmentShowStroke: false,
+                    legend: {
+                    display: false
+                    },
+                    maintainAspectRatio: true,
+                    }
+                        }
+             else if (type === 'bar'){
+                 var data = {
+                            labels: d_label,
+                            datasets: [{
+                            label: label,
+                            data: dat,
+                            barThickness: 30,
+                            backgroundColor:bgcolor,
+                            }],
+                        };
+                        var opt = {
+                     layout: {
+    padding: {
+        // Any unspecified dimensions are assumed to be 0
+        top: -15
+    }
+},
+                     scales: {
+        xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+            }
+        }],
+        yAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+            },
+
+        }]
+    },
+    events: false,
+    tooltips: {
+        enabled: false
+    },
+    hover: {
+        animationDuration: 0
+    },
+    animation: {
+        duration: 1,
+        onComplete: function () {
+            var chartInstance = this.chart,
+                ctx = chartInstance.ctx;
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+
+            this.data.datasets.forEach(function (dataset, i) {
+                var meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach(function (bar, index) {
+                    var data = dataset.data[index];
+                    ctx.fillText(data, bar._model.x, bar._model.y - 1);
+                });
+            });
+        }
+    },
+                    responsive: false,
+                    legend: {
+                    display: false
+                    },
+                    title :{display: title[0],text:title[1],fontSize:18,fontFamily:"Arial Rounded MT Bold"},
+                    maintainAspectRatio: true,
+                    }
+             }
+             else {
+                var data = {
+                            datasets: [{
+                            data: dat,
+                            backgroundColor: bgcolor,
+                            borderColor:'#d0eff9',}],
+                             labels: label
+                        };
+                        var opt = {
+                    responsive: false,
+                    segmentShowStroke: false,
+                    legend: {
+                    display: true,
+                    position: 'top',
+                    },
+                    maintainAspectRatio: true,
+                    }
+             }
+
+                    ctx = document.getElementById(id).getContext("2d")
+
+                    var myDoughnut = new Chart(ctx,{type:type,data:data,options:opt});
+                    }
+
+
+</script>
+
+  <script type="application/javascript">
+    $(document).ready(function() {
+      $("#date-popover").popover({
+        html: true,
+        trigger: "manual"
+      });
+      $("#date-popover").hide();
+      $("#date-popover").click(function(e) {
+        $(this).hide();
+      });
+
+      $("#my-calendar").zabuto_calendar({
+        action: function() {
+          return myDateFunction(this.id, false);
+        },
+        action_nav: function() {
+          return myNavFunction(this.id);
+        },
+        ajax: {
+          url: "show_data.php?action=1",
+          modal: true
+        },
+        legend: [{
+            type: "text",
+            label: "Special event",
+            badge: "00"
+          },
+          {
+            type: "block",
+            label: "Regular event",
+          }
+        ]
+      });
+    });
+
+    function myNavFunction(id) {
+      $("#date-popover").hide();
+      var nav = $("#" + id).data("navigation");
+      var to = $("#" + id).data("to");
+      console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+    }
+  </script>
+<script type="text/javascript">
+    $(function() {
+      //    fancybox
+      jQuery(".fancybox").fancybox();
+    });
+  </script>
+<script>
+
+    function setValue(e){
+    $val = e.target.text;
+         $('#toggle-menu').hide();
+        $('#search').val($val);
+        $.ajax({
+        type:'POST',
+        url: "{% url 'profile' %}",
+        data: { value: $val },
+        success: function(resp){
+        $att = resp.attendance;
+        $loc = resp.location;
+        $id = resp.id;
+            for (i=0;i<$att.length;i++){
+            $('.att-checkbox').append('<div class="row check-box"><input type="checkbox" id="approval'+i+'" name="approval" value="'+$id[i]+'"><label for="approval'+i+'" >'+$att[i]+' - '+$loc[i]+'</label></div>');
+            }
+        },
+        });
+    }
+    $('#search').on('input', function(e) {
+    $('.menu-list').remove();
+    $('.check-box').remove();
+    $query = e.target.value;
+        $.ajax({
+        type:'POST',
+        url: "{% url 'profile' %}",
+        data: { input: $query },
+        success: function(resp){
+        $('.menu-list').remove();
+        $vol = resp.volunteer;
+            for (i=0;i<$vol.length;i++){
+            $('.search-menu').append('<li><a onclick="setValue(event)" class="menu-list">'+$vol[i]+'</a></li>')
+            };
+            $('#toggle-menu').show();
+
+        },
+    });
+    });
+</script>
+
+{% endblock %}
+</body>
+
+</html>
