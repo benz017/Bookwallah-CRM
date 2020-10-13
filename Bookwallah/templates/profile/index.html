@@ -41,6 +41,9 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
+      <div class="centered" style="background-color:white;margin:0 300px;padding:5px 0;">
+        <img height="120px" src="{% static 'img/b_logo.webp' %}">
+      </div>
         <form class="form-login" action="{% url 'signin' %}" method="POST">
         <h2 class="form-login-heading">sign in now</h2>
               {% csrf_token %}
@@ -53,22 +56,17 @@
             {% endfor %}
             <!--input type="checkbox" value="remember-me"> Remember me-->
             <label class="checkbox" style="margin-top:15px;">
-            <input type="checkbox" value="remember-me"> Remember me
             <span class="pull-right">
             <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
             </span>
             </label>
 
-          <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+          <button class="btn btn-theme btn-block"  type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+          <button class="btn btn-theme btn-block"  type="button"><a href="{% url 'social:begin' 'linkedin-oauth2' %}">Signin With Linkedin</a> </button>
           <hr>
           {% for message in messages %}
           <h4>{{message}}</h4>
           {% endfor %}
-          <div class="login-social-link centered">
-            <p>or you can sign in via your social network</p>
-            <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
-            <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
-          </div>
         </div>
         <!-- Modal -->
         <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
@@ -80,12 +78,13 @@
               </div>
               <div class="modal-body">
                 <p>Enter your e-mail address below to reset your password.</p>
-                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+                <input style="margin-left:0px;" type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
               </div>
               <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
                 <button class="btn btn-theme" type="button">Submit</button>
               </div>
+
             </div>
           </div>
         </div>
@@ -101,7 +100,7 @@
   <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
   <script type="text/javascript" src="{% static 'lib/jquery.backstretch.min.js' %}"></script>
   <script>
-    $.backstretch("{% static 'img/p3.jpg' %}", {
+    $.backstretch("{% static 'img/12_Mantuga.jpg' %}", {
       speed: 500
     });
   </script>

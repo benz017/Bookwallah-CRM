@@ -50,7 +50,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -252,7 +252,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a class="active" href="javascript:;">
@@ -261,7 +261,8 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
-                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+              <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
+              <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li  ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
               <li class="active"><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
@@ -462,7 +463,7 @@
               <muted style="margin:0px 5px;" class="pull-left" >{{p.fields.timestamp|convert_iso|date:"j M" }}</muted>
               <select id="{{p.pk}}" name="value" class="pull-right pstatus"  style="text-align:center; padding: .375rem .75rem;">
                 <option value="{{p.fields.status}}">{{p.fields.status}}</option>
-                <option value="In-Process">In-process</option>
+                <option value="In-Process">In-Process</option>
                 <option value="Approved">Approved</option>
               </select>
 
@@ -536,7 +537,8 @@
   <!--common script for all pages-->
      <script src="{% static 'lib/common-scripts.js' %}"></script>
   <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
-  <script src="{% static 'lib/sparkline-chart.js' %}"></script>
+ <script src="{% static 'js/chartjs-plugin-datalabels.js' %}"></script>
+<script src="{% static 'lib/sparkline-chart.js' %}"></script>
     <script src="{% static 'lib/raphael/raphael.min.js' %}"></script>
   <script src="{% static 'lib/morris/morris.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
@@ -634,11 +636,45 @@
                             datasets: [{
                             data: dat,
                             borderColor:'#12b0e2',
-                            fill: false}],
+                            }],
                         };
                         var opt = {
+                layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                }
+},
                     responsive: false,
                     segmentShowStroke: false,
+                     scales: {
+        xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false,
+                }
+        }],
+        yAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false //this will remove only the label
+                }
+
+        }]
+        },
+                     plugins: {
+      datalabels: {
+      align: "top",
+      anchor: "center",
+      offset: 1,
+             }
+          },
                     legend: {
                     display: false
                     },
@@ -682,24 +718,12 @@
     hover: {
         animationDuration: 0
     },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
+    plugins: {
+      datalabels: {
+        color: '#34495e',
+             }
+          },
 
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillText(data, bar._model.x, bar._model.y - 1);
-                });
-            });
-        }
-    },
                     responsive: false,
                     legend: {
                     display: false
@@ -722,6 +746,20 @@
                     legend: {
                     display: true,
                     position: 'top',
+                    },
+                     plugins: {
+                      datalabels: {
+                        formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(0)+"%";
+                        return percentage;
+                        },
+                    color: '#fff',
+                        }
                     },
                     maintainAspectRatio: true,
                     }

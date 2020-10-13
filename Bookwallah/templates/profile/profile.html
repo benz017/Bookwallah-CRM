@@ -51,7 +51,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -253,7 +253,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a  href="javascript:;">
@@ -262,7 +262,8 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
-                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+              <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
+              <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
               <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
@@ -855,12 +856,38 @@
                               <input type="text" placeholder=" " name="email" class="form-control" value="{{email}}" disabled>
                             </div>
                           </div>
+                          <h4 class="mb">Social Links</h4>
                           <div class="form-group">
                             <label class="col-lg-2 control-label">Skype</label>
                             <div class="col-lg-6">
                               <input type="text" placeholder=" " name="skype" class="form-control" >
                             </div>
                           </div>
+                          <div class="form-group">
+                            <label class="col-lg-2 control-label">Zoom</label>
+                            <div class="col-lg-6">
+                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-lg-2 control-label">LinkedIn</label>
+                            <div class="col-lg-6">
+                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-lg-2 control-label">Facebook</label>
+                            <div class="col-lg-6">
+                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-lg-2 control-label">Instagram</label>
+                            <div class="col-lg-6">
+                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                            </div>
+                          </div>
+   
                           <div class="form-group">
                             <div class="col-lg-offset-4 col-lg-8">
                               <button type="submit" class="btn btn-theme" style="margin-left:55px;"><i class="fa fa-check-square-o" ></i> Update</button>

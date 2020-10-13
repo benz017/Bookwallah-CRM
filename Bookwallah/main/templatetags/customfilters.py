@@ -127,11 +127,21 @@ def mod(value, arg):
 
 @register.filter
 def index(sequence, position):
-    return sequence[position]
+    try:
+        return sequence[position]
+    except IndexError:
+        return ''
 
 
-@register.filter(name='range')
-def range(i, ilist):
+@register.filter(name='get_iter')
+def get_iter(value,arg):
+    if type(value) == list or type(value)==dict:
+        return range(arg,len(value)+arg)
+    else:
+        return range(arg,value+arg)
+
+
+def get_range(i, ilist):
     l = len(ilist)
     le = math.ceil(l/3)
     #print(ilist,l,math.ceil(le),type(len(ilist)))
@@ -141,6 +151,7 @@ def range(i, ilist):
     else:
         ar = np.arange((i - 1) * 3, i*3).tolist()
     return ar
+
 
 def truncate_float(n, places):
     return int(n * (10 ** places)) / 10 ** places

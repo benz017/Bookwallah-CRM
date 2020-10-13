@@ -43,7 +43,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-     <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+     <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -245,7 +245,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a href="javascript:;">
@@ -254,7 +254,8 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
-                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+              <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
+              <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
               <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
@@ -351,7 +352,7 @@
                          {% endfor %}
                      </select>
                    </div>
-                   <div class="col-md-3 col-sm-3 " >
+                   <div class="col-md-2 col-sm-2 " >
                      <select id="month" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;">
                      {% for m in month %}
                          <option value="{{m}}">{{m}}</option>
@@ -371,20 +372,24 @@
                         <select id="value" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;" disabled>
                         </select>
                         </div>
+                  <div class="col-md-1 col-sm-1" >
+                    <a id="filter" style="margin-left:70px;" ><i class="fa fa-repeat" style="font-size:32px;"></i></a>
+                  </div>
                 </div>
               </form>
                   </div>
                   </div>
         <hr style="margin-top:0px;margin-bottom:10px;">
-          {% for i in length %}
-        <div class="row">
-            {% for ind in i|range:img_list %}
+          {% for i in row_list %}
+        <div id="row">
+        <div class="row filter">
+            {% for ind in i %}
           <div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 desc">
             <div class="project-wrapper">
               <div class="project">
                 <div class="photo-wrapper">
                   <div class="photo">
-                    <a class="fancybox" href="{% get_media_prefix %}{{ img_list|index:ind }}"><img class="img-responsive" src="{% get_media_prefix %}{{ img_list|index:ind }}" alt=""></a>
+                    <a class="fancybox" href="{{ img_list|index:ind }}"><img class="img-responsive" src="{{ img_list|index:ind }}" alt=""></a>
                   </div>
                   <div class="overlay"></div>
                 </div>
@@ -394,6 +399,7 @@
               {% endfor %}
           <!-- col-lg-4 -->
         </div>
+          </div>
           {% endfor %}
 
         <!-- /row -->
@@ -449,7 +455,15 @@
         $month = $("#month option:selected").text();
         $.ajax({
         type:"POST",
-        url: "{% url 'main_dashboard' %}",
+        {% if active == 1 %}
+        url: "{% url 'session_gallery' %}",
+        {% elif active == 2 %}
+        url: "{% url 'project_gallery' %}",
+        {% elif active == 3 %}
+        url: "{% url 'donor_gallery' %}",
+        {% elif active == 4 %}
+        url: "{% url 'kid_gallery' %}",
+        {% endif %}
         data:{select: $selected,year:$year, month:$month},
         success: function(resp){
            $value_list = resp.value;
@@ -462,7 +476,7 @@
        }
       });
         });
-      $("#value").change(function(){
+      $("#filter").click(function(){
         //$('.hi').remove();
         $value= $("#value option:selected").text();
         $field= $("#field option:selected").text();
@@ -471,9 +485,25 @@
         //${'#hlight').empty();
         $.ajax({
         type:"POST",
-        url: "{% url 'main_dashboard' %}",
+        {% if active == 1 %}
+        url: "{% url 'session_gallery' %}",
+        {% elif active == 2 %}
+        url: "{% url 'project_gallery' %}",
+        {% elif active == 3 %}
+        url: "{% url 'donor_gallery' %}",
+        {% elif active == 4 %}
+        url: "{% url 'kid_gallery' %}",
+        {% endif %}
         data:{value: $value, field:$field, year:$year, month:$month},
-        success: function(resp){}
+        success: function(resp){
+        $('.filter').remove();
+        for (i=0;i<resp.row_list.length;i++){
+        $('#row').append('<div id="row'+i+'" class="row filter"></row>');
+          for (j=0;j<resp.row_list[i].length;j++){
+            $('#row'+i).append('<div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 desc"><div class="project-wrapper">    <div class="project">      <div class="photo-wrapper">        <div class="photo">          <a class="fancybox" href="'+resp.img_list[j]+'"><img class="img-responsive" src="'+resp.img_list[j]+'" alt=""></a></div><div class="overlay"></div></div></div></div></div>');
+          }
+        }
+        }
         });
         });
    });

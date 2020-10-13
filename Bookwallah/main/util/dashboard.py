@@ -1,7 +1,9 @@
 from ..models import *
+import math
+import numpy as np
 from django.contrib.auth.models import User,Group
 from datetime import date,datetime,timezone,timedelta
-from django.db.models import Sum,Count
+from django.db.models import Sum,Count,Max
 from django.db.models.functions import Concat
 from django.db.models import Value
 from dateutil.relativedelta import relativedelta
@@ -28,30 +30,15 @@ def do_geocode(address, attempt=1, max_attempts=5):
         raise
 
 
+
+
 def key_detail(data,arg=None):
     p_details = {}
-
-    if arg is None:
-        p = Project.objects.all()
-        add = p.values_list('address',flat=True)
-        city = p.values_list('city', flat=True)
-        country = p.values_list('country', flat=True)
-        project_name = p.values_list('project_name', flat=True)
-        loc = []
-        #for i in range(len(p)):
-        #    if do_geocode(add[i]) is not None:
-        #        addr = do_geocode(add[i])
-        #    else:
-        #        addr = do_geocode(city[i]+", "+country[i])
-        #    loc.append({'lat': addr.latitude, 'lon': addr.longitude , 'title': project_name[i]})
-        p_details['location'] = loc
-    else:
-        p_details['project_name'] = arg.values_list('project_name',flat=True)[0]
-        p_details['contact_number'] = arg.values_list('contact_number',flat=True)[0]
-        p_details['address'] = arg.values_list('address',flat=True)[0]
-        p_details['highlights'] = arg.values_list('highlights', flat=True)[0].split(',') if arg.values_list('highlights', flat=True)[0] is not None else ""
-        p_details['issues'] = arg.values_list('issues', flat=True)[0].split(',') if arg.values_list('issues', flat=True)[0] is not None else ""
-        p_details['image'] = arg.values_list('image',flat=True)[0]
+    p_details['project_name'] = arg.values_list('project_name',flat=True)[0]
+    p_details['description'] = arg.values_list('description', flat=True)[0]
+    p_details['contact_number'] = arg.values_list('contact_number',flat=True)[0]
+    p_details['address'] = arg.values_list('address',flat=True)[0]
+    p_details['image'] = arg.values_list('image',flat=True)[0]
     data['p_details'] = p_details
     return data
 
@@ -93,17 +80,18 @@ def get_year_dict(c,year):
 def monthly_session(data,con,p=None,year=None):
     data['months'] = []
     #print(config)
+    print(p)
     for i in con:
         if p is None:
             if year is None:
                 c = Session.objects.filter(date__year=get_year(con,i,today.year),date__month=i).count()
-                print(get_year(con,i,today.year),Session.objects.filter(date__year=get_year(con,i,today.year),date__month=i))
+
             else:
                 c = Session.objects.filter(date__year=get_year(con,i,year), date__month=i).count()
-                print(get_year(con,i,today.year),Session.objects.filter(date__year=get_year(con,i,year), date__month=i))
         else:
             if year is None:
-                c = Session.objects.filter(date__year=today.year,date__month=i).count()
+                c = Session.objects.filter(project__in=p,date__year=today.year,date__month=i).count()
+
             else:
                 c = Session.objects.filter(project__in=p,date__year=year, date__month=i).count()
         data['months'].append(c)
@@ -111,6 +99,7 @@ def monthly_session(data,con,p=None,year=None):
 
 
 def session_prog(data,con, p=None,year=None):
+
     all = past = 0
     if p is None:
         if year is None:
@@ -132,7 +121,7 @@ def session_prog(data,con, p=None,year=None):
                 past += Session.objects.filter(project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
                 print(2,all,past)
     try:
-        data['ses_p'] = int((past/all)*100)
+        data['ses_p'] = round((past/all)*100,1)
         data['ses_p_data'] = [past,all-past]
     except ZeroDivisionError:
         data['ses_p'] = 0
@@ -216,21 +205,17 @@ def total_expense(data,con,p=None,year=None):
     if p is None:
         if year is None:
             for k, v in get_year_dict(con, today.year).items():
-                total = Expense.objects.filter(date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum']
-                if total is not None:
-                    total += total
+                t = Expense.objects.filter(date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum'] or 0
+                total += t
             exp_list = []
-            print(con)
             for i in con:
-                print(i)
                 amt = Expense.objects.filter(date__year=get_year(con,i,today.year),date__month=i).aggregate(Sum('reimbursement_amount'))
                 exp_list.append(amt['reimbursement_amount__sum'])
         else:
             for k, v in get_year_dict(con, year).items():
-                total = Expense.objects.filter(date__year=v, date__month=k).aggregate(Sum('reimbursement_amount'))[
-                    'reimbursement_amount__sum']
-                if total is not None:
-                    total += total
+                t = Expense.objects.filter(date__year=v, date__month=k).aggregate(Sum('reimbursement_amount'))[
+                    'reimbursement_amount__sum']  or 0
+                total += t
             exp_list = []
             for i in con:
                 amt = Expense.objects.filter(date__year=get_year(con, i, year), date__month=i).aggregate(
@@ -239,18 +224,16 @@ def total_expense(data,con,p=None,year=None):
     else:
         if year is None:
             for k, v in get_year_dict(con, today.year).items():
-                total = Expense.objects.filter(project__in=p,date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum']
-                if total is not None:
-                    total += total
+                t = Expense.objects.filter(project__in=p,date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum'] or 0
+                total += t
             exp_list = []
             for i in con:
                 amt = Expense.objects.filter(project__in=p,date__year=get_year(con,i,today.year),date__month=i).aggregate(Sum('reimbursement_amount'))
                 exp_list.append(amt['reimbursement_amount__sum'])
         else:
             for k, v in get_year_dict(con, year).items():
-                total = Expense.objects.filter(project__in=p,date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum']
-                if total is not None:
-                    total += total
+                t = Expense.objects.filter(project__in=p,date__year=v,date__month=k).aggregate(Sum('reimbursement_amount'))['reimbursement_amount__sum']  or 0
+                total += t
             exp_list = []
             for i in con:
                 amt = Expense.objects.filter(project__in=p,date__year=get_year(con,i,year),date__month=i).aggregate(Sum('reimbursement_amount'))
@@ -263,13 +246,14 @@ def total_expense(data,con,p=None,year=None):
 def expense_type(data,con,p=None,year=None):
     if p is None:
         if year is None:
-            exp = Expense.objects.all().values('expense_type').order_by('expense_type').annotate(sum=Sum('reimbursement_amount'))
+            exp = Expense.objects.filter(date__year=today.year).values('expense_type').order_by('expense_type').annotate(sum=Sum('reimbursement_amount'))
         else:
             exp = Expense.objects.filter(date__year=year).values('expense_type').order_by('expense_type').annotate(
                 sum=Sum('reimbursement_amount'))
     else:
         if year is None:
-            exp = Expense.objects.filter(project__in=p).values('expense_type').order_by('expense_type').annotate(sum=Sum('reimbursement_amount'))
+            exp = Expense.objects.filter(project__in=p,date__year=today.year).values('expense_type').order_by('expense_type').annotate(sum=Sum('reimbursement_amount'))
+            print(exp)
         else:
             exp = Expense.objects.filter(project__in=p,date__year=year).values('expense_type').order_by('expense_type').annotate(
                 sum=Sum('reimbursement_amount'))
@@ -288,11 +272,11 @@ def no_of_kids(data,con,p=None,year=None):
             nk = Kid.objects.filter(date__year=year).count()
     else:
         if year is None:
-            k = Kid.objects.filter(library__in=p).count()
-            nk = Kid.objects.filter(library__in=p,date__month__gte=today.month - 1, date__month__lte=today.month).count()
+            k = Kid.objects.filter(project__in=p).count()
+            nk = Kid.objects.filter(project__in=p,date__month__gte=today.month - 1, date__month__lte=today.month).count()
         else:
-            k = Kid.objects.filter(library__in=p,date__year__lte=year).count()
-            nk = Kid.objects.filter(library__in=p, date__year=year).count()
+            k = Kid.objects.filter(project__in=p,date__year__lte=year).count()
+            nk = Kid.objects.filter(project__in=p, date__year=year).count()
     data['no_k'] = k
     data['no_nk'] = nk
     return data
@@ -305,9 +289,9 @@ def kid_stats(data,con,p=None,year=None):
         data['k_m'] = Kid.objects.filter(gender='M').count()
         data['k_f'] = Kid.objects.filter(gender='F').count()
     else:
-        c = Kid.objects.filter(library__in=p).values('age').order_by('age').annotate(count=Count('age'))
-        data['k_m'] = Kid.objects.filter(library__in=p,gender='M').count()
-        data['k_f'] = Kid.objects.filter(library__in=p,gender='F').count()
+        c = Kid.objects.filter(project__in=p).values('age').order_by('age').annotate(count=Count('age'))
+        data['k_m'] = Kid.objects.filter(project__in=p,gender='M').count()
+        data['k_f'] = Kid.objects.filter(project__in=p,gender='F').count()
     data['k_stat'] = list(c.values_list('count',flat=True))
     data['k_stat_label'] = [int(i) for i in list(c.values_list('age', flat=True))]
     return data
@@ -321,7 +305,7 @@ def kid_years(data,con,p=None,year=None):
             ky.append(c)
     else:
         for i in range(1, 6):
-            c = Kid.objects.filter(library__in=p,attending_sessions=True,date__lte=datetime.now() - relativedelta(years=i)).count()
+            c = Kid.objects.filter(project__in=p,attending_sessions=True,date__lte=datetime.now() - relativedelta(years=i)).count()
             ky.append(c)
     data['k_years']=ky
     return data
@@ -348,23 +332,116 @@ def no_story_teller(data):
 
 def session_galery(data,x=0,y=12):
     p = Session.objects.all().values_list('image',flat=True)
-    data["ses_gal"] = list(p)[x:y]
+    sli = list(p)[x:y]
+    data["ses_gal"] = [settings.MEDIA_URL + av for av in sli]
+
     return data
 
 
-def kid_galery(data,x=0,y=12):
-    p = Kid.objects.all().values_list('image',flat=True)
-    data["kid_gal"] = list(p)[x:y]
+def kid_galery(data,k=None,x=0,y=12):
+    data["kid_gal"] = []
+    if k is None:
+        p = Kid.objects.all().values_list('image',flat=True)
+        sli = list(p)[x:y]
+        data["kid_gal"] = [settings.MEDIA_URL + av for av in sli]
+    else:
+        p = Kid_Picture.objects.filter(kid__in=k).values_list('image',flat=True)
+        sli = list(p)[x:y]
+        data["kid_gal"] = [settings.MEDIA_URL + av for av in sli]
+    length = list(range(1, int(math.ceil(len(data["kid_gal"]) / 3)) + 1))
+    row_list = []
+    for i in length:
+        l = len(data["kid_gal"])
+        le = math.ceil(l / 3)
+        # print(ilist,l,math.ceil(le),type(len(ilist)))
+
+        if i == le:
+            ar = np.arange((i - 1) * 3, l).tolist()
+        else:
+            ar = np.arange((i - 1) * 3, i * 3).tolist()
+        row_list.append(ar)
+    data['row_list'] = row_list
     return data
 
 
-def child_attendance(data):
-    all = Session.objects.all().count()
-    att = Attendance.objects.filter(attendance_approved=True).count()
-    data['vol_att'] = int((att/all)*100)
-    data['vol_att_data'] = [att,all-att]
+def child_attendance(data,con,p=None,year=None,k=None):
+    all = att = 0
+    if k is None:
+        if p is None:
+            if year is None:
+                kid = Kid.objects.all().values_list('project')
+
+                for p in kid:
+                    for k, v in get_year_dict(con, today.year).items():
+                        all += Session.objects.filter(date__year=v, date__month=k, project=p).count()
+                for k, v in get_year_dict(con, today.year).items():
+                    att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
+                                                     attendance=True).count()
+                print(all, att)
+            else:
+                kid = Kid.objects.all().values_list('project')
+                all = 0
+                for p in kid:
+                    for k, v in get_year_dict(con, year).items():
+                        all += Session.objects.filter(project=p.project, date__year=v, date__month=k, ).count()
+                for k, v in get_year_dict(con, year).items():
+                    att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
+                                                         attendance=True).count()
+        else:
+            print(p)
+            if year is None:
+                kid = Kid.objects.filter(project__in=p)
+                pi = kid.count()
+                for k, v in get_year_dict(con, today.year).items():
+                    c = Session.objects.filter(date__year=v, date__month=k, project__in=kid.values_list('project'))
+                    all += pi * c.count()
+                    att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
+                                                         attendance=True, session__in=c).count()
+            else:
+                pid = Profile.objects.filter(user__groups__name="Volunteer", project__in=p)
+                pi = pid.count()
+                for k, v in get_year_dict(con, year).items():
+                    c = Session.objects.filter(date__year=v, date__month=k, project__in=pid.values_list('project'))
+                    all += pi * c.count()
+                    att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
+                                                         attendance=True, session__in=c).count()
+    else:
+        p = Kid.objects.filter(pk=k).values_list('project',flat=True)[0]
+        print(12,p, k)
+        if year is None:
+            all = Session.objects.filter(date__year=today.year, project=p).count()
+            att = Kid_Attendance.objects.filter(kid=k,session__date__year=today.year,
+                                              attendance=True).count()
+            print(all, att)
+        else:
+            all = Session.objects.filter(project=p, date__year=year, ).count()
+            att = Kid_Attendance.objects.filter(kid=k, session__date__year=year,
+                                                     attendance=True).count()
+
+    try:
+        data['c_att'] = int((att/(all))*100)
+        data['c_att_data'] = [att,all-att]
+    except ZeroDivisionError:
+        data['c_att'] = 0
+        data['c_att_data'] = [0, 0]
     return data
 
+
+def kid_session_history(data,k,year=None):
+    h = Kid_Attendance.objects.filter(kid=k, session__date__year=today.year,
+                                        attendance=True)
+    date = h.values_list('session__date',flat=True)
+    bn = h.values_list('session__book_name', flat=True)
+    sv = h.values_list('session__story_value', flat=True)
+    d = dict(zip(list(date), list(bn)))
+    sh = defaultdict(list)
+    for s in sv:
+        for k,v in d.items():
+            k = k.strftime('%d %b %I:%M %p')
+            sh[k].append(s)
+            sh[k].append(v)
+    data['ksh'] = dict(sh)
+    return data
 
 def kid_bday(data):
     b = Kid.objects.filter(dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
@@ -694,12 +771,15 @@ def social_behavior(data,con,p=None,year=None):
     return data
 
 
-def email_history(data, id):
+def email_history( id):
+    data={}
     from .mail import get_email
     eh = get_email(id)
     print(eh)
     data["e_history"] = eh
     return data
+
+
 
 
 def total_applications(data,year=None):
@@ -766,6 +846,96 @@ def rec_role(data,year=None):
     return data
 
 def upcoming_tasks(data):
-    u = Task.objects.filter(date__gte=today,date__month=today.month,date__year=today.year,type='Donor')
-    data['up_tasks'] = list(u)
+    ut = Task.objects.filter(date__gte=today,date__month__in=[today.month,today.month+1],date__year=today.year,type='Donor')
+    data['up_tasks'] = list(ut)
+    return data
+
+def upcoming_pledges(data):
+    up = Pledge.objects.filter(date__gte=today,date__month__in=[today.month,today.month+1],date__year=today.year)
+    data['up_pledge'] = list(up)
+    return data
+
+
+def gifts(data,id):
+    g = Gift.objects.filter(donor__in=id)
+    ig= list(g.values_list("item",flat=True))
+    iv = list(g.values_list("value",flat=True))
+    r = dict(zip(ig,iv))
+    data['gik']= r
+    return data
+
+
+def top_vol(data):
+    v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
+    p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+    jy = p.values_list('user__date_joined__year',flat=True)[0]
+    av = p.values_list('image',flat=True)[0]
+    a = Attendance.objects.filter(user__in=p,attendance_approved=True).count()
+    data["tv_na"] = p.values_list('fullname',flat=True)[0]
+    data["tv_jy"] = jy
+    data["tv_av"] = settings.MEDIA_URL +av
+    data["tv_hrs"] = a*8
+    return data
+
+
+def top_kid(data):
+    v = Config.objects.all().values_list('top_kid',flat=True)[0]
+    p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+    na = p.values_list('fullname',flat=True)[0]
+    jy = p.values_list('date__year',flat=True)[0]
+    av = p.values_list('image',flat=True)[0]
+    a = Kid_Attendance.objects.filter(kid__in=p,attendance=True).count()
+    data["tk_na"] = na
+    data["tk_jy"] = jy
+    data["tk_av"] = settings.MEDIA_URL +av
+    data["tk_count"] = a
+    return data
+
+
+def regular_vol(data):
+    #p = Profile.objects.filter(user__groups_name="Volunteer").annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+    a = Attendance.objects.filter(attendance_approved=True).annotate(total=Count('pk')).aggregate(
+        max=Max('total'))
+    print(a)
+
+
+def highlight(data,f,y=None):
+    try:
+        if y is None:
+            h = list(Highlight.objects.filter(chapter__in=f.values_list('state',flat=True),date__year=today.year).values())[0]
+            i = list(Issues.objects.filter(chapter__in=f.values_list('state',flat=True),date__year=today.year).values())[0]
+        else:
+            h = list(Highlight.objects.filter(chapter__in=f.values_list('state', flat=True),date__year=y).values())[0]
+            i = list(Issues.objects.filter(chapter__in=f.values_list('state', flat=True),date__year=y).values())[0]
+        h.pop("id")
+        h.pop("date")
+        h.pop("chapter")
+        i.pop("id")
+        i.pop("date")
+        i.pop("chapter")
+        print(h,i)
+        h = [x for x in list(h.values()) if x is not None]
+        i = [x for x in list(i.values()) if x is not None]
+        m = max(len(h),len(i))
+        data["hi"] = h
+        data["is"] = i
+        data["m"] = list(range(m))
+        return data
+    except:
+        data["hi"] = ''
+        data["is"] = ''
+        data["m"] = ''
+
+        return data
+
+
+def v_testimonials(data):
+    v = Volunteer_Testimonial.objects.all().order_by('-id')[0]
+    data["t_name"] = v.volunteer.user.first_name+" "+v.volunteer.user.last_name
+    data["t_test"] = v.testimonial
+    return data
+def d_testimonials(data):
+    d = Donor_Testimonial.objects.all().order_by('-id')[0]
+    data["d_name"] = d.donor.first_name+" "+d.donor.last_name
+    data["d_test"] = d.testimonial
     return data

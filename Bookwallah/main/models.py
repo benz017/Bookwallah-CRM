@@ -12,28 +12,13 @@ import json
 months = ((1,'JAN'),(2,'FEB'),(3,'MAR'),(4,'APR'),(5,'MAY'),(6,'JUN'),(7,'JUL'),(8,'AUG'),(9,'SEP'),(10,'OCT'),(11,'NOV'),(12,'DEC'))
 
 
-class Config(models.Model):
-    fiscal_month = models.IntegerField(choices=months,default=1)
-    sheet_name = models.CharField(max_length=200,blank=True,null=True)
-    username_field = models.CharField(max_length=200,blank=True,null=True)
-    email_field = models.CharField(max_length=200, blank=True, null=True)
-    name_field = models.CharField(max_length=300, blank=True, null=True)
-    address_field = models.CharField(max_length=300, blank=True, null=True)
-    contact_field = models.CharField(max_length=300, blank=True, null=True)
-    tenure_field = models.CharField(max_length=300, blank=True, null=True)
-    role_field = models.CharField(max_length=300, blank=True, null=True)
-    prior_experience_field = models.CharField(max_length=300, blank=True, null=True)
-    library_field = models.CharField(max_length=300, blank=True, null=True)
-    secret_file = models.FileField(upload_to='documents',blank=True, null=True)
-
-    def __str__(self):
-        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.sheet_name)
 
 
 class Project(models.Model):
     project_name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to='project', blank=True, null=True)
     type = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(max_length=1000, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
@@ -55,6 +40,8 @@ class Project(models.Model):
 
 
 class Session(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True,
+                                related_name="session_project")
     library_name = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
@@ -63,11 +50,10 @@ class Session(models.Model):
     story_value = models.CharField(max_length=100, blank=True, null=True)
     activity_name = models.CharField(max_length=100, blank=True, null=True)
     activity_desc = models.CharField(max_length=100, blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="session_project")
     volunteers_attended = models.CharField(max_length=100, blank=True, null=True)
     cancellation_reason = models.CharField(max_length=300, blank=True, null=True)
     image = models.ImageField(upload_to='session',blank=True, null=True)
-
+    description = models.TextField(max_length=1000, blank=True, null=True)
     def __str__(self):
         return "{} - {} - {}".format(self.library_name, self.project,self.date)
 
@@ -91,14 +77,18 @@ class Profile(models.Model):
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
     role = models.CharField(max_length=100, blank=True, null=True)
-    social_media = models.CharField(max_length=100, blank=True, null=True)
+    skype = models.CharField(max_length=100, blank=True, null=True)
+    zoom = models.CharField(max_length=100, blank=True, null=True)
+    facebook = models.CharField(max_length=100, blank=True, null=True)
+    linkedin = models.CharField(max_length=100, blank=True, null=True)
+    instagram = models.CharField(max_length=100, blank=True, null=True)
     leaving_date = models.DateField(null=True, blank=True)
     document = models.FileField(blank=True,null=True)
     is_online = models.BooleanField(null=True,default=False,blank=True)
     chat_room = models.ForeignKey('chat.Room', on_delete=models.DO_NOTHING, null=True, blank=True, related_name="chat_room")
 
     def __str__(self):
-        return "{} {}".format(self.user,self.project)
+        return "{} {} -- {}".format(self.user.first_name, self.user.last_name,self.project)
 
 
 @receiver(post_save, sender=User)
@@ -134,17 +124,15 @@ class Attendance(models.Model):
         return "{} - {}".format(self.user,self.session)
 
 
-
-
 class Donor(models.Model):
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
-    house_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=150, blank=True)
     image = models.ImageField(upload_to='donor', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
+    address1 = models.CharField(max_length=100, blank=True, null=True)
+    address2 = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -176,7 +164,11 @@ class Donor(models.Model):
 class Pledge(models.Model):
     donor = models.ForeignKey(Donor, default=2, on_delete=models.DO_NOTHING, related_name="pledge_donor")
     pledge = models.CharField(max_length=400, blank=True, null=True)
+    amount = models.CharField(max_length=32, blank=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} || {} || {}".format(self.donor, self.pledge,self.amount)
 
 
 class Gift(models.Model):
@@ -184,6 +176,9 @@ class Gift(models.Model):
     item = models.CharField(max_length=300, blank=True, null=True)
     value = models.CharField(max_length=32, blank=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} || {} || {}".format(self.donor, self.item,self.date)
 
 
 class Task(models.Model):
@@ -225,18 +220,99 @@ class Kid(models.Model):
     dob = models.DateField(null=True, blank=True)
     age = models.CharField(max_length=100, blank=True, null=True)
     hobbies = models.CharField(max_length=100, blank=True, null=True)
-    library = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True,verbose_name=u"Library")
     sibling_name = models.CharField(max_length=100, blank=True, null=True)
     class_no = models.IntegerField(blank=True, null=True)
     school_name = models.CharField(max_length=100, blank=True, null=True)
     wish_to_pursue = models.CharField(max_length=100, blank=True, null=True)
-    attended_sessions = models.CharField(max_length=100, blank=True, null=True)
     attending_sessions = models.BooleanField(default=True)
     date = models.DateTimeField(default=timezone.now, verbose_name=u"Joining Date")
     image = models.ImageField(upload_to='kid',blank=True, null=True)
+    description = models.TextField(max_length=1000, blank=True, null=True)
+    def __str__(self):
+        return "{} {} -- {}".format(self.first_name,self.last_name,self.project, )
+
+
+class Kid_Picture(models.Model):
+    kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='kid',blank=True, null=True)
 
     def __str__(self):
-        return "{} {} {}".format(self.library, self.first_name,self.last_name)
+        return "{}".format(self.kid)
+
+def create_kid_pic_obj(sender, **kwargs):
+    if kwargs['created']:
+        print(kwargs['instance'].image)
+        kp = Kid_Picture.objects.create(kid=kwargs['instance'],image=kwargs['instance'].image)
+    else:
+        obj, _created = Kid_Picture.objects.get_or_create(kid=kwargs['instance'])
+        setattr(obj, 'image', kwargs['instance'].image)
+        obj.save()
+
+post_save.connect(create_kid_pic_obj,sender=Kid)
+
+
+class Session_Picture(models.Model):
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='session', blank=True, null=True)
+
+    def __str__(self):
+        return "{}".format(self.session)
+
+def create_session_pic_obj(sender, **kwargs):
+    if kwargs['created']:
+        print(kwargs['instance'].image)
+        kp = Session.objects.create(kid=kwargs['instance'],image=kwargs['instance'].image)
+    else:
+        obj,_created= Session.objects.get_or_create(kid=kwargs['instance'])
+        setattr(obj, 'image', kwargs['instance'].imag)
+        obj.save()
+
+post_save.connect(create_session_pic_obj,sender=Session)
+
+
+class Volunteer_Testimonial(models.Model):
+    volunteer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=True, limit_choices_to={'user__groups__name': "Volunteer"})
+    testimonial = models.TextField(max_length=1000, blank=True, null=True)
+
+class Donor_Testimonial(models.Model):
+
+    donor = models.ForeignKey(Donor, on_delete=models.DO_NOTHING, null=True)
+    testimonial = models.TextField(max_length=1000, blank=True, null=True)
+
+
+class Highlight(models.Model):
+    state = list(set(list(Project.objects.all().values_list('state', flat=True))))
+    state = ((i, i) for i in state)
+    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, unique=True, null=True, choices=state)
+    date = models.DateField( blank=True, null=True)
+    h1 = models.CharField(max_length=1000, blank=True, null=True)
+    h2 = models.CharField(max_length=1000, blank=True, null=True)
+    h3 = models.CharField(max_length=1000, blank=True, null=True)
+    h4 = models.CharField(max_length=1000, blank=True, null=True)
+    h5 = models.CharField(max_length=1000, blank=True, null=True)
+    h6 = models.CharField(max_length=1000, blank=True, null=True)
+    h7 = models.CharField(max_length=1000, blank=True, null=True)
+    h8 = models.CharField(max_length=1000, blank=True, null=True)
+    h9 = models.CharField(max_length=1000, blank=True, null=True)
+    h10 = models.CharField(max_length=1000, blank=True, null=True)
+
+
+class Issues(models.Model):
+    state = list(set(list(Project.objects.all().values_list('state', flat=True))))
+    state = ((i, i) for i in state)
+    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True, unique=True, choices=state)
+    date = models.DateField(blank=True, null=True)
+    i1 = models.CharField(max_length=1000, blank=True, null=True)
+    i2 = models.CharField(max_length=1000, blank=True, null=True)
+    i3 = models.CharField(max_length=1000, blank=True, null=True)
+    i4 = models.CharField(max_length=1000, blank=True, null=True)
+    i5 = models.CharField(max_length=1000, blank=True, null=True)
+    i6 = models.CharField(max_length=1000, blank=True, null=True)
+    i7 = models.CharField(max_length=1000, blank=True, null=True)
+    i8 = models.CharField(max_length=1000, blank=True, null=True)
+    i9 = models.CharField(max_length=1000, blank=True, null=True)
+    i10 = models.CharField(max_length=1000, blank=True, null=True)
 
 
 class Kid_Attendance(models.Model):
@@ -263,7 +339,7 @@ class Recruit(models.Model):
     status = models.CharField(max_length=50, default='Pending',null=True, blank=True,choices=status_choices)
 
     def __str__(self):
-        return "{} | {} - {}".format(self.timestamp,self.username,self.role)
+        return "{} | {} - {} --- {}".format(self.timestamp,self.username,self.role, self.status)
 
 
 class Expense(models.Model):
@@ -332,3 +408,21 @@ class ProSocialBehaviorScore(models.Model):
         return "{} ({} {})".format(self.project, self.quarter, self.year)
 
 
+class Config(models.Model):
+    fiscal_month = models.IntegerField(choices=months,default=1)
+    sheet_name = models.CharField(max_length=200,blank=True,null=True)
+    username_field = models.CharField(max_length=200,blank=True,null=True)
+    email_field = models.CharField(max_length=200, blank=True, null=True)
+    name_field = models.CharField(max_length=300, blank=True, null=True)
+    address_field = models.CharField(max_length=300, blank=True, null=True)
+    contact_field = models.CharField(max_length=300, blank=True, null=True)
+    tenure_field = models.CharField(max_length=300, blank=True, null=True)
+    role_field = models.CharField(max_length=300, blank=True, null=True)
+    prior_experience_field = models.CharField(max_length=300, blank=True, null=True)
+    library_field = models.CharField(max_length=300, blank=True, null=True)
+    secret_file = models.FileField(upload_to='documents',blank=True, null=True)
+    top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},on_delete=models.DO_NOTHING, null=True, blank=True)
+    top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    def __str__(self):
+        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.sheet_name)

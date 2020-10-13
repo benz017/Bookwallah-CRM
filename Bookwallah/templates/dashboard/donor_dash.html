@@ -52,7 +52,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -254,7 +254,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a class="active" href="javascript:;">
@@ -263,7 +263,8 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
-                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+              <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
+              <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li  class="active"><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
               <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
@@ -389,7 +390,7 @@
                   <div class="blue-header" >
                     <h5>TOTAL LIFETIME DONATION</h5>
                   </div>
-                  <h1 style="font-size:60px;margin-top:30px;"><i class="fa fa-money fa-3x" style="color:#2980b9;"></i></h1>
+                  <img height="200" width="300" src="{% static 'img/kid.png' %}">
                   <footer>
                     <div class="centered">
                         <h3 style="font-size:32px;"><i class="fa fa-dollar"></i> <span id="t_d"></span></h3>
@@ -583,14 +584,14 @@
                             <th style="text-align:center;color:#34495e;">VALUE</th>
                         </tr>
                     </thead>
-                    <tbody id="d_body">
+                    <tbody id="gh">
 
                     </tbody>
                 </table>
                       </div>
               </div>
 
-              <div class="blue-panel pn mb" id="task" style="height:100%;">
+              <div class="blue-panel pn mb w1" id="task" style="height:100%;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING TASKS</h5>
                   </div>
@@ -616,31 +617,33 @@
             <!-- First Member -->
 
             <!-- CALENDAR-->
-            <div class="blue-panel pn mb" id="pledge" style="height:100%;">
+            <div class="blue-panel pn mb w1" id="pledge" style="height:100%;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING PLEDGES</h5>
                   </div>
                       <div style="overflow:auto; height:300px;">
-            {% for i in "0123456789" %}
-            <div class="desc">
-              <div class="thumb">
-                <img class="img-circle" src="{% static 'img/ui-divya.jpg' %}" width="35px" height="35px" align="">
+                          {% for i in up_pledge %}
+            <div class="desc" >
+              <div class="details" style="width:100%;">
+                <div class="thumb">
+                <img class="img-circle" src="{% get_media_prefix %}{{i.donor.image}}" width="35px" height="35px" align="">
               </div>
-              <div class="details">
-                <p>
-                  <a href="#">Task 1</a><br/>
-                  <h5><span>DIVYA MANIAN </span><small>- 12 June</small></h5>
-                </p>
+                <h5><span class="pull-left">{{i.donor.first_name}} {{i.donor.last_name}} </span></h5>
+                <small class="pull-right">{{i.date|date:"j M"}}</small>
               </div>
+              <h4 style="margin:0px;" class="pull-left"><span style="font-size:16px;">Pledge:</span> {{i.pledge}}</h4>
+              <h4 style="margin:0px;" class="pull-right"><span style="font-size:16px;">Amount:</span> {{i.amount}}</h4>
+
             </div>
                 {% endfor %}
+
                   </div>
                   </div>
-            <div class="blue-panel" style="height:310px;">
+            <div class="blue-panel mb w1" style="height:100%">
               <div class="blue-header">
                 <h5>ADD PLEDGE</h5>
               </div>
-              <section class=" tasks-widget">
+              <section class=" tasks-widget ">
                 <form role="form" id="addpledge" class="form-horizontal" method="POST" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
                 <div class="task-content" style="margin-bottom:0px;">
                   <ul class="task-list">
@@ -665,6 +668,14 @@
                     </li>
                     <li>
                       <div class="form-group">
+                            <label class="col-lg-2 control-label">Amount:</label>
+                            <div class="col-lg-7" >
+                               <input id="amt" type="text" placeholder=" " name="amount" class="form-control" value="" style="background-color:#ffffff;" autocomplete="off">
+                            </div>
+                          </div>
+                    </li>
+                    <li>
+                      <div class="form-group">
                             <label class="col-lg-2 control-label">Date:</label>
                             <div class="col-lg-7">
                               <input type="date" placeholder=" " name="date" class="form-control" value="">
@@ -673,13 +684,13 @@
                     </li>
                   </ul>
                 </div>
-                <div class=" add-task-row" style="margin-right:7px;">
+                <div class=" add-task-row" style="margin-right:7px;margin-bottom:50px;">
                   <button id="pledge-creation-form-btn" class="btn btn-success btn-sm pull-right"  type="submit">Confirm</button>
                 </div>
                 </form>
             </section>
             </div>
-            <div class="blue-panel" style="height:310px;">
+            <div class="blue-panel w1 mt" style="height:100%;">
               <div class="blue-header">
                 <h5>ADD GIFT</h5>
               </div>
@@ -703,6 +714,14 @@
                             <label class="col-lg-2 control-label">Gift:</label>
                             <div class="col-lg-7" >
                                <input id="gift-field" type="text" placeholder=" " name="gift" class="form-control" value="" style="background-color:#ffffff;" autocomplete="off">
+                            </div>
+                          </div>
+                    </li>
+                    <li>
+                      <div class="form-group">
+                            <label class="col-lg-2 control-label">Value:</label>
+                            <div class="col-lg-7" >
+                               <input id="gift-value" type="text" placeholder=" " name="gift_value" class="form-control" value="" style="background-color:#ffffff;" autocomplete="off">
                             </div>
                           </div>
                     </li>
@@ -764,7 +783,8 @@
   <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
   <script src="{% static 'lib/sparkline-chart.js' %}"></script>
     <script src="{% static 'lib/raphael/raphael.min.js' %}"></script>
-  <script src="{% static 'lib/morris/morris.min.js' %}"></script>
+ <script src="{% static 'js/chartjs-plugin-datalabels.js' %}"></script>
+<script src="{% static 'lib/morris/morris.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
   <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
   <script src="{% static 'lib/zabuto_calendar.js' %}"></script>
@@ -774,19 +794,42 @@
   <script src="{% static 'lib/google-maps/data/points.js' %}"></script>
 <script type="text/javascript" src="{% static 'lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/bootstrap-timepicker/js/bootstrap-timepicker.js' %}"></script>
-<script>
-    new Maplace({
-      locations: LocsB,
+<script type="text/javascript">
+    $(document).ready(function() {
+     $.ajax({
+        url: "{% url 'd_location' %}",
+        }).done(function( data) {
+            var loc = data;
+    var map_obj = new Maplace({
+      locations: loc,
       map_div: '#gmap-list',
       controls_div: '#controls-tabs',
-      controls_type: 'list',
+      controls_type: 'dropdown',
       controls_on_map: false,
+      view_all: true,
       show_infowindow: false,
       start: 1,
-      afterShow: function(index, location, marker) {
-        $('#info').html(location.html);
-      }
     }).Load();
+    var unique_id = $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title: 'Welcome to BookWallah!',
+        // (string | mandatory) the text inside the notification
+        text: 'Have a Good Day!!',
+        // (string | optional) the image to display on the left
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky: false,
+        // (int | optional) the time you want it to be alive for before fading out
+        time: 8000,
+        // (string | optional) the class name you want to apply to that specific message
+        class_name: 'my-sticky-class'
+      });
+
+      return false;
+        });
+
+
+
+    });
   </script>
   <script type="text/javascript">
     $(document).ready(function() {
@@ -1047,8 +1090,7 @@ $(document).ready(function() {
         $('#barchart2').remove();
         $('#graph3').append('<canvas id="barchart2" height="400" width="550" style="margin:0 auto;margin-left:10px;"></canvas>');
         chart(resp.new_data.d_list,"rgba(18,176,226,0.7)",resp.new_data.dy_list,"Amount of Donation",[true,"Donations (by Year)"],'bar','barchart2');
-        $('#task').hide();
-        $('#pledge').hide();
+
         $('#av').append('<div class="profile-pic centered donor" ><p><img src="/media/'+$data[0].fields.image+'" class="img-circle"></p></div>');
         $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Full Name:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.fname+'</div></div>');
         Object.entries($data[0].fields).forEach(function([key, value]){
@@ -1058,7 +1100,7 @@ $(document).ready(function() {
             else if (key === 'note'){
             $('#note').text(value);
             }
-            else if (key !== 'image' ){
+            else if (key !== 'image' && key !== 'next_task' && key !== 'next_task_date'){
             $('#details').append('<div class="row donor" ><div class="col-sm-5 text-capitalize key" style="color:rgba(47, 50, 58, 0.8);">'+key.replaceAll(/_/g," ")+':</div><div class="col-sm-7 text-right value"  style="color:#34495e;">'+value+'</div></div>');
             }
 
@@ -1066,12 +1108,21 @@ $(document).ready(function() {
          Object.entries(resp.donation).forEach(function([key, value]){
         $('#dh').append('<tr class="dn donor" style="height:100%;rgba(47, 50, 58, 0.8);"><td >'+key+'</td><td >'+value+'</td></tr>');
         });
+        Object.entries(resp.gik).forEach(function([key, value]){
+        $('#gh').append('<tr class="dn donor" style="height:100%;rgba(47, 50, 58, 0.8);"><td >'+key+'</td><td >'+value+'</td></tr>');
+        });
         $('#d_history').show();
-        $emails = JSON.parse(resp.new_data.e_history);
+        $.ajax({
+        url: "{% url 'donor_dashboard' %}",
+        data: {value: $val}
+        }).done(function( data) {
+          $emails = JSON.parse(data.e_history);
 
         for (i=0;i<$emails.length;i++){
           $('#mail_list').append('<tr><td class="emails" style="display: block; width: 100%;text-align: left;" data-toggle="collapse" data-target="#'+i+'"><h4 class="ws">From: '+$emails[i]["From"]+'</h4><h4 class="ws">To: '+$emails[i]["To"]+'</h4><h4 class="ws">Date: '+$emails[i]["Date"]+'</h4><h4 class="ws">Subject: '+$emails[i]["Subject"]+'</h4><div id="'+i+'" style="background-color:rgba(18, 176, 226, 0.3);padding:2px 5px;" class="collapse">'+$emails[i]["Body"]+'</div></td></tr>');
         }
+        });
+
         }
 
         });
@@ -1233,18 +1284,52 @@ function interpolateColors(color1, color2, steps) {
 
 });
 
-    function chart(dat, bgcolor, d_label, label,title, type, id){
+   function chart(dat, bgcolor, d_label, label,title, type, id){
             if (type === 'line'){
                         var data = {
                             labels: d_label,
                             datasets: [{
                             data: dat,
                             borderColor:'#12b0e2',
-                            fill: false}],
+                            }],
                         };
                         var opt = {
+                layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                }
+},
                     responsive: false,
                     segmentShowStroke: false,
+                     scales: {
+        xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false,
+                }
+        }],
+        yAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false //this will remove only the label
+                }
+
+        }]
+        },
+                     plugins: {
+      datalabels: {
+      align: "top",
+      anchor: "center",
+      offset: 1,
+             }
+          },
                     legend: {
                     display: false
                     },
@@ -1262,13 +1347,13 @@ function interpolateColors(color1, color2, steps) {
                             }],
                         };
                         var opt = {
-                        layout: {
-    padding: {
-        // Any unspecified dimensions are assumed to be 0
-        top: -15
-    }
+                         layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                }
 },
-                     scales: {
+                    scales: {
         xAxes: [{
             gridLines: {
                 color: "rgba(0, 0, 0, 0)",
@@ -1288,29 +1373,17 @@ function interpolateColors(color1, color2, steps) {
     hover: {
         animationDuration: 0
     },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
+    plugins: {
+      datalabels: {
+        color: '#34495e',
+             }
+          },
 
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillText(data, bar._model.x, bar._model.y - 1);
-                });
-            });
-        }
-    },
                     responsive: false,
                     legend: {
-                    display: false,
+                    display: false
                     },
-                    title :{display: title[0],text:title[1],fontSize:18,fontFamily:"Arial Rounded MT Bold",padding:25},
+                    title :{display: title[0],position:'bottom',text:title[1],fontSize:18,fontFamily:"Arial Rounded MT Bold",padding:15,fontColor:'rgb(52, 73, 94)'},
                     maintainAspectRatio: true,
                     }
              }
@@ -1329,14 +1402,28 @@ function interpolateColors(color1, color2, steps) {
                     display: true,
                     position: 'top',
                     },
+                     plugins: {
+                      datalabels: {
+                        formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(0)+"%";
+                        return percentage;
+                        },
+                    color: '#fff',
+                        }
+                    },
+                    maintainAspectRatio: true,
                     }
              }
 
                     ctx = document.getElementById(id).getContext("2d")
 
-                    var myDoughnut = new Chart(ctx, {type:type,data:data,options:opt});
+                    var myDoughnut = new Chart(ctx,{type:type,data:data,options:opt});
                     }
-
 
 </script>
 {% endblock %}

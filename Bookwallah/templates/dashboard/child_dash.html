@@ -30,6 +30,30 @@
     <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-timepicker/css/timepicker.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/zabuto_calendar.css' %}">
 
+  <style>
+    table tr:nth-of-type(4n) td {
+    border-bottom: 3px solid black;
+}
+  table tr {
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  }
+
+  #sh td{
+
+  text-align:left;
+  }
+table tr td:nth-of-type(n) {
+background:#12b0e2;
+color:white;
+}
+  table tr td:nth-of-type(2n) {
+    background:white;
+    color:black;
+    width:70%;
+}
+
+  </style>
   <!-- =======================================================
     Template Name: Dashio
     Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
@@ -50,7 +74,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -252,7 +276,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a class="active" href="javascript:;">
@@ -261,7 +285,8 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
-                <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
+              <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
+              <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li class="active"><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
               <li><a href="{% url 'rec_dashboard' %}">Recruitment Dashboard</a></li>
@@ -356,7 +381,7 @@
                   </div>
              <div class="row">
 
-              <div class="col-md-6 col-sm-6 mb" >
+              <div class="col-md-6 col-sm-6 mb w2" >
                 <div class="blue-panel pn" style="height:350px;">
                   <div class="blue-header">
                     <h5>TOTAL NO. OF KIDS ATTENDING</h5>
@@ -368,6 +393,21 @@
                         <h3><i class="fa fa-trophy"></i> <span id="no_k">{{no_k}}</span></h3>
                     </div>
                   </footer>
+                </div>
+                <!--  /darkblue panel -->
+              </div>
+               <div class="col-md-6 col-sm-6 mb w1" hidden>
+                <div class="blue-panel pn" style="height:100%; ">
+                  <div class="blue-header">
+                    <h5>SESSION HISTORY (LAST 10)</h5>
+                  </div>
+                  <div style="overflow:auto;height:292px;">
+                  <table class="table table-condensed" style="width:95%; margin:0 auto;">
+                    <tbody id="sh" >
+
+                   </tbody>
+                </table>
+                    </div>
                 </div>
                 <!--  /darkblue panel -->
               </div>
@@ -386,7 +426,7 @@
                       <p>Total<br/>Attendance:</p>
                     </div>
                     <div class="col-sm-6 col-xs-6 goright">
-                      <h2>21%</h2>
+                      <h2 id="c_att">{{c_att}}%</h2>
                     </div>
                   </div>
                 </div>
@@ -396,7 +436,7 @@
 
             </div>
             <!--custom chart end-->
-            <div class="row mt">
+            <div class="row mt w2">
               <!-- SERVER STATUS PANELS -->
               <div class="col-md-6 col-sm-6 mb">
                 <div class="blue-panel pn" style="height:350px;">
@@ -433,6 +473,17 @@
               <!-- /col-md-4 -->
               <!-- /col-md-4 -->
             </div>
+            <div class="row mt w1" hidden>
+            <div class="col-md-12 col-sm-12">
+                      <div class="darkblue-panel pn" style="height:100%;overflow:auto;">
+                  <div class="darkblue-header">
+                    <h5>KIDS GALLERY</h5>
+                  </div>
+                        <div id="img-container"></div>
+
+                      </div>
+            </div>
+            </div>
 
             <!-- /row -->
             <!-- /row -->
@@ -455,21 +506,25 @@
                             </div>
                           </div>
               </form>
+                <div id="av"></div>
+             <div id="stage" style="text-align:center;"></div>
+                <div id="details">
 
-                <div class="blue-panel pn mb">
+                </div>
+                <div class="blue-panel pn mb w2">
                   <div class="blue-header">
                     <h5>TOP CHILD</h5>
                   </div>
-                  <p><img src="{% static 'img/friends/fr-05.jpg' %}" class="img-circle" width="90"></p>
-                  <p><b>Zac Snider</b></p>
+                  <p><img src="{{tk_av}}" class="img-circle" width="80" height="80"></p>
+                  <p><b>{{tk_na}}</b></p>
                   <div class="row">
                     <div class="col-md-6">
-                      <p>MEMBER SINCE</p>
-                      <p>2012</p>
+                      <p >MEMBER SINCE</p>
+                      <p>{{tk_jy}}</p>
                     </div>
                     <div class="col-md-6">
-                      <p>TOTAL SESSIONS</p>
-                      <p>41</p>
+                      <p >TOTAL SESSIONS</p>
+                      <p>{{tk_count}}</p>
                     </div>
                   </div>
                 </div>
@@ -477,7 +532,7 @@
             <!-- RECENT ACTIVITIES SECTION -->
 
             <!-- USERS ONLINE SECTION -->
-            <div class="blue-panel pn mb" style="height:100%;">
+            <div class="blue-panel pn mb w2" style="height:100%;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING BIRTHDAYS</h5>
                   </div>
@@ -501,7 +556,8 @@
               </div>
             <!-- Fourth Member -->
             <!-- CALENDAR-->
-            <div class="blue-panel pn mb" style="height:100%;">
+
+            <div class="blue-panel pn mb w2" style="height:100%;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING MEMBERSHIP ANNIVERSARIES</h5>
                   </div>
@@ -536,17 +592,9 @@
     <footer class="site-footer">
       <div class="text-center">
         <p>
-          &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+          &copy; Copyrights <strong>Bookwallah</strong>. All Rights Reserved
         </p>
-        <div class="credits">
-          <!--
-            You are NOT allowed to delete the credit link to TemplateMag with free version.
-            You can delete the credit link only if you bought the pro version.
-            Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-            Licensing information: https://templatemag.com/license/
-          -->
-          Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-        </div>
+
         <a href="index.html#" class="go-top">
           <i class="fa fa-angle-up"></i>
           </a>
@@ -563,16 +611,21 @@
   <!--common script for all pages-->
      <script src="{% static 'lib/common-scripts.js' %}"></script>
   <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
-  <script src="{% static 'lib/sparkline-chart.js' %}"></script>
+   <script src="{% static 'js/chartjs-plugin-datalabels.js' %}"></script>
+<script src="{% static 'lib/sparkline-chart.js' %}"></script>
     <script src="{% static 'lib/raphael/raphael.min.js' %}"></script>
   <script src="{% static 'lib/morris/morris.min.js' %}"></script>
+<script src="{% static 'js/chartjs-plugin-label.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
   <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
   <script src="{% static 'lib/zabuto_calendar.js' %}"></script>
   <script src="{% static 'lib/fancybox/jquery.fancybox.js' %}"></script>
- <script>
-    $(document).ready(function(){
-    function interpolateColor(color1, color2, factor) {
+<script>
+
+
+</script>
+<script>
+ function interpolateColor(color1, color2, factor) {
     if (arguments.length < 3) {
         factor = 0.5;
     }
@@ -596,10 +649,11 @@ function interpolateColors(color1, color2, steps) {
 
     return interpolatedColorArray;
 };
+    $(document).ready(function(){
     title = [true,""]
     var month_list = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
     chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
-    chart([4,5],interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",2),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
+     chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
     $("#field").change(function(){
         $(".filter_value").remove();
@@ -610,6 +664,7 @@ function interpolateColors(color1, color2, steps) {
         data:{select: $selected},
         success: function(resp){
            $value_list = resp.value;
+
            $("#value").attr('disabled', false);
            $("#value").append('<option class="filter_value" value="0">Select value..</option>');
         $.each($value_list,function(index, value)
@@ -629,11 +684,16 @@ function interpolateColors(color1, color2, steps) {
         data:{value: $value, field:$field},
         success: function(resp){
         $('#serverstatus03').remove();
+        $('#serverstatus02').remove();
         $('#barchart2').remove();
         $('#graph1').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;"></canvas>');
         $('#graph2').append('<canvas id="serverstatus03" height="220" width="600" style="margin:0 auto;"></canvas>');
         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
         chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+
+         $('#graph').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
+         chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
+        $('#c_att').text(resp.c_att+"%");
         $('#male').text(resp.k_m);
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);
@@ -642,9 +702,74 @@ function interpolateColors(color1, color2, steps) {
       });
 
     });
+    $('#search').on('input', function(e) {
+    $('.menu-list').remove();
+    $('.check-box').remove();
+    $query = e.target.value;
+        $.ajax({
+        type:'POST',
+        url: "{% url 'child_dashboard' %}",
+        data: { input: $query },
+        success: function(resp){
+        $('.menu-list').remove();
+        $vol = resp.volunteer;
+            for (i=0;i<$vol.length;i++){
+            $('.search-menu').append('<li><a onclick="setValue(event)" class="menu-list">'+$vol[i]+'</a></li>')
+            };
+            $('#toggle-menu').show();
+
+        },
+    });
+    });
 
 });
+function setValue(e){
+    $val = e.target.text;
+         $('#toggle-menu').hide();
+        $('#search').val($val);
+        $.ajax({
+        type:'POST',
+        url: "{% url 'child_dashboard' %}",
+        data: { value: $val },
+        success: function(resp){
+        $('#img-container').html('');
+        $('#sh').html('');
+        $row_list = resp.new_data.row_list
+        $kid_gal = resp.new_data.kid_gal
+        $row_list.forEach(function(val,idx,arr){
+          $('#img-container').append('<div id="row"><div class="row filter">');
+            val.forEach(function(v,i,a){
+                $('#img-container').append('<div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 desc"><div class="project-wrapper"><div class="project"><div class="photo-wrapper"><div class="photo"><a class="fancybox" href="'+$kid_gal[v]+'"><img class="img-responsive" src="'+$kid_gal[v]+'" alt=""></a></div></div></div></div></div>');
+            });
+            $('#img-container').append('</div></div>');
+        });
+        $('.donor').remove();
+        $('.w2').hide();
+        $('#serverstatus02').remove();
+        $('#graph').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
+        chart(resp.new_data.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.new_data.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
+        $('#c_att').text(resp.new_data.c_att+"%");
+        $data = JSON.parse(resp.data);
+        $('#av').append('<div class="profile-pic centered donor" ><p><img width="128px" height="128px" src="/media/'+$data[0].fields.image+'" class="img-circle"></p></div>');
+        $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Full Name:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.fname+'</div></div>');
+        $('#stage').append('<h3 class="donor" style="color:#34495e;">Library</h3><div class="btn-group donor"><div class="mb"> <button type="button" class="btn btn-theme03">'+resp.library+'</button></div></div>');
+        Object.entries($data[0].fields).forEach(function([key, value]){
 
+            if (key == "date"){
+              $('#details').append('<div class="row donor" ><div class="col-sm-5 text-capitalize key" style="color:rgba(47, 50, 58, 0.8);">Joining Date:</div><div class="col-sm-7 text-right value"  style="color:#34495e;">'+value+'</div></div>');
+            }
+            else if (key !== 'image' && key!== 'first_name' && key !== 'last_name'){
+            $('#details').append('<div class="row donor" ><div class="col-sm-5 text-capitalize key" style="color:rgba(47, 50, 58, 0.8);">'+key.replaceAll(/_/g," ")+':</div><div class="col-sm-7 text-right value"  style="color:#34495e;">'+value+'</div></div>');
+            }
+        });
+        Object.entries(resp.new_data.ksh).forEach(function([key, value]){
+            $('#sh').append('<tr style="border-top: 3px solid black;"><tr><td >Date</td><td>'+key+'</td></tr><tr><td>Book Name</td><td>'+value[0]+'</td></tr><tr><td>Story Value</td><td >'+value[1]+'</td></tr></tr>');
+            });
+        $('.w1').show();
+        },
+        });
+
+    }
     function chart(dat, bgcolor, d_label, label,title, type, id){
             if (type === 'line'){
                         var data = {
@@ -652,11 +777,45 @@ function interpolateColors(color1, color2, steps) {
                             datasets: [{
                             data: dat,
                             borderColor:'#12b0e2',
-                            fill: false}],
+                            }],
                         };
                         var opt = {
+                layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                }
+},
                     responsive: false,
                     segmentShowStroke: false,
+                     scales: {
+        xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false,
+                }
+        }],
+        yAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false //this will remove only the label
+                }
+
+        }]
+        },
+                     plugins: {
+      datalabels: {
+      align: "top",
+      anchor: "center",
+      offset: 1,
+             }
+          },
                     legend: {
                     display: false
                     },
@@ -669,18 +828,18 @@ function interpolateColors(color1, color2, steps) {
                             datasets: [{
                             label: label,
                             data: dat,
-                            barThickness: 30,
+                            barThickness: 32,
                             backgroundColor:bgcolor,
                             }],
                         };
                         var opt = {
-                     layout: {
-    padding: {
-        // Any unspecified dimensions are assumed to be 0
-        top: -15
-    }
+                         layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                }
 },
-                     scales: {
+                    scales: {
         xAxes: [{
             gridLines: {
                 color: "rgba(0, 0, 0, 0)",
@@ -700,29 +859,17 @@ function interpolateColors(color1, color2, steps) {
     hover: {
         animationDuration: 0
     },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
+    plugins: {
+      datalabels: {
+        color: '#34495e',
+             }
+          },
 
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillText(data, bar._model.x, bar._model.y - 1);
-                });
-            });
-        }
-    },
                     responsive: false,
                     legend: {
                     display: false
                     },
-                    title :{display: title[0],text:title[1],fontSize:18,fontFamily:"Arial Rounded MT Bold"},
+                    title :{display: title[0],position:'bottom',text:title[1],fontSize:18,fontFamily:"Arial Rounded MT Bold",padding:15,fontColor:'rgb(52, 73, 94)'},
                     maintainAspectRatio: true,
                     }
              }
@@ -741,6 +888,20 @@ function interpolateColors(color1, color2, steps) {
                     display: true,
                     position: 'top',
                     },
+                     plugins: {
+                      datalabels: {
+                        formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(0)+"%";
+                        return percentage;
+                        },
+                    color: '#fff',
+                        }
+                    },
                     maintainAspectRatio: true,
                     }
              }
@@ -749,7 +910,6 @@ function interpolateColors(color1, color2, steps) {
 
                     var myDoughnut = new Chart(ctx,{type:type,data:data,options:opt});
                     }
-
 
 </script>
 
@@ -801,46 +961,6 @@ function interpolateColors(color1, color2, steps) {
       jQuery(".fancybox").fancybox();
     });
   </script>
-<script>
-
-    function setValue(e){
-    $val = e.target.text;
-         $('#toggle-menu').hide();
-        $('#search').val($val);
-        $.ajax({
-        type:'POST',
-        url: "{% url 'profile' %}",
-        data: { value: $val },
-        success: function(resp){
-        $att = resp.attendance;
-        $loc = resp.location;
-        $id = resp.id;
-            for (i=0;i<$att.length;i++){
-            $('.att-checkbox').append('<div class="row check-box"><input type="checkbox" id="approval'+i+'" name="approval" value="'+$id[i]+'"><label for="approval'+i+'" >'+$att[i]+' - '+$loc[i]+'</label></div>');
-            }
-        },
-        });
-    }
-    $('#search').on('input', function(e) {
-    $('.menu-list').remove();
-    $('.check-box').remove();
-    $query = e.target.value;
-        $.ajax({
-        type:'POST',
-        url: "{% url 'profile' %}",
-        data: { input: $query },
-        success: function(resp){
-        $('.menu-list').remove();
-        $vol = resp.volunteer;
-            for (i=0;i<$vol.length;i++){
-            $('.search-menu').append('<li><a onclick="setValue(event)" class="menu-list">'+$vol[i]+'</a></li>')
-            };
-            $('#toggle-menu').show();
-
-        },
-    });
-    });
-</script>
 
 {% endblock %}
 </body>

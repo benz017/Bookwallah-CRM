@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "chart.js": "^2.9.3",
-    "chartjs-plugin-datalabels": "file:chartjs-plugin-datalabels",
     "croppie": "^2.6.4"
   },
   "devDependencies": {},

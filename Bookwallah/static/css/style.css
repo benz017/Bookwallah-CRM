@@ -176,7 +176,7 @@ src: local('Arial Rounded MT ExtraBold'), url('../fonts/ARIALROUNDEDMTEXTRABOLD.
 /* BASIC THEME CONFIGURATION */
 body {
     color: #34495e;
-	background: white;
+	background: #e9f0f4;
     font-family: "Arial Rounded MT Bold";
     padding: 0px !important;
     margin: 0px !important;
@@ -311,7 +311,9 @@ a, a:hover, a:focus {
 .open .dropdown-toggle.btn-theme04 {
   color: #fff;
   background-color: #da4453;
+  background:#da4453;
   border-color: #da4453;
+
 }
 
 .btn-clear-g {
@@ -983,7 +985,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .border-head h3 {
-    border-bottom: 1px solid #c9cdd7;
+    border-bottom: 1px solid black;
     margin-top: 0;
     margin-bottom: 20px;
     padding-bottom: 5px;
@@ -1828,14 +1830,15 @@ PANELS CONFIGURATIONS
 
 /* Gallery Configuration */
 .photo-wrapper {
-  display: block;
+  display: inline-block;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   -webkit-transition: background-color 0.4s;
   -moz-transition: background-color 0.4s;
   -o-transition: background-color 0.4s;
   transition: background-color 0.4s;
   margin-left:2px;
+
 }
 .project .overlay {
   position: absolute;
@@ -1860,6 +1863,8 @@ PANELS CONFIGURATIONS
 	left: 0;
 	right: 0;
 	position: relative;
+	width:auto;
+  height:auto;
 }
 .project:hover .photo {
   opacity: 10;
@@ -2126,8 +2131,9 @@ ul li {
 
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
-	max-width: 330px;
-	margin: 100px auto 0;
+	max-width: 1024px;
+	opacity:0.92;
+	margin: 400px auto 0;
 	background: #fff;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -2805,8 +2811,7 @@ ul.inbox-pagination li {
 
 .compose-mail input, .compose-mail input:focus {
     border:none;
-    padding: 0;
-    width: 80%;
+    width: 100%;
     float: left;
 }
 .compose-mail .form-group {
@@ -2818,9 +2823,8 @@ ul.inbox-pagination li {
 
 .compose-mail .form-group label {
     line-height: 34px;
-    width: 10%;
+    width: 100%;
     float: left;
-    padding-left: 5px;
     margin-bottom: 0;
 }
 
@@ -2915,7 +2919,7 @@ ul.inbox-pagination li {
 
 .chat-room .mid-side {
     width: 75%;
-    background: #fff;
+    background: #e9f0f4;
     border-right: 1px solid #e5e8ef;
 }
 
@@ -3754,9 +3758,9 @@ ul.chat-available-user li a:hover {
   padding: 0 4px;
 }
   .column {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
-  max-width: 25%;
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+  max-width: 50%;
   padding: 0 4px;
 }
 
@@ -3844,7 +3848,7 @@ vertical-align:top;
 /*Blue Panel */
 .blue-panel {
 	text-align: center;
-	background: #e9f0f4;
+	background: white;
 }
 .blue-panel .blue-header {
 	background: #12b0e2;
@@ -3865,3 +3869,162 @@ vertical-align:top;
     color: #34495e;
     font-size: 14px;
 }
+
+/* CHAT  */
+
+#frame ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  margin: 15px 15px 5px 15px;
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+#frame ul li:nth-last-child(1) {
+  margin-bottom: 20px;
+}
+#frame ul li.sent img {
+  margin: 6px 8px 0 0;
+}
+#frame ul li.sent p {
+  background: #435f7a;
+  color: #f5f5f5;
+}
+#frame ul li.replies img {
+  float: right;
+  margin: 6px 0 0 8px;
+}
+#frame ul li.replies p {
+  background: #f5f5f5;
+  float: right;
+}
+#frame ul li img {
+  width: 22px;
+  border-radius: 50%;
+  float: left;
+}
+#frame ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+@media screen and (min-width: 735px) {
+  #frame ul li p {
+    max-width: 300px;
+  }
+}
+
+.fc1{
+    margin-left:0px;
+}
+
+.nav-link[data-toggle].collapsed:before {
+    content: " ▾";
+}
+.nav-link[data-toggle]:not(.collapsed):before {
+    content: " ▴";
+}
+
+.ws{
+    white-space: pre-line;
+}
+
+.a-selected {
+    background:#07465a;
+    opacity:0.8;
+}
+
+.emails{
+    padding:5px 10px;
+    background-color:rgba(255, 255, 255, 0.3);
+}
+
+.img{
+   opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+
+/* Slideshow container */
+.slideshow-container {
+  margin:0;
+  position: relative;
+  background: #f1f1f1f1;
+}
+
+/* Slides */
+.mySlides {
+  display: none;
+  padding: 40px;
+  text-align: center;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  float:left;
+  top: 50%;
+  width: auto;
+  margin-top: -30px;
+  padding: 16px;
+  color: #888;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  position: absolute;
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+.prev {
+  position: absolute;
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+}
+
+/* The dot/bullet/indicator container */
+.dot-container {
+    text-align: center;
+    padding: 20px;
+    background: #ddd;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+/* Add a background color to the active dot/circle */
+.actv, .dot:hover {
+  background-color: #717171;
+}
+
+/* Add an italic font style to all quotes */
+q {font-style: italic;font-size:20px;}
+
+/* Add a blue color to the author */
+.author {color: cornflowerblue;font-size:18px;}

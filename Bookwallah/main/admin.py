@@ -13,6 +13,15 @@ from .models import *
 admin.site.register(Config)
 admin.site.register(Recruit)
 admin.site.register(Task)
+admin.site.register(Pledge)
+admin.site.register(Gift)
+admin.site.register(Kid_Attendance)
+admin.site.register(Kid_Picture)
+admin.site.register(Session_Picture)
+admin.site.register(Highlight)
+admin.site.register(Issues)
+admin.site.register(Volunteer_Testimonial)
+admin.site.register(Donor_Testimonial)
 
 @admin.register(NPSScore)
 class NPSScore(ImportExportModelAdmin):

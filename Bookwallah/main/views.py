@@ -33,14 +33,6 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 today = date.today()
 
 
-def get_blog(request):
-    data = {
-        'success': True,
-        'message': 'simple api response'
-    }
-    print(fetch_data())
-    return JsonResponse(data)
-
 @login_required
 @csrf_exempt
 def main_dashboard(request):
@@ -54,31 +46,40 @@ def main_dashboard(request):
     data["image"] = settings.MEDIA_URL + av
     data["config"] = config
     print(data['config'])
-    uid = Profile.objects.filter(role="Volunteer").order_by()
-    aid = Attendance.objects.filter()
     p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
     y_list = []
     print(today.year,p)
     for i in range(today.year,p-1,-1):
         y_list.append(i)
     data["year"] = y_list
-    data = dashboard.monthly_session(data,con)
-    data = dashboard.session_prog(data,con)
-    data = dashboard.vol_attendance(data,con)
-    data = dashboard.total_revenue(data,con)
-    data = dashboard.total_expense(data,con)
-    data = dashboard.kid_stats(data,con)
-    data = dashboard.kid_years(data,con)
-    data = dashboard.no_of_kids(data,con)
-    data = dashboard.vol_role(data,con)
-    data = dashboard.volunteer_list(data)
-    data = dashboard.key_detail(data)
-    data = dashboard.expense_type(data,con)
+    c = Project.objects.filter(country='India')
+    print(c)
+    sel_in = Project.objects.all().values_list('country', flat=True)
+    data["country_list"] = list(set(sel_in))
+
+    data = dashboard.child_attendance(data,con)
+    data = dashboard.top_vol(data)
+    data = dashboard.top_kid(data)
+    data = dashboard.monthly_session(data,con,c)
+    data = dashboard.session_prog(data,con,c)
+    data = dashboard.vol_attendance(data,con,c)
+    data = dashboard.total_revenue(data,con,)
+    data = dashboard.total_expense(data,con,c)
+    data = dashboard.kid_stats(data,con,c)
+    data = dashboard.kid_years(data,con,c)
+    data = dashboard.no_of_kids(data,con,c)
+    data = dashboard.vol_role(data,con,c)
+    data = dashboard.volunteer_list(data,c)
+    data = dashboard.key_detail(data,c)
+    data = dashboard.expense_type(data,con,c)
     data = dashboard.session_galery(data)
     data = dashboard.kid_galery(data)
-    data= dashboard.nps_score(data,con)
+    data = dashboard.nps_score(data,con)
     data = dashboard.child_psychology(data,con)
     data = dashboard.social_behavior(data,con)
+    data = dashboard.highlight(data,c)
+    data = dashboard.v_testimonials(data)
+    data = dashboard.d_testimonials(data)
     print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
@@ -110,7 +111,7 @@ def main_dashboard(request):
                 f = Project.objects.filter(country= val)
             elif field == 'Chapter':
                 f = Project.objects.filter(state=val)
-
+            new_data = dashboard.child_attendance(new_data, con, f, year)
             new_data = dashboard.vol_attendance(new_data,con, f, year)
             new_data = dashboard.key_detail(new_data,f)
             new_data = dashboard.session_prog(new_data,con, f, year)
@@ -121,10 +122,55 @@ def main_dashboard(request):
             new_data = dashboard.no_of_kids(new_data,con, f, year)
             new_data = dashboard.volunteer_list(new_data, f)
             new_data = dashboard.expense_type(new_data,con, f, year)
+            new_data = dashboard.highlight(new_data, f,year)
             json_stuff = json.dumps(new_data)
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/main_dash.html', context=data)
+
+@csrf_exempt
+def p_location(request):
+    p = Project.objects.all()
+    add = p.values_list('address', flat=True)
+    city = p.values_list('city', flat=True)
+    country = p.values_list('country', flat=True)
+    project_name = p.values_list('project_name', flat=True)
+    loc = []
+    for i in range(len(p)):
+        if dashboard.do_geocode(add[i]) is not None:
+            addr = dashboard.do_geocode(add[i])
+        else:
+            addr = dashboard.do_geocode(city[i] + ", " + country[i])
+        loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
+
+    data = json.dumps(loc)
+    print(data)
+    return HttpResponse(data, content_type='application/json')
+
+@csrf_exempt
+def d_location(request):
+    p = Donor.objects.all().annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+    add1 = p.values_list('address1', flat=True)
+    add2 = p.values_list('address2', flat=True)
+    print(add1, add2)
+    add = [a+b if a is not None and b is not None else "" for a in add1 for b in add2 ]
+
+    city = p.values_list('city', flat=True)
+    country = p.values_list('country', flat=True)
+    project_name = p.values_list('fullname', flat=True)
+    loc = []
+    for i in range(len(p)):
+        if dashboard.do_geocode(add[i]) is not None:
+            addr = dashboard.do_geocode(add[i])
+        elif dashboard.do_geocode(city[ i] + ", " + country[i]) is not None:
+            addr = dashboard.do_geocode(city[i] + ", " + country[i])
+        else:
+            continue
+        loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
+
+    data = json.dumps(loc)
+    print(data)
+    return HttpResponse(data, content_type='application/json')
 
 @csrf_exempt
 @login_required
@@ -136,9 +182,8 @@ def vol_dashboard(request):
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-    #pr_id = Project.
-    uid = Profile.objects.filter(role="Volunteer").order_by()
-    aid = Attendance.objects.filter()
+    dashboard.regular_vol(data)
+    data = dashboard.top_vol(data)
     data = dashboard.vol_attendance(data,con)
     data = dashboard.vol_role(data)
     data = dashboard.no_story_teller(data)
@@ -173,7 +218,15 @@ def donor_dashboard(request):
     data = dashboard.don_country(data)
     data = dashboard.don_by_year(data)
     data = dashboard.upcoming_tasks(data)
+    data = dashboard.upcoming_pledges(data)
     print(data)
+    if request.method == "GET" and request.is_ajax():
+        value = request.GET.get('value')
+        donor = Donor.objects.filter(first_name=value.split()[0], last_name=value.split()[1])
+        result = dashboard.email_history(donor.values_list('email', flat=True)[0])
+        print(result)
+        json_stuff = json.dumps(result)
+        return HttpResponse(json_stuff, content_type="application/json")
     if request.method == "POST":
         if 'input' in request.POST:
             input = request.POST.get('input')
@@ -186,17 +239,19 @@ def donor_dashboard(request):
             year = request.POST.get('year')
             donor = Donor.objects.filter(first_name=value.split()[0],last_name=value.split()[1])
             donation = Donation.objects.filter(donated_by__in=donor)
-            data = serializers.serialize('json', list(donor), fields=('image','email', 'contact_number','address','city','state','country','zip','dob','project__project_name','company','position','account_no','program_pref','account_manager','next_task','next_task_date','note','stage','nationality','introduced_by'))
+            data = serializers.serialize('json', list(donor), fields=('image','email', 'contact_number','address1','address2','city','state','country','zip','dob','project__project_name','company','position','account_no','program_pref','account_manager','next_task','next_task_date','note','stage','nationality','introduced_by'))
             date = [datetime.strftime(d,"%d-%b-%y") for d in donation.values_list('date', flat=True)]
             amount = donation.values_list('amount', flat=True)
             new_data = {}
+            g = Gift.objects.filter(donor__in=donor)
+            gift = dict(zip(list(g.values_list("item",flat=True)),list(g.values_list("value",flat=True))))
             don = dict(zip(list(date),list(amount)))
             new_data = dashboard.monthly_donation(new_data, donor, year)
             new_data = dashboard.don_by_year(new_data, donor, year)
             new_data = dashboard.total_donation(new_data, donor)
-            new_data = dashboard.email_history(new_data,donor.values_list('email',flat=True)[0])
-            print(123, new_data)
-            json_stuff = json.dumps({'fname':value,'data':data,'donation':don,'new_data':new_data})
+
+            print(123, don,gift)
+            json_stuff = json.dumps({'fname':value,'data':data,'donation':don,'gik':gift,'new_data':new_data})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'select' in request.POST:
             new_data = {}
@@ -229,16 +284,17 @@ def donor_dashboard(request):
         elif 'pledge' in request.POST:
             donor = request.POST.get('donor')
             pledge = request.POST.get('pledge')
+            amount = request.POST.get('amount')
             date = request.POST.get('date')
             print(donor, pledge)
-            #Pledge.objects.create(donor=Donor.objects.get(pk=1),pledge=pledge,date=date)
-        elif 'task' in request.POST:
+            Pledge.objects.create(donor=Donor.objects.filter(first_name=donor.split()[0], last_name=donor.split()[1])[0],pledge=pledge,amount=amount,date=date)
+        elif 'gift' in request.POST:
             donor = request.POST.get('donor')
             gift = request.POST.get('gift')
-            value = request.POST.get('value')
+            value = request.POST.get('gift_value')
             date = request.POST.get('date')
             print(gift, value)
-            #Gift.objects.create(user=Profile.objects.get(user=User.objects.get(username=volunteer)),assigned_by=request.user.profile,task=task,date=due_date,type=type)
+            Gift.objects.create(donor=Donor.objects.filter(first_name=donor.split()[0], last_name=donor.split()[1])[0],item=gift,value=value,date=date)
         elif 'field' in request.POST:
             new_data = {}
             field = request.POST.get('field')
@@ -255,7 +311,7 @@ def donor_dashboard(request):
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/donor_dash.html', context=data)
-
+@csrf_exempt
 @login_required
 def child_dashboard(request):
     data = {}
@@ -265,28 +321,110 @@ def child_dashboard(request):
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-    #pr_id = Project.
-    uid = Profile.objects.filter(role="Volunteer").order_by()
-    aid = Attendance.objects.filter()
+    data = dashboard.child_attendance(data, con)
+    data = dashboard.top_kid(data)
     data = dashboard.kid_years(data,con)
     data = dashboard.kid_stats(data,con)
     data = dashboard.kid_bday(data)
     data = dashboard.mem_ani(data)
     data = dashboard.no_of_kids(data,con)
+
     print(data)
+    if request.method == "POST":
+        if 'input' in request.POST:
+            input = request.POST.get('input')
+
+            pid = Kid.objects.annotate(fullname=Concat('first_name', Value(' '), 'last_name')).filter(first_name__startswith=input)
+            vol = pid.values_list('fullname', flat=True)
+            json_stuff = json.dumps({'volunteer': list(vol)})
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'value' in request.POST:
+            value = request.POST.get('value')
+            if " " not in value:
+                kid = Kid.objects.filter(first_name=value.split()[0],last_name=value.split()[1])
+            else:
+                kid = Kid.objects.filter(first_name=value.split()[0])
+            print(kid)
+            new_data = {}
+            data = serializers.serialize('json', list(kid),fields=('first_name','last_name','house_name','gender','dob','age','hobbies','sibling_name','school_name','class_no','wish_to_pursue','attended_sessions','attending_sessions','date','image'))
+            new_data = dashboard.child_attendance(new_data,con,None,None,kid.values_list('pk',flat=True)[0])
+            new_data = dashboard.kid_session_history(new_data,kid.values_list('pk',flat=True)[0])
+            new_data = dashboard.kid_galery(new_data,kid)
+            print(new_data)
+            json_stuff = json.dumps({'fname': value, 'data': data,'new_data':new_data,'library':kid.values_list('project__project_name',flat=True)[0]})
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/child_dash.html', context=data)
 
+@csrf_exempt
 @login_required
 def proj_dashboard(request):
     data = {}
+    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    con, ml = dashboard.get_month_range(config)
+    data["m_list"] = ml
+    print('view', config, ml)
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-    #pr_id = Project.
+    data["config"] = config
+    print(data['config'])
+    p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
+    y_list = []
+    print(today.year, p)
+    for i in range(today.year, p - 1, -1):
+        y_list.append(i)
+    data["year"] = y_list
+    c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
+    print(c)
+    data = dashboard.monthly_session(data, con, c)
+    data = dashboard.child_attendance(data, con)
+    data = dashboard.session_prog(data, con, c)
+    data = dashboard.vol_attendance(data, con, c)
+    data = dashboard.total_revenue(data, con, )
+    data = dashboard.total_expense(data, con, c)
+    data = dashboard.kid_stats(data, con, c)
+    data = dashboard.kid_years(data, con, c)
+    data = dashboard.no_of_kids(data, con, c)
+    data = dashboard.vol_role(data, con, c)
+    data = dashboard.volunteer_list(data, c)
+    data = dashboard.key_detail(data, c)
+    data = dashboard.highlight(data, c)
+    print(data)
+    if request.method == "POST":
+        if 'fiscalv' in request.POST:
+            fv = request.POST.get('fiscalv')
+            ft = request.POST.get('fiscalt')
+            config = Config.objects.filter(id=1)
+            config.update(fiscal_month=fv)
+        elif 'select' in request.POST:
+            sel = request.POST.get('select')
+            print(sel)
+            if sel == 'Project':
+                p = Project.objects.all().values_list('project_name', flat=True)
+            elif sel == 'Country':
+                p = Project.objects.all().values_list('country', flat=True)
+            elif sel == 'Chapter':
+                p = Project.objects.all().values_list('state', flat=True)
+            json_stuff = json.dumps({'value': list(set(p))})
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'year' in request.POST:
+            new_data = {}
+            year = request.POST.get('year')
+            p = Profile.objects.filter(user=request.user).values_list('project',flat=True)[0]
+            f = Project.objects.filter(pk=p)
+            print(f)
+            new_data = dashboard.child_attendance(new_data, con, f, year)
+            new_data = dashboard.vol_attendance(new_data, con, f, year)
+            new_data = dashboard.key_detail(new_data, f)
+            new_data = dashboard.session_prog(new_data, con, f, year)
+            new_data = dashboard.monthly_session(new_data, con, f, year)
+            new_data = dashboard.volunteer_list(new_data, f)
+            new_data = dashboard.highlight(new_data, f, year)
+            json_stuff = json.dumps(new_data)
+            print(new_data)
+            return HttpResponse(json_stuff, content_type="application/json")
 
-    uid = Profile.objects.filter(role="Volunteer").order_by()
-    aid = Attendance.objects.filter()
-    return render(request,'dashboard/proj_dash.html', context=data)
+    return render(request,'dashboard/p_dash.html', context=data)
 
 @csrf_exempt
 @login_required
@@ -392,8 +530,8 @@ def mailchimp(request):
 def gallery_op(request,c):
     data = {}
     y = Project.objects.all().order_by("date").values_list('date__year')[0][0]
-    data['month'] = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
-    y_list = []
+    data['month'] = ['ALL','JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+    y_list = ['ALL']
     for i in range(today.year, y - 1, -1):
         y_list.append(i)
     data["year"] = y_list
@@ -433,24 +571,148 @@ def gallery_op(request,c):
                 f = Project.objects.filter(state=val)
     return data
 
+@csrf_exempt
 def session_gallery(request):
     data = gallery_op(request,Session)
     data["active"]=1
+    if request.method == "POST":
+        if 'value' in request.POST:
+            val = request.POST.get('value')
+            field = request.POST.get('field')
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            f = None
+            if field == 'Project':
+                f = Project.objects.filter(project_name=val)
+            elif field == 'Country':
+                f = Project.objects.filter(country=val)
+            elif field == 'Chapter':
+                f = Project.objects.filter(state=val)
+            if year == 'ALL':
+                year = None
+            if month == 'ALL':
+                month = None
+            data = gallery.gallery(data, Session,f,year, month)
+            json_stuff = json.dumps(data)
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'select' in request.POST:
+            sel = request.POST.get('select')
+            print(sel)
+            if sel == 'Project':
+                p = Project.objects.all().values_list('project_name', flat=True)
+            elif sel == 'Country':
+                p = Project.objects.all().values_list('country', flat=True)
+            elif sel == 'Chapter':
+                p = Project.objects.all().values_list('state', flat=True)
+            json_stuff = json.dumps({'value': list(set(p))})
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
+@csrf_exempt
 def project_gallery(request):
     data = gallery_op(request, Project)
     data["active"] = 2
+    if request.method == "POST":
+        if 'value' in request.POST:
+            val = request.POST.get('value')
+            field = request.POST.get('field')
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            print(val)
+            if year == 'ALL':
+                year = None
+            if month == 'ALL':
+                month = None
+            data = gallery.gallery(data, Project,val,year, month)
+            json_stuff = json.dumps(data)
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'select' in request.POST:
+            sel = request.POST.get('select')
+            print(sel)
+            if sel == 'Project':
+                p = Project.objects.all().values_list('project_name', flat=True)
+            elif sel == 'Country':
+                p = Project.objects.all().values_list('country', flat=True)
+            elif sel == 'Chapter':
+                p = Project.objects.all().values_list('state', flat=True)
+            json_stuff = json.dumps({'value': list(set(p))})
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
+
+@csrf_exempt
 def donor_gallery(request):
     data = gallery_op(request, Donor)
     data["active"] = 3
+    if request.method == "POST":
+        if 'value' in request.POST:
+            val = request.POST.get('value')
+            field = request.POST.get('field')
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            f = None
+            if field == 'Project':
+                f = Project.objects.filter(project_name=val)
+            elif field == 'Country':
+                f = Project.objects.filter(country=val)
+            elif field == 'Chapter':
+                f = Project.objects.filter(state=val)
+            if year == 'ALL':
+                year = None
+            if month == 'ALL':
+                month = None
+            data = gallery.gallery(data, Donor,f,year, month)
+            json_stuff = json.dumps(data)
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'select' in request.POST:
+            sel = request.POST.get('select')
+            print(sel)
+            if sel == 'Project':
+                p = Project.objects.all().values_list('project_name', flat=True)
+            elif sel == 'Country':
+                p = Project.objects.all().values_list('country', flat=True)
+            elif sel == 'Chapter':
+                p = Project.objects.all().values_list('state', flat=True)
+            json_stuff = json.dumps({'value': list(set(p))})
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
+
+@csrf_exempt
 def kid_gallery(request):
     data = gallery_op(request, Kid)
     data["active"] = 4
+    if request.method == "POST":
+        if 'value' in request.POST:
+            val = request.POST.get('value')
+            field = request.POST.get('field')
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            f = None
+            if field == 'Project':
+                f = Project.objects.filter(project_name=val)
+            elif field == 'Country':
+                f = Project.objects.filter(country=val)
+            elif field == 'Chapter':
+                f = Project.objects.filter(state=val)
+            if year == 'ALL':
+                year = None
+            if month == 'ALL':
+                month = None
+            data = gallery.gallery(data, Kid,f,year, month)
+            json_stuff = json.dumps(data)
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'select' in request.POST:
+            sel = request.POST.get('select')
+            print(sel)
+            if sel == 'Project':
+                p = Project.objects.all().values_list('project_name', flat=True)
+            elif sel == 'Country':
+                p = Project.objects.all().values_list('country', flat=True)
+            elif sel == 'Chapter':
+                p = Project.objects.all().values_list('state', flat=True)
+            json_stuff = json.dumps({'value': list(set(p))})
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
 def signin(request):
@@ -522,7 +784,7 @@ def profile(request):
     data['first_name'] = request.user.first_name
     data['last_name'] = request.user.last_name
     data['email'] = request.user.email
-    data['project'] = request.user.profile.project.project_name or ''
+    data['project'] = request.user.profile.project.project_name if request.user.profile.project is not None else ''
     data['role_key'] = get_key(role)
     data['role_val'] = role
     av = pid.values_list("image", flat=True)[0]
@@ -631,6 +893,9 @@ def profile(request):
 def calender(request):
     data = {}
     session_kv = {}
+    k = "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=86jm210h5i5hd7&scope=r_fullprofile r_emailaddress rw_company_adminw_share&state=8897239179ramya&redirect_uri=http://127.0.0.1:8000/accounts/profile"
+    k = requests.get(k)
+    print(k.text)
     data['sessions'] = Session.objects.all()
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
@@ -648,25 +913,24 @@ def calender(request):
                 if sid:
                     data['warning'] = ""
                     objs = serializers.serialize('json',sid, fields=['library_name','location'])
-                    i=1
                     for obj in json.loads(objs):
                         print(obj)
-                        session_kv.update({str(i):obj['fields']['library_name']+" - "+obj['fields']['location']})
-                        i+=1
+                        session_kv.update({str(obj['pk']):obj['fields']['library_name']+" - "+obj['fields']['location']})
+
                     data['session_select'] = json.dumps(session_kv)
                 else:
                     data['session_select'] = ""
                     data['warning'] = "Selected date had no sessions. Kindly change the date."
+                print(session_kv)
                 return JsonResponse(data)
         elif 'session' in request.POST:
             date = request.POST.get('session_date')
             session = request.POST.get('session')
+            print(session)
             sid = Session.objects.filter(date__startswith=date)
             objs = serializers.serialize('json', sid, fields=['library_name', 'location'])
-            i = 1
             for obj in json.loads(objs):
-                session_kv.update({str(i): obj['fields']['library_name'] + " - " + obj['fields']['location']})
-                i += 1
+                session_kv.update({str(obj['pk']): obj['fields']['library_name'] + " - " + obj['fields']['location']})
             sid = Session.objects.get(date__startswith=date,library_name=session_kv[session].split(" - ")[0])
             try:
                 if Attendance.objects.get(user=request.user.profile,session=sid,attendance_submitted=True):
@@ -697,6 +961,24 @@ def calender(request):
             print(session)
             json_stuff = json.dumps({'id':list(id),'attendance': list(session),'location': list(location)})
             return HttpResponse(json_stuff, content_type="application/json")
+        elif 'selected' in request.POST:
+            selected = request.POST.get('selected')
+            p = Session.objects.filter(pk=selected).values_list('project')
+            ka = Kid_Attendance.objects.filter(session=selected).values_list('kid',flat=True)
+            k = Kid.objects.filter(library=list(p)[0]).exclude(pk__in=ka).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+            print(k)
+            id = k.values_list('pk',flat=True)
+            name = k.values_list('fullname',flat=True)
+            json_stuff = json.dumps(dict(zip(list(id),list(name))))
+            print(json_stuff)
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'cat_approval' in request.POST:
+            date = request.POST.get('session_date')
+            session = request.POST.get('session2')
+            approval = request.POST.getlist('cat_approval')
+            for a in approval:
+                Kid_Attendance.objects.create(kid=Kid.objects.get(pk=int(a)),session=Session.objects.get(pk=session),attendance=True)
+            print(date,session,approval)
         elif 'volunteer' in request.POST:
             volunteer = request.POST.get('volunteer')
             approval = request.POST.getlist('approval')

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'main',
     'django_mysql',
     'import_export',
+    'social_django',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,6 +76,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -120,6 +125,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -135,12 +147,20 @@ USE_L10N = True
 
 USE_TZ = False
 
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86jm210h5i5hd7'    #Client ID
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'J8AXYsRzMoGygeUu'  #Client Secret
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress','r_fullprofile']
+
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address','positions', 'headline','summary','picture-url','site-standard-profile-request','public-profile-url','location','interests','skills','languages',]
+
+LINKEDIN_EXTRA_DATA = [('id', 'id'), ('first-name', 'first_name'), ('last-name', 'last_name'), ('email-address', 'email_address'), ('positions', 'positions'), ('summary', 'summary'), ('headline', 'headline'), ('picture-url', 'picture_url'),
+ ('site-standard-profile-request', 'site_standard_profile_request'), ('public-profile-url', 'public_profile_url'), ('location', 'location'), ('interests', 'interests'), ('skills', 'skills'), ('languages', 'languages'),]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,"main", "static"),
-    os.path.join(BASE_DIR,"chat", "static"),
+    os.path.join(BASE_DIR, "main", "static"),
+    os.path.join(BASE_DIR, "chat", "static"),
 ]
 
 MEDIAFILES_DIRS = [
@@ -156,7 +176,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
+LOGIN_REDIRECT_URL = '/accounts/profile'
+LOGOUT_REDIRECT_URL = '/accounts/signin'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'

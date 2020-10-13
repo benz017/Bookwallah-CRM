@@ -46,7 +46,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -248,7 +248,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a href="javascript:;">
@@ -257,6 +257,7 @@
               </a>
             <ul class="sub">
               <li ><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
+                <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
                 <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
@@ -335,7 +336,7 @@
                       <div class="row form-group added">
                           <label for="session" class="col-lg-2 control-label">Session: </label>
                           <div class="col-lg-7">
-                              <select id="session" name="session"  class="form-control" style="text-align:center; padding: .375rem .75rem;" disabled required>
+                              <select id="session" name="session"  class="form-control session" style="text-align:center; padding: .375rem .75rem;" disabled required>
                                   <option value="0">Please select</option>
                                   <!--option value="{{forloop.counter}}">{{session.fields.library_name}} - {{session.fields.location}}</11option-->
                               </select>
@@ -375,6 +376,39 @@
 
                             <div class="col-lg-8 col-lg-offset-8" >
                                     <button type="submit" class="btn btn-theme" style="margin-left:10px;" onsubmit="approve(event)"><i class="fa fa-check-square-o" ></i> Update</button>
+                            </div>
+                          </div>
+                  </form>
+                  </div>
+                     <div class="row mt" style=" background:white;">
+                  <h4 class="mb" style="text-align:center;">Child Attendance</h4>
+                  <form role="form" id="c-att-form" class="form-horizontal" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Date</label>
+                            <div class="col-lg-7">
+                              <input type="date" placeholder=" " name="session_date" class="form-control" value="" onchange="postdate2(event)" oncancel="closedate2(event)" required>
+                            </div>
+                          </div>
+                      <div class="row form-group added">
+                          <label for="session" class="col-lg-2 control-label">Session: </label>
+                          <div class="col-lg-7">
+                              <select id="session2" name="session2"  class="form-control session" style="text-align:center; padding: .375rem .75rem;" disabled required>
+                                  <option value="0">Please select</option>
+                                  <!--option value="{{forloop.counter}}">{{session.fields.library_name}} - {{session.fields.location}}</11option-->
+                              </select>
+
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="col-lg-2 control-label">Children: </label>
+                          <div class="col-lg-7 catt-checkbox" style="margin:10px auto;margin-left:85px;">
+
+                          </div>
+                      </div>
+                       <div class="form-group">
+
+                            <div class="col-lg-8 col-lg-offset-8" >
+                                    <button type="submit" class="btn btn-theme" id="form-submit2" style="margin-left:10px;" onsubmit="submit(event)"><i class="fa fa-check-square-o" ></i> Update</button>
                             </div>
                           </div>
                   </form>
@@ -504,6 +538,95 @@
        }
        });
     }
+  </script>
+ <script>
+    function closedate2(e){
+    $(".select_session").remove();
+    }
+    function postdate2(e){
+      $(".select_session").remove();
+      $date = e.target.value;
+      $.ajax({
+        type:"POST",
+        url: "{% url 'calender' %}",
+        data:{date: $date},
+       success: function(resp){
+        var warning = resp.warning;
+        if ( warning !== ""){
+        $(".select_session").remove();
+        $("#session2").attr('disabled', true);
+      $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title: 'Warning!',
+        // (string | mandatory) the text inside the notification
+        text: warning,
+        // (string | optional) the image to display on the left
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky: false,
+        // (int | optional) the time you want it to be alive for before fading out
+        time: 8000,
+        // (string | optional) the class name you want to apply to that specific message
+      });
+      }
+        var session = JSON.parse(resp.session_select);
+
+        $("#session2").attr('disabled', false);
+        $.each(session,function(key, value)
+        {
+            $("#session2").append('<option class="select_session" value=' + key + '>' + value + '</option>');
+        });
+       },
+       error: function(e){
+       console.log(e);
+       }
+       });
+    }
+    $('#session2').change(function(e){
+        $selected= $(this).children("option:selected").val();
+         $.ajax({
+        type:"POST",
+        url: "{% url 'calender' %}",
+        data:{selected: $selected},
+       success: function(resp){
+        $.each(resp,function(key, value){
+          $('.catt-checkbox').append('<div class="row check-box"><input type="checkbox" id="'+key+'" name="cat_approval" value="'+key+'"><label for="'+key+'" >'+value+'</label></div>');
+        });
+       }
+       });
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+        $('#c-att-form').submit(function(e) {
+    e.preventDefault();
+    msg = '';
+    $body = $("body");
+    var $myForm = $('#c-att-form');
+    var $formData = $(this).serialize();
+    var $thisURL = $myForm.attr('data-url') || window.location.href;
+    $.ajax({
+        type:'POST',
+        url:$thisURL,
+        data: $formData,
+        success: formSuccess4
+    });
+    });
+    function formSuccess4(data){
+    $('.check-box').remove();
+    $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title: 'Notification!',
+        // (string | mandatory) the text inside the notification
+        text: "Attendance Updated!",
+        // (string | optional) the image to display on the left
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky: false,
+        // (int | optional) the time you want it to be alive for before fading out
+        time: 8000,
+        // (string | optional) the class name you want to apply to that specific message
+      });
+      }
+    });
   </script>
     <script>
     $(document).ready(function() {

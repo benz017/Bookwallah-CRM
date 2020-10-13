@@ -35,6 +35,7 @@
     Author: TemplateMag.com
     License: https://templatemag.com/license/
   ======================================================= -->
+
 </head>
 
 <body>
@@ -49,7 +50,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -251,7 +252,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="{{image}}" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="{% url 'profile' %}"><img src="{{image}}" class="img-circle" width="80"></a></p>
           <h5 class="centered">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
           <li class="sub-menu">
             <a class="active" href="javascript:;">
@@ -260,6 +261,7 @@
               </a>
             <ul class="sub">
               <li class="active"><a href="{% url 'main_dashboard' %}">Main Dashboard</a></li>
+                <li ><a href="{% url 'proj_dashboard' %}">Project Dashboard</a></li>
                 <li><a href="{% url 'vol_dashboard' %}">Volunteer Dashboard</a></li>
                 <li ><a href="{% url 'donor_dashboard' %}">Donor Dashboard</a></li>
                 <li><a href="{% url 'child_dashboard' %}">Child Dashboard</a></li>
@@ -331,7 +333,7 @@
             <!--CUSTOM CHART START -->
             <div  class="row" style="padding-bottom:15px; ">
             <div id="img-container" >
-          <div id="image" class="col-lg-12 parallax" style="background-image: url('/static/img/12_Mantuga 7.jpg');">
+          <div id="image" class="col-lg-12 parallax" style="background-image: url('/static/img/12_Mantuga.jpg');">
               </div>
             </div></div>
              <div class="row">
@@ -358,7 +360,11 @@
                         </select>
                     </div>
                         <div class="col-md-4 col-sm-4 " >
-                        <select id="value" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;" disabled>
+                        <select id="value" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;">
+                          <option value="">Select Value...</option>
+                          {% for c in country_list %}
+                          <option value="{{c}}">{{c}}</option>
+                          {% endfor %}
                         </select>
                         </div>
                   <div class="col-md-1 col-sm-1 " >
@@ -391,6 +397,7 @@
               </div>
                   </div>
                 </div>
+
               </form>
                   </div>
                   </div>
@@ -426,16 +433,15 @@
                   <div class="blue-header">
                     <h5>CHILD ATTENDANCE</h5>
                   </div>
+                  <div id="graph5">
                   <canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>
-                  <script>
-
-                  </script>
+                  </div>
                   <div class="row">
                     <div class="col-sm-5 col-xs-6">
                       <p>Total<br/>Attendance:</p>
                     </div>
                     <div class="col-sm-6 col-xs-6 goright">
-                      <h2>21%</h2>
+                      <h2 id="c_att">{{c_att}}%</h2>
                     </div>
                   </div>
                 </div>
@@ -452,16 +458,16 @@
                   <div class="blue-header">
                     <h5>TOP VOLUNTEER</h5>
                   </div>
-                  <p><img src="{% static 'img/ui-zac.jpg' %}" class="img-circle" width="150"></p>
-                  <p><b>Zac Snider</b></p>
+                  <p><img src="{{tv_av}}" class="img-circle" width="150" height="150"></p>
+                  <p><b>{{tv_na}}</b></p>
                   <div class="row">
                     <div class="col-md-6">
                       <p class="mt">MEMBER SINCE</p>
-                      <p>2012</p>
+                      <p>{{tv_jy}}</p>
                     </div>
                     <div class="col-md-6">
                       <p class="mt">TOTAL HOURS</p>
-                      <p>47</p>
+                      <p>{{tv_hrs}}</p>
                     </div>
                   </div>
                 </div>
@@ -471,16 +477,16 @@
                   <div class="blue-header">
                     <h5>TOP CHILD</h5>
                   </div>
-                  <p><img src="{% static 'img/friends/fr-05.jpg' %}" class="img-circle" width="150"></p>
-                  <p><b>Tom Hanks</b></p>
+                  <p><img src="{{tk_av}}" class="img-circle" width="150" height="150"></p>
+                  <p><b>{{tk_na}}</b></p>
                   <div class="row">
                     <div class="col-md-6">
                       <p class="mt">MEMBER SINCE</p>
-                      <p>2012</p>
+                      <p>{{tk_jy}}</p>
                     </div>
                     <div class="col-md-6">
                       <p class="mt">TOTAL SESSIONS</p>
-                      <p>41</p>
+                      <p>{{tk_count}}</p>
                     </div>
                   </div>
                 </div>
@@ -533,48 +539,35 @@
                 </div>
                 </div>
             </div>
-            <div class="border-head">
-              <h3>SURVEY REPORTS</h3>
+            <div class="row mt mb">
+              <div class="col-md-12 col-sm-12 mb">
+                <div class="blue-panel pn">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>TESTIMONIALS</h5>
+                  </div>
+                  <div class="slideshow-container">
+<a class="prev" onclick="plusSlides(-1)">❮</a>
+<div class="mySlides">
+  <q >{{d_test}}</q>
+  <p class="author">- {{d_name}}</p>
+</div>
+
+<div class="mySlides">
+  <q>{{t_test}}</q>
+  <p class="author">- {{t_name}}</p>
+</div>
+
+<a class="next" onclick="plusSlides(1)">❯</a>
             </div>
-            <div class="row">
-
-                  <div class="col-md-4 mb">
-                    <div class="blue-panel pn" style="height:300px;">
-                    <div class="blue-header" style="margin-bottom:0px;" >
-                    <h5>NPS SCORE</h5>
-                  </div>
-
-                    <div id="sgraph1">
-                  <canvas id="schart1" height="230" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
-                  </div>
+                  <div id="dot" class="dot-container">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+</div>
                 </div>
-                  </div>
-              <script>
-
-              </script>
-              <div class="col-md-4 mb">
-                <div class="blue-panel pn" style="height:300px;">
-                    <div class="blue-header" style="margin-bottom:0px;" >
-                    <h5>CHILD PSYCHOLOGY</h5>
-                  </div>
-
-                    <div id="sgraph2">
-                  <canvas id="schart2" height="230" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
-                  </div>
                 </div>
-                  </div>
-              <div class="col-md-4 mb">
-                <div class="blue-panel pn" style="height:300px;">
-                    <div class="blue-header" style="margin-bottom:0px;" >
-                    <h5>PRO SOCIAL BEHAVIOR</h5>
-                  </div>
-
-                    <div id="sgraph3">
-                  <canvas id="schart3" height="230" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
-                  </div>
-                </div>
-                  </div>
             </div>
+
+
                <div class="row mt mb">
               <div class="col-md-12 col-sm-12">
               <section class="blue-panel">
@@ -685,7 +678,13 @@
                         </tr>
                     </thead>
                     <tbody class="hvi">
+                    {% for i in m %}
+                      <tr class="hi" style="height:100%;">
+                        <td >{{hi|index:i}}</td>
 
+                        <td >{{is|index:i}}</td>
+                      </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
                       </div>
@@ -715,27 +714,50 @@
               </div>
 
             <!-- CALENDAR-->
-            <div id="calendar" class="mb" style="color:white;">
-              <div class="panel green-panel no-margin">
-                <div class="panel-body">
-                  <div id="date-popover" class="popover top" style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
-                    <div class="arrow"></div>
-                    <h3 class="popover-title" style="disadding: none;"></h3>
-                    <div id="date-popover-content" class="popover-content"></div>
-                  </div>
-                  <div id="my-calendar"></div>
-                </div>
-              </div>
-            </div>
             <div class="mb">
                 <div class="weather pn">
                   <i class="fa fa-cloud fa-4x"></i>
-                  <h2>11º C</h2>
-                  <h4>BUDAPEST</h4>
+                  <h2>31º C</h2>
+                  <h4>India</h4>
                 </div>
               </div>
+            <div class="border-head">
+              <h3>SURVEY REPORTS</h3>
+            </div>
+                    <div class="blue-panel pn" style="height:300px;">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>NPS SCORE</h5>
+                  </div>
+
+                    <div id="sgraph1">
+                  <canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
+                  </div>
+                </div>
+
+
+                <div class="blue-panel pn" style="height:300px;">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>CHILD PSYCHOLOGY</h5>
+                  </div>
+
+                    <div id="sgraph2">
+                  <canvas id="schart2" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
+                  </div>
+                </div>
+
+                <div class="blue-panel pn" style="height:300px;">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>PRO SOCIAL BEHAVIOR</h5>
+                  </div>
+
+                    <div id="sgraph3">
+                  <canvas id="schart3" height="230" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
+                  </div>
+                </div>
             <!-- / calendar -->
           </div>
+
+
             <div class="row mt">
                   <div class="col-md-6 col-sm-6">
                       <div class="darkblue-panel pn" style="height:100%;">
@@ -748,7 +770,7 @@
                                 {% for pic in ses_gal %}
                                 {% if forloop.counter|mod:'2' == 1 %}
 
-                                <img width="100%" src="{% get_media_prefix %}{{ ses_gal|index:forloop.counter0 }}" alt="">
+                                <img class="img" width="100%" src="{{ ses_gal|index:forloop.counter0 }}" alt="">
                                 {% endif %}
                                 {% endfor %}
                               </div>
@@ -756,7 +778,7 @@
                             <div class="column mb">
                                {% for pic in ses_gal %}
                                 {% if forloop.counter|mod:'2' == 0 %}
-                                <img width="100%" src="{% get_media_prefix %}{{ ses_gal|index:forloop.counter0 }}" alt="">
+                                <img class="img" width="100%" src="{{ ses_gal|index:forloop.counter0 }}" alt="">
                                 {% endif %}
                                 {% endfor %}
                               </div>
@@ -775,7 +797,7 @@
                                 {% for pic in kid_gal %}
                                 {% if forloop.counter|mod:'2' == 1 %}
 
-                                <img width="100%" src="{% get_media_prefix %}{{ kid_gal|index:forloop.counter0 }}" alt="">
+                                <img width="100%" src="{{ kid_gal|index:forloop.counter0 }}" alt="">
                                 {% endif %}
                                 {% endfor %}
                               </div>
@@ -783,7 +805,7 @@
                             <div class="column mb">
                                {% for pic in kid_gal %}
                                 {% if forloop.counter|mod:'2' == 0 %}
-                                <img width="100%" src="{% get_media_prefix %}{{ kid_gal|index:forloop.counter0 }}" alt="{{forloop.counter0 }}">
+                                <img width="100%" src="{{ kid_gal|index:forloop.counter0 }}" alt="{{forloop.counter0 }}">
                                 {% endif %}
                                 {% endfor %}
                               </div>
@@ -831,7 +853,7 @@
   <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
   <script src="{% static 'lib/sparkline-chart.js' %}"></script>
     <script src="{% static 'lib/raphael/raphael.min.js' %}"></script>
-  <script src="{% static 'lib/morris/morris.min.js' %}"></script>
+  <script src="{% static 'js/chartjs-plugin-datalabels.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
   <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
     <script src="{% static 'js/moment.min.js' %}"></script>
@@ -840,13 +862,20 @@
  <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry&v=3.7"></script>
   <script src="{% static 'lib/google-maps/maplace.js' %}"></script>
   <script src="{% static 'lib/google-maps/data/points.js' %}"></script>
-<script>
+  <script>
 
+    $(function () {
+    $('#field').val('4');
+    $('#value').val('India');
+});
 
-  </script>
-  <script type="text/javascript">
+   </script>
+<script type="text/javascript">
     $(document).ready(function() {
-    var loc = {{p_details.location|safe}};
+     $.ajax({
+        url: "{% url 'p_location' %}",
+        }).done(function( data) {
+            var loc = data;
     var map_obj = new Maplace({
       locations: loc,
       map_div: '#gmap-list',
@@ -857,8 +886,7 @@
       show_infowindow: false,
       start: 1,
     }).Load();
-
-     var unique_id = $.gritter.add({
+    var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
         title: 'Welcome to BookWallah!',
         // (string | mandatory) the text inside the notification
@@ -873,6 +901,10 @@
       });
 
       return false;
+        });
+
+
+
     });
   </script>
   <script type="application/javascript">
@@ -944,6 +976,7 @@
 <script>
 
     $(document).ready(function(){
+
     $("#f_m").val({{config}});
      $.each({{year}},function(index, value)
         {
@@ -980,7 +1013,7 @@
     groupedbar("schart2",{{cp_label|safe}},{{cp_data|safe}},0);
     groupedbar("schart3",{{sb_label|safe}},{{sb_data|safe}},{{sb_data|list_min}});
     chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},title,'pie','exp_chart');
-    chart([4,5],interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",2),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
+    chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
     chart({{ses_p_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{ses_p_data|length}}),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
     chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
@@ -998,6 +1031,7 @@
         url: "{% url 'main_dashboard' %}",
         data:{select: $selected},
         success: function(resp){
+        $('#value').find('option').remove();
            $value_list = resp.value;
            $("#value").attr('disabled', false);
            $("#value").append('<option class="filter_value" value="0">Select value..</option>');
@@ -1026,23 +1060,32 @@
           $('#pname').text(resp.p_details.project_name);
           $('#contact').text(resp.p_details.contact_number);
           $('#add').text(resp.p_details.address);
-          if (resp.p_details.highlights !== ''){
-          for (i=0;i<resp.p_details.highlights.length;i++){
-                $('#hlight').append('<li class="hi">'+resp.p_details.highlights[i]+'</li>');
+          if ((resp.hi !== '') || (resp.is !== '')){
+          for (i=0;i<4;i++){
+                $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
           }
           }
             $('#kd').show();
-            for (i=0;i<resp.p_details.highlights.length;i++){
-            $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+resp.p_details.highlights[i]+'</td><td>'+resp.p_details.issues[i]+'</td></tr>');
+            for (i=0;i<resp.m.length;i++){
+            $hi = '';
+            $is = '';
+            if (resp.hi[i]!==undefined){$hi=resp.hi[i];}
+            if (resp.is[i]!==undefined){$is=resp.is[i];}
+            $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+$hi+'</td><td>'+$is+'</td></tr>');
+
           }
-        document.getElementById('hlight').innerHTML = '';
+        //document.getElementById('hlight').innerHTML = '';
         $('#serverstatus01').remove();
         $('#serverstatus04').remove();
+        $('#serverstatus02').remove();
         $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
         $('#graph4').append('<canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>');
+         $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
+        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
         chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
         chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
         $('#vol_att').text(resp.vol_att+"%");
+        $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
         $('#t_exp').text('$'+resp.t_exp);
         $('#serverstatus05').remove();
@@ -1098,6 +1141,11 @@ var myBarChart = new Chart(ctx, {
     type: 'bar',
     data: data,
     options: {
+    plugins: {
+      datalabels: {
+        color: '#fff',
+             }
+          },
         barValueSpacing: 20,
         scales: {
         xAxes: [{
@@ -1127,11 +1175,43 @@ var myBarChart = new Chart(ctx, {
                             datasets: [{
                             data: dat,
                             borderColor:'#12b0e2',
-                            fill: false}],
+                            }],
                         };
                         var opt = {
+                layout: {
+                padding: {
+                    // Any unspecified dimensions are assumed to be 0
+                    top: 25,
+                    right:10,
+                }
+},
                     responsive: false,
                     segmentShowStroke: false,
+                     scales: {
+        xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            }
+        }],
+        yAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+            },
+            ticks: {
+                    display: false //this will remove only the label
+                }
+
+        }]
+        },
+                     plugins: {
+      datalabels: {
+      align: "top",
+      anchor: "center",
+      offset: 1,
+             }
+          },
                     legend: {
                     display: false
                     },
@@ -1175,24 +1255,12 @@ var myBarChart = new Chart(ctx, {
     hover: {
         animationDuration: 0
     },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
+    plugins: {
+      datalabels: {
+        color: '#34495e',
+             }
+          },
 
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillText(data, bar._model.x, bar._model.y - 1);
-                });
-            });
-        }
-    },
                     responsive: false,
                     legend: {
                     display: false
@@ -1215,6 +1283,20 @@ var myBarChart = new Chart(ctx, {
                     legend: {
                     display: true,
                     position: 'top',
+                    },
+                     plugins: {
+                      datalabels: {
+                        formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(0)+"%";
+                        return percentage;
+                        },
+                    color: '#fff',
+                        }
                     },
                     maintainAspectRatio: true,
                     }
@@ -1255,6 +1337,34 @@ function interpolateColors(color1, color2, steps) {
 
 
 
+</script>
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+}
 </script>
 {% endblock %}
 </body>
