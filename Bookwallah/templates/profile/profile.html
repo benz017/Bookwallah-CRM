@@ -301,12 +301,7 @@
               <li><a href="{% url 'kid_gallery' %}">Kid</a></li>
             </ul>
           </li>
-          <li class="sub-menu">
-            <a href="{% url 'mailchimp' %}">
-              <i class="fa fa-envelope"></i>
-              <span>MailChimp</span>
-              </a>
-          </li>
+
             {% else %}
             <li class="mt">
             <a href="{% url 'signin' %}">
@@ -333,11 +328,11 @@
               <div class="col-md-4 profile-text mt mb centered">
                 <div class="right-divider hidden-sm hidden-xs">
                   <h4 class="badge bg-info" style="color:white;font-size:16px;margin:1px;">2</h4>
-                  <h5>MY PENDING TASKS</h5>
+                  <h5>JOINING DATE</h5>
                   <h4 class="badge  bg-info" style="color:white;font-size:16px;margin:1px;">29</h4>
-                  <h5>VOLUNTEERS' PENDING TASK</h5>
+                  <h5>JOURNEY WITH BOOKWALLAH</h5>
                   <h4 class="badge  bg-info" style="color:white;font-size:16px;margin:1px;">5</h4>
-                  <h5>SESSIONS THIS QUARTER</h5>
+                  <h5>TEAM STRENGTH</h5>
                 </div>
               </div>
               <!-- /col-md-4 -->
@@ -447,66 +442,12 @@
                       <h2 style="color:#e9f0f4;">{{att_p|convert:"int"}}%</h2>
                     </div>
                   </div>
+
                 </div>
+
                 <!-- /grey-panel -->
               </div>
-                          </div>
-                          <div class="detailed mt">
-                          <h4>Recent Activity</h4>
-                          <div class="recent-activity">
-                            <div class="activity-icon bg-theme"><i class="fa fa-trophy"></i></div>
-                            <div class="activity-panel">
-                              <h5>1 HOUR AGO</h5>
-                              <p>Task Completed: Completed 1 Task.</p>
-                            </div>
-                            <div class="activity-icon bg-theme02"><i class="fa fa-check"></i></div>
-                            <div class="activity-panel">
-                              <h5>5 HOURS AGO</h5>
-                              <p>Attendance. Your attendance has been approved.</p>
-                            </div>
-                            <div class="activity-icon bg-theme03"><i class="fa fa-rocket"></i></div>
-                            <div class="activity-panel">
-                              <h5>3 DAYS AGO</h5>
-                              <p>Attendance: You updated your attendance.</p>
-                            </div>
-                          </div>
-                          <!-- /recent-activity -->
-                        </div>
-                        <!-- /detailed -->
-                      </div>
-                      <!-- /col-md-6 -->
-                      <div class="col-md-6 detailed">
-                          <textarea rows="3" class="form-control" placeholder="Whats on your mind?" style="margin-left:0px;"></textarea>
-                        <div class="grey-style">
-                          <div class="pull-left">
-                            <button class="btn btn-sm btn-theme"><i class="fa fa-camera"></i></button>
-                            <button class="btn btn-sm btn-theme"><i class="fa fa-map-marker"></i></button>
-                          </div>
-                          <div class="pull-right">
-                            <button class="btn btn-sm btn-theme03">POST</button>
-                          </div>
-                        </div>
-                        <h4>User Stats</h4>
-                        <div class="row centered mt mb">
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-ticket"></i></h1>
-                            <h3>24</h3>
-                            <h6>SUCCESSFUL SESSIONS</h6>
-                          </div>
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-trophy"></i></h1>
-                            <h3>37</h3>
-                            <h6>COMPLETED TASKS</h6>
-                          </div>
-                          <div class="col-sm-4">
-                            <h1><i class="fa fa-star"></i></h1>
-                            <h3>5</h3>
-                            <h6>APPRAISAL RATING</h6>
-                          </div>
-                        </div>
-                        <!-- /row -->
-                        <!-- /row -->
-                        <h4>Task Progress</h4>
+                            <h4>Task Progress</h4>
                         <div class="row centered">
                           <div class="col-md-8 col-md-offset-2">
                             <h5>Dashboard Update ({{strength}}%)</h5>
@@ -525,6 +466,34 @@
                           </div>
                           <!-- /col-md-8 -->
                         </div>
+                          </div>
+
+                        <!-- /detailed -->
+                      </div>
+                      <!-- /col-md-6 -->
+                      <div class="col-md-6 detailed">
+
+                        <h4>User Stats</h4>
+                        <div class="row centered mb">
+                          <div class="col-sm-4">
+                            <h1><i class="fa fa-ticket"></i></h1>
+                            <h3>24</h3>
+                            <h6>TOTAL SESSIONS</h6>
+                          </div>
+                          <div class="col-sm-4">
+                            <h1><i class="fa fa-trophy"></i></h1>
+                            <h3>37</h3>
+                            <h6>COMPLETED TASKS</h6>
+                          </div>
+                          <div class="col-sm-4">
+                            <h1><i class="fa fa-star"></i></h1>
+                            <h3>5</h3>
+                            <h6>APPRAISAL RATING</h6>
+                          </div>
+                        </div>
+                        <!-- /row -->
+                        <!-- /row -->
+
                           {% if request.user|has_group:"Volunteer" %}
                           <h4>Tasks Assigned</h4>
                       <div class="row centered">
@@ -860,31 +829,31 @@
                           <div class="form-group">
                             <label class="col-lg-2 control-label">Skype</label>
                             <div class="col-lg-6">
-                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                              <input type="text" placeholder=" " name="skype" class="form-control" value="{{skype}}">
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-lg-2 control-label">Zoom</label>
                             <div class="col-lg-6">
-                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                              <input type="text" placeholder=" " name="zoom" class="form-control" value="{{zoom}}">
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-lg-2 control-label">LinkedIn</label>
                             <div class="col-lg-6">
-                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                              <input type="text" placeholder=" " name="linkedin" class="form-control" value="{{linkedin}}">
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-lg-2 control-label">Facebook</label>
                             <div class="col-lg-6">
-                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                              <input type="text" placeholder=" " name="facebook" class="form-control" value="{{facebook}}">
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-lg-2 control-label">Instagram</label>
                             <div class="col-lg-6">
-                              <input type="text" placeholder=" " name="skype" class="form-control" >
+                              <input type="text" placeholder=" " name="instagram" class="form-control" value="{{instagram}}">
                             </div>
                           </div>
    

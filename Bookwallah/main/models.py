@@ -77,12 +77,12 @@ class Profile(models.Model):
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
     role = models.CharField(max_length=100, blank=True, null=True)
-    skype = models.CharField(max_length=100, blank=True, null=True)
-    zoom = models.CharField(max_length=100, blank=True, null=True)
-    facebook = models.CharField(max_length=100, blank=True, null=True)
-    linkedin = models.CharField(max_length=100, blank=True, null=True)
-    instagram = models.CharField(max_length=100, blank=True, null=True)
-    leaving_date = models.DateField(null=True, blank=True)
+    skype = models.CharField(max_length=500, blank=True,default="")
+    zoom = models.CharField(max_length=500, blank=True,default="")
+    facebook = models.CharField(max_length=500, blank=True,default="" )
+    linkedin = models.CharField(max_length=500, blank=True,default="" )
+    instagram = models.CharField(max_length=500, blank=True,default="")
+    leaving_date = models.DateField(null=True, blank=True,default="")
     document = models.FileField(blank=True,null=True)
     is_online = models.BooleanField(null=True,default=False,blank=True)
     chat_room = models.ForeignKey('chat.Room', on_delete=models.DO_NOTHING, null=True, blank=True, related_name="chat_room")
@@ -155,6 +155,12 @@ class Donor(models.Model):
     nationality = models.CharField(max_length=200, blank=True, null=True)
     introduced_by = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateTimeField(default=timezone.now, verbose_name=u"Date of Involvement")
+    skype = models.CharField(max_length=500, blank=True, default="")
+    zoom = models.CharField(max_length=500, blank=True, default="")
+    facebook = models.CharField(max_length=500, blank=True, default="")
+    linkedin = models.CharField(max_length=500, blank=True, default="")
+    instagram = models.CharField(max_length=500, blank=True, default="")
+    twitter = models.CharField(max_length=500, blank=True, default="")
     documents = models.FileField(null=True,blank=True)
 
     def __str__(self):
@@ -175,10 +181,10 @@ class Gift(models.Model):
     donor = models.ForeignKey(Donor, default=2, on_delete=models.DO_NOTHING, related_name="gift_donor")
     item = models.CharField(max_length=300, blank=True, null=True)
     value = models.CharField(max_length=32, blank=True, null=True)
-    date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return "{} || {} || {}".format(self.donor, self.item,self.date)
+    date = models.DateTimeField(null=True, blank=True)
 
 
 class Task(models.Model):
@@ -282,37 +288,27 @@ class Donor_Testimonial(models.Model):
 
 
 class Highlight(models.Model):
-    state = list(set(list(Project.objects.all().values_list('state', flat=True))))
-    state = ((i, i) for i in state)
-    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, unique=True, null=True, choices=state)
+    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+    proj = ((i, i) for i in proj)
+    project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
     date = models.DateField( blank=True, null=True)
-    h1 = models.CharField(max_length=1000, blank=True, null=True)
-    h2 = models.CharField(max_length=1000, blank=True, null=True)
-    h3 = models.CharField(max_length=1000, blank=True, null=True)
-    h4 = models.CharField(max_length=1000, blank=True, null=True)
-    h5 = models.CharField(max_length=1000, blank=True, null=True)
-    h6 = models.CharField(max_length=1000, blank=True, null=True)
-    h7 = models.CharField(max_length=1000, blank=True, null=True)
-    h8 = models.CharField(max_length=1000, blank=True, null=True)
-    h9 = models.CharField(max_length=1000, blank=True, null=True)
-    h10 = models.CharField(max_length=1000, blank=True, null=True)
+    highlight = models.CharField(max_length=1000, blank=True, null=True)
+    priority = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{}".format(self.project)
 
 
 class Issues(models.Model):
-    state = list(set(list(Project.objects.all().values_list('state', flat=True))))
-    state = ((i, i) for i in state)
-    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True, unique=True, choices=state)
+    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+    proj = ((i, i) for i in proj)
+    project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
     date = models.DateField(blank=True, null=True)
-    i1 = models.CharField(max_length=1000, blank=True, null=True)
-    i2 = models.CharField(max_length=1000, blank=True, null=True)
-    i3 = models.CharField(max_length=1000, blank=True, null=True)
-    i4 = models.CharField(max_length=1000, blank=True, null=True)
-    i5 = models.CharField(max_length=1000, blank=True, null=True)
-    i6 = models.CharField(max_length=1000, blank=True, null=True)
-    i7 = models.CharField(max_length=1000, blank=True, null=True)
-    i8 = models.CharField(max_length=1000, blank=True, null=True)
-    i9 = models.CharField(max_length=1000, blank=True, null=True)
-    i10 = models.CharField(max_length=1000, blank=True, null=True)
+    issue = models.CharField(max_length=1000, blank=True, null=True)
+    priority = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{}".format(self.project)
 
 
 class Kid_Attendance(models.Model):

@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'main',
     'django_mysql',
     'import_export',
-    'social_django',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,10 +75,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -124,14 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.linkedin.LinkedinOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

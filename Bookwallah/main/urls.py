@@ -21,7 +21,6 @@ urlpatterns = [
     path('accounts/signout', views.signout, name='signout'),
     path('accounts/profile', views.profile, name='profile'),
     path('accounts/calender', views.calender, name='calender'),
-    path('social-auth/', include('social_django.urls', namespace='social'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

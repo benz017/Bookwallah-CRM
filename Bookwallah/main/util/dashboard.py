@@ -21,7 +21,7 @@ config = Config.objects.filter(id=1).values_list('fiscal_month',flat=True)[0]
 month_dict = {1:'JAN',2: 'FEB',3: 'MAR', 4:'APR', 5:'MAY', 6:'JUN', 7:'JUL',8: 'AUG', 9:'SEP', 10:'OCT', 11:'NOV', 12:'DEC'}
 
 def do_geocode(address, attempt=1, max_attempts=5):
-    geolocator = Nominatim()
+    geolocator = Nominatim(user_agent="http")
     try:
         return geolocator.geocode(address)
     except GeocoderTimedOut:
@@ -899,34 +899,38 @@ def regular_vol(data):
     print(a)
 
 
-def highlight(data,f,y=None):
-    try:
+def highlight(data,f,y=None,field = None):
+    if field == 'Project' or field is None:
         if y is None:
-            h = list(Highlight.objects.filter(chapter__in=f.values_list('state',flat=True),date__year=today.year).values())[0]
-            i = list(Issues.objects.filter(chapter__in=f.values_list('state',flat=True),date__year=today.year).values())[0]
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year).values())
         else:
-            h = list(Highlight.objects.filter(chapter__in=f.values_list('state', flat=True),date__year=y).values())[0]
-            i = list(Issues.objects.filter(chapter__in=f.values_list('state', flat=True),date__year=y).values())[0]
-        h.pop("id")
-        h.pop("date")
-        h.pop("chapter")
-        i.pop("id")
-        i.pop("date")
-        i.pop("chapter")
-        print(h,i)
-        h = [x for x in list(h.values()) if x is not None]
-        i = [x for x in list(i.values()) if x is not None]
-        m = max(len(h),len(i))
-        data["hi"] = h
-        data["is"] = i
-        data["m"] = list(range(m))
-        return data
-    except:
-        data["hi"] = ''
-        data["is"] = ''
-        data["m"] = ''
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y).values())
 
-        return data
+    elif field == 'Chapter':
+        if y is None:
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+        else:
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+    elif field == 'Country':
+        if y is None:
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+        else:
+            h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+    print(h,i)
+    h = [x['highlight'] for x in h if x['highlight'] is not None]
+    i = [x['issue'] for x in i if x['issue'] is not None]
+    m = max(len(h),len(i))
+    print(123,h, i, m)
+    data["hi"] = h
+    data["is"] = i
+    data["m"] = list(range(m))
+    return data
 
 
 def v_testimonials(data):

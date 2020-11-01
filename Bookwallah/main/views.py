@@ -1,30 +1,20 @@
 # ------------- External Libraries ------------- #
-import avinit
-import os
-import json
 from .forms import LogInForm
 from .models import *
 from datetime import date,datetime
-from .util import dashboard,gallery,gform
+from .util import dashboard,gallery
 from .integrations.mailchimp import *
-from .tasks import fetch_data
-import jsonify
+
 # ------------- Django Libraries ------------ #
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
-from django.http import HttpResponse, HttpResponseNotFound,JsonResponse
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from .tokens import account_activation_token
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages,sessions
-from django.utils.encoding import force_text
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models.functions import Concat
 from django.db.models import Value
@@ -122,7 +112,7 @@ def main_dashboard(request):
             new_data = dashboard.no_of_kids(new_data,con, f, year)
             new_data = dashboard.volunteer_list(new_data, f)
             new_data = dashboard.expense_type(new_data,con, f, year)
-            new_data = dashboard.highlight(new_data, f,year)
+            new_data = dashboard.highlight(new_data, f,year, field)
             json_stuff = json.dumps(new_data)
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
@@ -239,7 +229,7 @@ def donor_dashboard(request):
             year = request.POST.get('year')
             donor = Donor.objects.filter(first_name=value.split()[0],last_name=value.split()[1])
             donation = Donation.objects.filter(donated_by__in=donor)
-            data = serializers.serialize('json', list(donor), fields=('image','email', 'contact_number','address1','address2','city','state','country','zip','dob','project__project_name','company','position','account_no','program_pref','account_manager','next_task','next_task_date','note','stage','nationality','introduced_by'))
+            data = serializers.serialize('json', list(donor), fields=('image','email', 'contact_number','address1','address2','city','state','country','zip','dob','project__project_name','company','position','twitter','account_no','program_pref','zoom','skype','linkedin','facebook','instagram','account_manager','next_task','next_task_date','note','stage','nationality','introduced_by'))
             date = [datetime.strftime(d,"%d-%b-%y") for d in donation.values_list('date', flat=True)]
             amount = donation.values_list('amount', flat=True)
             new_data = {}
@@ -789,7 +779,11 @@ def profile(request):
     data['role_val'] = role
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-
+    data["zoom"] = request.user.profile.zoom
+    data["skype"] = request.user.profile.skype
+    data["linkedin"] = request.user.profile.linkedin
+    data["facebook"] = request.user.profile.facebook
+    data["instagram"] = request.user.profile.instagram
     task_list = Task.objects.filter(user=request.user.profile,status="Pending").order_by('date')
     data['tasks'] = task_list
     print(task_list)
@@ -874,6 +868,11 @@ def profile(request):
             pid.update(nick_name=nick_name, dob=dob, company=c_name, position=pos,role=role_dict[role], hobbies=interest,
                        chapter=chapter, future_plans=fplan)
         elif 'addr1' in request.POST:
+            zoom = request.POST.get('zoom') or None
+            skype = request.POST.get('skype') or None
+            linkedin = request.POST.get('linkedin') or None
+            facebook = request.POST.get('facebook')or None
+            instagram = request.POST.get('instagram')or None
             addr1 = request.POST.get('addr1')
             addr2 = request.POST.get('addr2')
             city = request.POST.get('city')
@@ -884,7 +883,9 @@ def profile(request):
                 address = str(addr1)+"; "+str(addr2)
             else:
                 address = ""
-            pid.update(address=address,city=city,state=state,country=country,contact_number=phone)
+            pid.update(address=address,city=city,state=state,country=country,contact_number=phone,
+                       zoom=zoom,skype=skype,linkedin=linkedin,facebook=facebook,
+                       instagram=instagram)
         return redirect('profile')
     return render(request, 'profile/profile.html', context=data)
 

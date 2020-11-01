@@ -32,11 +32,11 @@
 
   <style>
     table tr:nth-of-type(4n) td {
-    border-bottom: 3px solid black;
+    border-bottom: 3px solid #C0C0C0;
 }
   table tr {
-  border-left: 3px solid black;
-  border-right: 3px solid black;
+  border-left: 3px solid #C0C0C0;
+  border-right: 3px solid #C0C0C0;
   }
 
   #sh td{
@@ -324,12 +324,7 @@ color:white;
               <li><a href="{% url 'kid_gallery' %}">Kid</a></li>
             </ul>
           </li>
-          <li class="sub-menu">
-            <a href="{% url 'mailchimp' %}">
-              <i class="fa fa-envelope"></i>
-              <span>MailChimp</span>
-              </a>
-          </li>
+
             {% else %}
             <li class="mt">
             <a href="{% url 'signin' %}">
@@ -475,8 +470,8 @@ color:white;
             </div>
             <div class="row mt w1" hidden>
             <div class="col-md-12 col-sm-12">
-                      <div class="darkblue-panel pn" style="height:100%;overflow:auto;">
-                  <div class="darkblue-header">
+                      <div class="blue-panel pn" style="height:100%;overflow:auto;">
+                  <div class="blue-header">
                     <h5>KIDS GALLERY</h5>
                   </div>
                         <div id="img-container"></div>
@@ -763,7 +758,7 @@ function setValue(e){
             }
         });
         Object.entries(resp.new_data.ksh).forEach(function([key, value]){
-            $('#sh').append('<tr style="border-top: 3px solid black;"><tr><td >Date</td><td>'+key+'</td></tr><tr><td>Book Name</td><td>'+value[0]+'</td></tr><tr><td>Story Value</td><td >'+value[1]+'</td></tr></tr>');
+            $('#sh').append('<tr style="border-top: 3px solid #C0C0C0;"><tr><td >Date</td><td>'+key+'</td></tr><tr><td>Book Name</td><td>'+value[0]+'</td></tr><tr><td>Story Value</td><td >'+value[1]+'</td></tr></tr>');
             });
         $('.w1').show();
         },

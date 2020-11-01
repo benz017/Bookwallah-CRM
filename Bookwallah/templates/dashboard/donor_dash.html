@@ -302,12 +302,7 @@
               <li><a href="{% url 'kid_gallery' %}">Kid</a></li>
             </ul>
           </li>
-          <li class="sub-menu">
-            <a href="{% url 'mailchimp' %}">
-              <i class="fa fa-envelope"></i>
-              <span>MailChimp</span>
-              </a>
-          </li>
+
             {% else %}
             <li class="mt">
             <a href="{% url 'signin' %}">
@@ -536,6 +531,8 @@
             <!-- USERS ONLINE SECTION -->
               <div id="av"></div>
             <div id="stage" style="text-align:center;"></div>
+            <div id="social" class="centered w2" style="padding:10px;" hidden>
+            </div>
                 <div id="details">
 
                 </div>
@@ -1090,12 +1087,41 @@ $(document).ready(function() {
         $('#barchart2').remove();
         $('#graph3').append('<canvas id="barchart2" height="400" width="550" style="margin:0 auto;margin-left:10px;"></canvas>');
         chart(resp.new_data.d_list,"rgba(18,176,226,0.7)",resp.new_data.dy_list,"Amount of Donation",[true,"Donations (by Year)"],'bar','barchart2');
-
         $('#av').append('<div class="profile-pic centered donor" ><p><img src="/media/'+$data[0].fields.image+'" class="img-circle"></p></div>');
         $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Full Name:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.fname+'</div></div>');
         Object.entries($data[0].fields).forEach(function([key, value]){
             if (key === 'stage'){
-            $('#stage').append('<h3 class="donor" style="color:#34495e;">Donor Stage</h3><div class="btn-group donor"><div class="mb"> <button type="button" class="btn btn-theme03">'+value+'</button></div></div>');
+            $('#stage').append('<h3 class="donor" style="color:#34495e;">Donor Stage</h3><div class="btn-group donor"><button type="button" class="btn btn-theme03">'+value+'</button></div>');
+            }
+            else if (key === 'zoom' ) {
+            if (value !== null && value !== ''){
+            $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-video-camera" style="font-size:24px;padding:0 5px;"></i></a>')
+            }
+            }
+            else if (key === 'skype' ) {
+            if (value !== null && value !== ''){
+            $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-skype" style="font-size:24px;padding:0 5px;"></i></a>')
+            }
+            }
+            else if (key === 'linkedin' ) {
+             if (value !== null && value !== ''){
+            $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-linkedin-square" style="font-size:24px;padding:0 5px;"></i></a>')
+            }
+            }
+            else if (key === 'facebook' ) {
+             if (value !== null && value !== ''){
+             $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-facebook" style="font-size:24px;padding:0 5px;"></i></a>')
+            }
+            }
+            else if (key === 'instagram' ) {
+             if (value !== null && value !== ''){
+             $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-instagram" style= "font-size:24px;padding:0 5px;"></i></a>')
+            }
+            }
+            else if (key === 'twitter' ) {
+             if (value !== null && value !== ''){
+             $('#social').append('<a href="'+value+'"  target="_blank"><i class="fa fa-twitter" style="font-size:24px;padding:0 5px;"></i></a>')
+            }
             }
             else if (key === 'note'){
             $('#note').text(value);
