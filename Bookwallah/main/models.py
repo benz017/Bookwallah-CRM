@@ -421,4 +421,4 @@ class Config(models.Model):
     top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return "{} {}".format(self.fiscal_month,self.sheet_name)
+        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.sheet_name)
