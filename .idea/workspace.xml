@@ -79,8 +79,8 @@
           <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="116" column="8" lean-forward="true" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="8" />
+                <state relative-caret-position="204">
+                  <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
                   <folding>
                     <element signature="e#0#28#0" expanded="true" />
                   </folding>
@@ -340,11 +340,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-100" />
-    <option name="y" value="105" />
-    <option name="width" value="1945" />
-    <option name="height" value="1105" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="826" />
+    <option name="y" value="37" />
+    <option name="width" value="1943" />
+    <option name="height" value="1103" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -364,6 +364,42 @@
               <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
               <item name=".ebextensions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="media" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -552,17 +588,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="23" width="1550" height="848" extended-state="6" />
-    <editor active="true" />
+    <frame x="661" y="30" width="1554" height="882" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49673203" visible="true" weight="0.269002" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49673203" visible="true" weight="0.2682927" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3272472" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067115" side_tool="true" weight="0.32621083" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286517" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.3258427" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.2752809" />
       <window_info id="Structure" order="1" sideWeight="0.503268" side_tool="true" weight="0.22339723" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49932885" visible="true" weight="0.2991573" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49932885" visible="true" weight="0.2855228" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3974719" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24967062" />
@@ -922,8 +957,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="116" column="8" lean-forward="true" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="8" />
+        <state relative-caret-position="204">
+          <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
