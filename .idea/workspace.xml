@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +90,9 @@
           </file>
           <file leaf-file-name="jquery.flot.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/flot/jquery.flot.js">
-              <provider selected="true" editor-type-id="text-editor" />
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-459" />
+              </provider>
             </entry>
           </file>
           <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
@@ -222,7 +221,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>expense_type</find>
       <find>hlight</find>
       <find>url</find>
       <find>month_list</find>
@@ -240,7 +238,7 @@
       <find>kid_gal</find>
       <find>Mat</find>
       <find>.form-login</find>
-      <find />
+      <find>.active, .dot:hover</find>
       <find>.active</find>
       <find>social_django</find>
       <find>70px</find>
@@ -248,10 +246,11 @@
       <find>form-control</find>
       <find>details</find>
       <find>stage</find>
-      <find />
-      <find />
+      <find>(value !== null || value !== '')</find>
+      <find>border-top: 3px solid black;</find>
       <find>#sh</find>
-      <find />
+      <find>{% url 'mailchimp' %}</find>
+      <find>gitignore</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -279,13 +278,14 @@
       <replace>#session</replace>
       <replace>project</replace>
       <replace>$month_list</replace>
-      <replace />
+      <replace>(value !== null &amp;&amp; value !== '')</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\templates</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\chat</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah</dir>
       <dir>C:\Projects\BookWalah\Bookwallah</dir>
+      <dir>C:\Projects\BookWalah\New folder\Bookwallah-CRM</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -430,18 +430,18 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\BookWalah\New folder\Bookwallah-CRM\Bookwallah\main\static" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\img" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\static\img" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\media\project" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master\bkp" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\js" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\img" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\static\img" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\js" />
     </key>
   </component>
@@ -966,7 +966,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/flot/jquery.flot.js">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-459" />
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">

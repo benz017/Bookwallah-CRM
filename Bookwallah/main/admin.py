@@ -1,6 +1,6 @@
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from .models import *
 # Register your models here.
 #admin.site.register(Profile)
@@ -10,7 +10,7 @@ from .models import *
 #admin.site.register(Donation)
 #admin.site.register(Donor)
 #admin.site.register(Expense)
-admin.site.register(Config)
+
 admin.site.register(Recruit)
 admin.site.register(Task)
 admin.site.register(Pledge)
@@ -22,6 +22,20 @@ admin.site.register(Highlight)
 admin.site.register(Issues)
 admin.site.register(Volunteer_Testimonial)
 admin.site.register(Donor_Testimonial)
+
+
+
+@admin.register(Group)
+class Group(ImportExportModelAdmin):
+    pass
+
+@admin.register(User)
+class User(ImportExportModelAdmin):
+    pass
+
+@admin.register(Config)
+class Config(ImportExportModelAdmin):
+    pass
 
 @admin.register(NPSScore)
 class NPSScore(ImportExportModelAdmin):
