@@ -82,7 +82,7 @@ class Profile(models.Model):
     facebook = models.CharField(max_length=500, blank=True,default="" )
     linkedin = models.CharField(max_length=500, blank=True,default="" )
     instagram = models.CharField(max_length=500, blank=True,default="")
-    leaving_date = models.DateField(null=True, blank=True,default="")
+    leaving_date = models.DateField(null=True, blank=True)
     document = models.FileField(blank=True,null=True)
     is_online = models.BooleanField(null=True,default=False,blank=True)
     chat_room = models.ForeignKey('chat.Room', on_delete=models.DO_NOTHING, null=True, blank=True, related_name="chat_room")
