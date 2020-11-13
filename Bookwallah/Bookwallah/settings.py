@@ -34,7 +34,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['venv.eba-vrxmabmu.us-east-1.elasticbeanstalk.com']
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 MAILCHIMP_API_KEY = "8b751e5e02087d6e09b8717929c088d6-us3"
 MAILCHIMP_SUBSCRIBE_LIST_ID = "4184463c28"
