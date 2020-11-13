@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="" />
+    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/Bookwallah/main/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/admin.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,18 +32,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="17">
                   <caret line="365" column="95" selection-start-line="365" selection-start-column="79" selection-end-line="365" selection-end-column="95" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="vol_dash.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/vol_dash.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="11526">
-                  <caret line="678" column="48" selection-start-line="678" selection-start-column="48" selection-end-line="678" selection-end-column="48" />
-                  <folding>
-                    <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#section#0;n#section#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                  </folding>
                 </state>
               </provider>
             </entry>
@@ -88,10 +78,24 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="jquery.flot.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="jquery.flot.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/flot/jquery.flot.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-459" />
+                <state relative-caret-position="68">
+                  <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Bookwallah/main/admin.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="323">
+                  <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+                  <folding>
+                    <element signature="e#0#54#0" expanded="true" />
+                  </folding>
+                </state>
               </provider>
             </entry>
           </file>
@@ -321,7 +325,6 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/rec_dash.html" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html" />
-        <option value="$PROJECT_DIR$/Bookwallah/main/admin.py" />
         <option value="$PROJECT_DIR$/Bookwallah/test.py" />
         <option value="$PROJECT_DIR$/Bookwallah/media/cusp-274414-93a72a5c6ee7.json" />
         <option value="$PROJECT_DIR$/Bookwallah/main/piktorlabs.py" />
@@ -345,6 +348,7 @@
         <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/Bookwallah/main/admin.py" />
       </list>
     </option>
   </component>
@@ -408,6 +412,13 @@
               <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
               <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -742,13 +753,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="18" column="32" lean-forward="true" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7310">
@@ -885,8 +889,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/donor_dash.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18989">
-          <caret line="1117" column="105" selection-start-line="1117" selection-start-column="105" selection-end-line="1117" selection-end-column="105" />
+        <state relative-caret-position="13532">
+          <caret line="796" column="32" selection-start-line="796" selection-start-column="22" selection-end-line="796" selection-end-column="32" />
           <folding>
             <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#section#0;n#section#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
@@ -965,15 +969,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/flot/jquery.flot.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-459" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/flot/jquery.flot.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

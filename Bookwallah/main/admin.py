@@ -25,13 +25,6 @@ admin.site.register(Donor_Testimonial)
 
 
 
-@admin.register(Group)
-class Group(ImportExportModelAdmin):
-    pass
-
-@admin.register(User)
-class User(ImportExportModelAdmin):
-    pass
 
 @admin.register(Config)
 class Config(ImportExportModelAdmin):
