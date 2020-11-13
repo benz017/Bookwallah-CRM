@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,8 +18,8 @@
           <file leaf-file-name="dashboard.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="132">
-                  <caret line="18" column="36" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="36" />
+                <state relative-caret-position="306">
+                  <caret line="18" column="111" lean-forward="true" selection-start-line="18" selection-start-column="78" selection-end-line="18" selection-end-column="111" />
                   <folding>
                     <element signature="e#0#22#0" expanded="true" />
                   </folding>
@@ -326,7 +326,6 @@
         <option value="$PROJECT_DIR$/Bookwallah/main/static/lib/bootstrap/css/bootstrap.min.css" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/vol_dash.html" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/child_dash.html" />
-        <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/views.py" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/profile/profile.html" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/donor_dash.html" />
@@ -336,6 +335,7 @@
         <option value="$PROJECT_DIR$/.ebextensions/01_pre_deps.config" />
         <option value="$PROJECT_DIR$/.ebextensions/packages.config" />
         <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
+        <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
       </list>
     </option>
   </component>
@@ -918,8 +918,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="18" column="36" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="36" />
+        <state relative-caret-position="306">
+          <caret line="18" column="111" lean-forward="true" selection-start-line="18" selection-start-column="78" selection-end-line="18" selection-end-column="111" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
