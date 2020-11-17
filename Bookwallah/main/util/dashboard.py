@@ -885,7 +885,7 @@ def top_vol(data):
 
 
 def top_kid(data):
-    if Kid.objects.exist():
+    if Kid.objects.exists():
         v = Config.objects.all().values_list('top_kid',flat=True)[0]
         p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
         na = p.values_list('fullname',flat=True)[0]
