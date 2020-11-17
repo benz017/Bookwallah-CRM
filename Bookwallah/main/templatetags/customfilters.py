@@ -21,6 +21,8 @@ def delta(date,arg):
     min = date.minute
     if arg == "d":
         return days
+    if arg == "-d":
+        return abs(days)
     elif arg == "h":
         return hr
     elif arg == "m":
