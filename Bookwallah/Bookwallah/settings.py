@@ -34,7 +34,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
-ALLOWED_HOSTS = ['venv.eba-vrxmabmu.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # # Application definition
 

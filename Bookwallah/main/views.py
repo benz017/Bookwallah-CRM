@@ -24,7 +24,7 @@ today = date.today()
 
 
 def landing(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect('profile')
     else:
         return redirect('signin')
