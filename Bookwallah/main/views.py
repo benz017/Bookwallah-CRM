@@ -198,7 +198,7 @@ def vol_dashboard(request):
             vol = Profile.objects.filter(user__first_name=value.split()[0], user__last_name=value.split()[1],user__groups__name="Volunteer")
             data = serializers.serialize('json', list(vol))
             json_stuff = json.dumps({'fname': value, 'data': data})
-            return HttpResponse(json_stuff, content_type="application/json"
+            return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/vol_dash.html', context=data)
 
 @login_required
@@ -899,9 +899,6 @@ def profile(request):
 def calender(request):
     data = {}
     session_kv = {}
-    k = "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=86jm210h5i5hd7&scope=r_fullprofile r_emailaddress rw_company_adminw_share&state=8897239179ramya&redirect_uri=http://127.0.0.1:8000/accounts/profile"
-    k = requests.get(k)
-    print(k.text)
     data['sessions'] = Session.objects.all()
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
