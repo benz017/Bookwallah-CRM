@@ -865,29 +865,43 @@ def gifts(data,id):
 
 
 def top_vol(data):
-    v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
-    p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
-    jy = p.values_list('user__date_joined__year',flat=True)[0]
-    av = p.values_list('image',flat=True)[0]
-    a = Attendance.objects.filter(user__in=p,attendance_approved=True).count()
-    data["tv_na"] = p.values_list('fullname',flat=True)[0]
-    data["tv_jy"] = jy
-    data["tv_av"] = settings.MEDIA_URL +av
-    data["tv_hrs"] = a*8
+    if User.object.filter(groups_name="Volunteer").count()>0:
+        v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
+        p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+        jy = p.values_list('user__date_joined__year',flat=True)[0]
+        av = p.values_list('image',flat=True)[0]
+        a = Attendance.objects.filter(user__in=p,attendance_approved=True).count()
+        data["tv_na"] = p.values_list('fullname',flat=True)[0]
+        data["tv_jy"] = jy
+        data["tv_av"] = settings.MEDIA_URL +av
+        data["tv_hrs"] = a*8
+    else:
+        data["tv_na"]=""
+        data["tv_jy"]=""
+        data["tv_av"]=""
+        data["tv_hrs"]=""
+
     return data
 
 
 def top_kid(data):
-    v = Config.objects.all().values_list('top_kid',flat=True)[0]
-    p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
-    na = p.values_list('fullname',flat=True)[0]
-    jy = p.values_list('date__year',flat=True)[0]
-    av = p.values_list('image',flat=True)[0]
-    a = Kid_Attendance.objects.filter(kid__in=p,attendance=True).count()
-    data["tk_na"] = na
-    data["tk_jy"] = jy
-    data["tk_av"] = settings.MEDIA_URL +av
-    data["tk_count"] = a
+    if Kid.objects.exist():
+        v = Config.objects.all().values_list('top_kid',flat=True)[0]
+        p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        na = p.values_list('fullname',flat=True)[0]
+        jy = p.values_list('date__year',flat=True)[0]
+        av = p.values_list('image',flat=True)[0]
+        a = Kid_Attendance.objects.filter(kid__in=p,attendance=True).count()
+        data["tk_na"] = na
+        data["tk_jy"] = jy
+        data["tk_av"] = settings.MEDIA_URL +av
+        data["tk_count"] = a
+    else:
+        data["tk_na"] =""
+        data["tk_jy"] =""
+        data["tk_av"] =""
+        data["tk_count"]=""
+
     return data
 
 
