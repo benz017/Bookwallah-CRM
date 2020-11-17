@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.conf.urls.static import static
 from . import views
 urlpatterns = [
+    path('',views.landing, name='landing'),
     path('dashboard/main', views.main_dashboard, name='main_dashboard'),
     path('dashboard/volunteer', views.vol_dashboard, name='vol_dashboard'),
     path('dashboard/donor', views.donor_dashboard, name='donor_dashboard'),

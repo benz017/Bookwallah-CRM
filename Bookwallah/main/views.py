@@ -23,6 +23,12 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 today = date.today()
 
 
+def landing(request):
+    if request.user.is_authenticated():
+        return redirect('profile')
+    else:
+        return redirect('signin')
+
 @login_required
 @csrf_exempt
 def main_dashboard(request):
