@@ -64,7 +64,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='image', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True,blank=True)
-    address = models.CharField(max_length=100,null=True,label='Use ";" as seperator...',)
+    address = models.CharField(max_length=100,null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
