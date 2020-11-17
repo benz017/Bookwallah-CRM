@@ -109,8 +109,8 @@ def save_user_profile(sender, instance, **kwargs):
         import base64
         imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
         imgdata = base64.b64decode(imgdata)
-        url = "\\avatar\\" + instance.username + ".svg"
-        filename = settings.MEDIAFILES_DIRS[0] + url
+        url = "/avatar/" + instance.username + ".svg"
+        filename = settings.MEDIA_ROOT + url
         with open(filename, 'wb') as f:
             f.write(imgdata)
         instance.profile.avatar = url
