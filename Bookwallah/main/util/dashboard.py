@@ -643,36 +643,40 @@ def nps_score(data,con,c=None,year=None):
             'label': "Q3",
             'data': []
         }]
+    try:
+        if year is None:
+            year = list(range(today.year - 2, today.year + 1))
+            if c is None:
+                for i in year:
+                    q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
+                    q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
+                    q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
+                    q1 = sum(q1)/len(q1)
+                    q2 = sum(q2) / len(q2)
+                    q3 = sum(q3) / len(q3)
+                    ds[0]['data'].append(q1)
+                    ds[1]['data'].append(q2)
+                    ds[2]['data'].append(q3)
+        else:
+            year = list(range(year - 2, year + 1))
+            if c is None:
+                for i in year:
+                    q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
+                    q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
+                    q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
+                    q1 = sum(q1)/len(q1)
+                    q2 = sum(q2) / len(q2)
+                    q3 = sum(q3) / len(q3)
+                    ds[0]['data'].append(q1)
+                    ds[1]['data'].append(q2)
+                    ds[2]['data'].append(q3)
 
-    if year is None:
-        year = list(range(today.year - 2, today.year + 1))
-        if c is None:
-            for i in year:
-                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
-                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
-                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
-                q1 = sum(q1)/len(q1)
-                q2 = sum(q2) / len(q2)
-                q3 = sum(q3) / len(q3)
-                ds[0]['data'].append(q1)
-                ds[1]['data'].append(q2)
-                ds[2]['data'].append(q3)
-    else:
-        year = list(range(year - 2, year + 1))
-        if c is None:
-            for i in year:
-                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
-                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
-                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
-                q1 = sum(q1)/len(q1)
-                q2 = sum(q2) / len(q2)
-                q3 = sum(q3) / len(q3)
-                ds[0]['data'].append(q1)
-                ds[1]['data'].append(q2)
-                ds[2]['data'].append(q3)
-
-    data['nps_data'] = json.dumps(ds)
-    data['nps_label'] = year
+        data['nps_data'] = json.dumps(ds)
+        data['nps_label'] = year
+    except Exception as ex:
+        data['nps_data'] =""
+        data['nps_label'] =""
+        print(ex)
     return data
 
 

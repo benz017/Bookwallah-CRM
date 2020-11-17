@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +17,8 @@
       <file leaf-file-name="dashboard.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="892" column="41" lean-forward="true" selection-start-line="892" selection-start-column="41" selection-end-line="892" selection-end-column="41" />
+            <state relative-caret-position="226">
+              <caret line="675" column="11" selection-start-line="675" selection-start-column="11" selection-end-line="675" selection-end-column="11" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -28,7 +29,7 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
+            <state relative-caret-position="2378">
               <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
               <folding>
                 <element signature="e#51#79#0" expanded="true" />
@@ -127,8 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>profile.html</find>
-      <find>&quot;profile.html&quot;</find>
       <find>=&quot;index.html&quot;</find>
       <find>location</find>
       <find>pledge</find>
@@ -157,6 +156,8 @@
       <find>delta</find>
       <find>TOTAL SESSIONS</find>
       <find>authent</find>
+      <find>group</find>
+      <find>key</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -544,6 +545,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="23" width="1550" height="848" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49673203" visible="true" weight="0.21348314" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3272472" />
@@ -911,7 +913,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
+        <state relative-caret-position="2378">
           <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
           <folding>
             <element signature="e#51#79#0" expanded="true" />
@@ -921,8 +923,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="892" column="41" lean-forward="true" selection-start-line="892" selection-start-column="41" selection-end-line="892" selection-end-column="41" />
+        <state relative-caret-position="226">
+          <caret line="675" column="11" selection-start-line="675" selection-start-column="11" selection-end-line="675" selection-end-column="11" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
