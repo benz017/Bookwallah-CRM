@@ -799,7 +799,7 @@ def profile(request):
             url = "\\avatar\\"+request.user.username+".png"
             im.save(settings.MEDIA_ROOT+url, 'PNG')
             pid = Profile.objects.filter(user=request.user.profile.user)
-            print(pid)
+            print(pid,url)
             pid.update(image=url)
 
         elif 'input' in request.POST:
