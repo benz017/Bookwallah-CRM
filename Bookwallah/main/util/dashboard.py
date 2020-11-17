@@ -32,13 +32,16 @@ def do_geocode(address, attempt=1, max_attempts=5):
 
 
 def key_detail(data,arg=None):
-    p_details = {}
-    p_details['project_name'] = arg.values_list('project_name',flat=True)[0]
-    p_details['description'] = arg.values_list('description', flat=True)[0]
-    p_details['contact_number'] = arg.values_list('contact_number',flat=True)[0]
-    p_details['address'] = arg.values_list('address',flat=True)[0]
-    p_details['image'] = arg.values_list('image',flat=True)[0]
-    data['p_details'] = p_details
+    if Project.objects.exists():
+        p_details = {}
+        p_details['project_name'] = arg.values_list('project_name',flat=True)[0]
+        p_details['description'] = arg.values_list('description', flat=True)[0]
+        p_details['contact_number'] = arg.values_list('contact_number',flat=True)[0]
+        p_details['address'] = arg.values_list('address',flat=True)[0]
+        p_details['image'] = arg.values_list('image',flat=True)[0]
+        data['p_details'] = p_details
+    else:
+        data['p_details'] = ""
     return data
 
 def get_month_range(c):
