@@ -954,12 +954,21 @@ def highlight(data,f,y=None,field = None):
 
 
 def v_testimonials(data):
-    v = Volunteer_Testimonial.objects.all().order_by('-id')[0]
-    data["t_name"] = v.volunteer.user.first_name+" "+v.volunteer.user.last_name
-    data["t_test"] = v.testimonial
+    if Volunteer_Testimonial.objects.exists():
+        v = Volunteer_Testimonial.objects.all().order_by('-id')[0]
+        data["t_name"] = v.volunteer.user.first_name+" "+v.volunteer.user.last_name
+        data["t_test"] = v.testimonial
+    else:
+        data["t_name"] =""
+        data["t_test"] =""
+
     return data
 def d_testimonials(data):
-    d = Donor_Testimonial.objects.all().order_by('-id')[0]
-    data["d_name"] = d.donor.first_name+" "+d.donor.last_name
-    data["d_test"] = d.testimonial
+    if Donor_Testimonial.objects.exists():
+        d = Donor_Testimonial.objects.all().order_by('-id')[0]
+        data["d_name"] = d.donor.first_name+" "+d.donor.last_name
+        data["d_test"] = d.testimonial
+    else:
+        data["d_name"] =""
+        data["d_test"] =""
     return data
