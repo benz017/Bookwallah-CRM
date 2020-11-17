@@ -802,8 +802,8 @@ def profile(request):
             from io import BytesIO
             imgdata=imgdata.replace("data:image/png;base64,","")+"=="
             im = Image.open(BytesIO(base64.b64decode(imgdata)))
-            url = "avatar/"+request.user.username+".jpeg"
-            im.save(settings.MEDIA_ROOT+url, 'JPEG')
+            url = "avatar/"+request.user.username+".png"
+            im.save(settings.MEDIA_ROOT+url, 'PNG')
             pid = Profile.objects.filter(user=request.user.profile.user)
             print(pid,url)
             pid.update(image=url)
