@@ -161,9 +161,12 @@ def truncate_float(n, places):
 @register.filter(name='list_min')
 def list_min(data):
     data = json.loads(data)
-    l = [i for item in data for i in item["data"]]
-    if min(l) >=0:
-        return 0
+    if data != []:
+        l = [i for item in data for i in item["data"]]
+        if min(l) >=0:
+            return 0
+        else:
+            return min(l)
     else:
-        return min(l)
+        return data
 
