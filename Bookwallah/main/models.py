@@ -61,7 +61,7 @@ class Session(models.Model):
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='avatar', null=True, blank=True)
+    image = models.ImageField(upload_to='image', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True,blank=True)
     address = models.CharField(max_length=100,null=True,label='Use ";" as seperator...',)
@@ -110,7 +110,7 @@ def save_user_profile(sender, instance, **kwargs):
         import base64
         imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
         imgdata = base64.b64decode(imgdata)
-        url = "/avatar/" + instance.username + ".svg"
+        url = "\\avatar\\" + instance.username + ".svg"
         filename = settings.MEDIA_ROOT + url
         with open(filename, 'wb') as f:
             f.write(imgdata)
