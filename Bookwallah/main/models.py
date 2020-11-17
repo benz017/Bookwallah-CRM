@@ -64,7 +64,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatar', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True,blank=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=100,null=True,label='Use ";" as seperator...',)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -76,7 +76,7 @@ class Profile(models.Model):
     future_plans = models.CharField(max_length=100, blank=True, null=True)
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
-    role = models.CharField(max_length=100, blank=True, null=True)
+    role = models.CharField(max_length=100, null=True)
     skype = models.CharField(max_length=500, blank=True,default="")
     zoom = models.CharField(max_length=500, blank=True,default="")
     facebook = models.CharField(max_length=500, blank=True,default="" )
@@ -104,6 +104,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     if instance.profile.image == "":
+        from PIL import Image
         name = instance.get_full_name()
         av = avinit.get_avatar_data_url(name)
         import base64
