@@ -865,7 +865,7 @@ def gifts(data,id):
 
 
 def top_vol(data):
-    if User.objects.filter(groups_name="Volunteer").count()>0:
+    if User.objects.filter(groups__name="Volunteer").count()>0:
         v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
         p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
         jy = p.values_list('user__date_joined__year',flat=True)[0]
