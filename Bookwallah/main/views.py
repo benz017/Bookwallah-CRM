@@ -465,7 +465,8 @@ def rec_dashboard(request):
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-    p = Recruit.objects.all().order_by("timestamp").values_list('timestamp__year')[0][0]
+    if Recruit.objects.exists():
+        p = Recruit.objects.all().order_by("timestamp").values_list('timestamp__year')[0][0]
     y_list = []
     for i in range(today.year, p - 1, -1):
         y_list.append(i)
