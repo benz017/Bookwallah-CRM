@@ -85,33 +85,34 @@ def members(room,arg):
 
 @register.filter(name='last_activity')
 def last_activity(room):
-    if Message.objects.filter(room=room).exists():
-        date = Message.objects.filter(room=room).order_by('-timestamp').values_list('timestamp',flat=True)[0]
-        now = datetime.now()
-        # date = date.replace(tzinfo=pytz.timezone('Asia/Kolkata'))
-        dif = now - date
-        days = dif.days
-        hr = dif.total_seconds()/3600
-        min = dif.total_seconds()/60
-        if min < 60:
-            return str(int(min)) + "min(s) ago"
-        elif hr < 24:
-            m = (hr-int(hr))*60
-            if m == 0:
-                return str(int(hr)) + "hr(s) ago"
+    if Room.objects.exists():
+        if Message.objects.filter(room=room).exists():
+            date = Message.objects.filter(room=room).order_by('-timestamp').values_list('timestamp',flat=True)[0]
+            now = datetime.now()
+            # date = date.replace(tzinfo=pytz.timezone('Asia/Kolkata'))
+            dif = now - date
+            days = dif.days
+            hr = dif.total_seconds()/3600
+            min = dif.total_seconds()/60
+            if min < 60:
+                return str(int(min)) + "min(s) ago"
+            elif hr < 24:
+                m = (hr-int(hr))*60
+                if m == 0:
+                    return str(int(hr)) + "hr(s) ago"
+                else:
+                    return str(int(hr)) + "hr(s) " +str(int(m)) + "min(s) ago"
             else:
-                return str(int(hr)) + "hr(s) " +str(int(m)) + "min(s) ago"
+                h = (days - int(days)) * 24
+                m = (h - int(h)) * 60
+                if h == 0 and m==0:
+                    return str(int(days)) + "day(s) ago"
+                elif m == 0:
+                    return str(int(days)) + "day(s) "+str(int(m)) + "min(s) ago"
+                else:
+                    return str(int(days)) + "day(s) "+ str(int(h)) + "hr(s)" + str(int(m)) + "min(s) ago"
         else:
-            h = (days - int(days)) * 24
-            m = (h - int(h)) * 60
-            if h == 0 and m==0:
-                return str(int(days)) + "day(s) ago"
-            elif m == 0:
-                return str(int(days)) + "day(s) "+str(int(m)) + "min(s) ago"
-            else:
-                return str(int(days)) + "day(s) "+ str(int(h)) + "hr(s)" + str(int(m)) + "min(s) ago"
-    else:
-        return "Never"
+            return "Never"
 
 @register.filter(name='replace')
 def replace(str,arg):
