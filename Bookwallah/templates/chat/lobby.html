@@ -152,15 +152,9 @@
           <aside class="mid-side">
             <div class="chat-room-head">
               <h3>Lobby Room</h3>
-              <form action="#" class="pull-right position">
-                <input type="text" placeholder="Search" class="form-control search-btn ">
-              </form>
             </div>
               <div class="room-desk">
               <h4 class="pull-left">Project room</h4>
-                  {% if request.user|nothas_group:"Volunteer" %}
-                  <a href="#" class="pull-right btn btn-theme02">+ Create Room</a>
-                  {% endif %}
               <div class="room-box">
                 <h5 class="text-primary"><a href="{{room.name}}">{{room.name|replace:"_"}}</a></h5>
                 <p>{{room.description}}</p>
@@ -201,8 +195,6 @@
           </aside>
           <aside class="right-side">
             <div class="user-head">
-              <a href="#" class="chat-tools btn-theme"><i class="fa fa-cog"></i> </a>
-              <a href="#" class="chat-tools btn-theme03"><i class="fa fa-key"></i> </a>
             </div>
             <div class="invite-row">
               <h4 class="pull-left">Online Members</h4>

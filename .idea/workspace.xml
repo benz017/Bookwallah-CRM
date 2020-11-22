@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Bookwallah/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/chat/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,25 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bookwallah/chat/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="48" column="26" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rec_dash.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/rec_dash.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
-              <caret line="77" column="12" selection-start-line="77" selection-start-column="12" selection-end-line="77" selection-end-column="12" />
-              <folding>
-                <element signature="n#div#1;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#ul#0;n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
-              </folding>
+            <state relative-caret-position="218">
+              <caret line="43" column="38" lean-forward="true" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -69,6 +55,18 @@
                 <element signature="n#div#1;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#ul#0;n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="customfilters.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="107" column="35" lean-forward="true" selection-start-line="107" selection-start-column="35" selection-end-line="107" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#27#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -154,7 +152,7 @@
       <find>kid_gal</find>
       <find>Mat</find>
       <find>.form-login</find>
-      <find>.active, .dot:hover</find>
+      <find />
       <find>.active</find>
       <find>social_django</find>
       <find>70px</find>
@@ -162,23 +160,23 @@
       <find>form-control</find>
       <find>details</find>
       <find>stage</find>
-      <find>(value !== null || value !== '')</find>
-      <find>border-top: 3px solid black;</find>
+      <find />
+      <find />
       <find>#sh</find>
-      <find>{% url 'mailchimp' %}</find>
+      <find />
       <find>gitignore</find>
-      <find>JOINING DATE</find>
-      <find>TOTAL SESSIONS</find>
+      <find />
+      <find />
       <find>authent</find>
       <find>group</find>
       <find>key</find>
       <find>sb_data</find>
       <find>delta</find>
       <find>top</find>
-      <find>USER STA</find>
+      <find />
       <find>landing</find>
       <find>rec_</find>
-      <find>p = Recruit.objects.all().order_by(&quot;timestamp&quot;).values_list('timestamp__year')[0][0]</find>
+      <find />
     </findStrings>
     <replaceStrings>
       <replace />
@@ -206,14 +204,14 @@
       <replace>#session</replace>
       <replace>project</replace>
       <replace>$month_list</replace>
-      <replace>(value !== null &amp;&amp; value !== '')</replace>
+      <replace />
     </replaceStrings>
     <dirStrings>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\templates</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\chat</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah</dir>
       <dir>C:\Projects\BookWalah\Bookwallah</dir>
-      <dir>C:\Projects\BookWalah\New folder\Bookwallah-CRM</dir>
+      <dir />
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -252,7 +250,6 @@
         <option value="$PROJECT_DIR$/.ebextensions/packages.config" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/Bookwallah/Bookwallah/settings.py" />
-        <option value="$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/admin.py" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/profile/index.html" />
@@ -273,6 +270,7 @@
         <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/views.py" />
         <option value="$PROJECT_DIR$/Bookwallah/chat/views.py" />
+        <option value="$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py" />
       </list>
     </option>
   </component>
@@ -822,16 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="24" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1047,8 +1035,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/chat/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="48" column="26" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
+        <state relative-caret-position="218">
+          <caret line="43" column="38" lean-forward="true" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/templatetags/customfilters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="107" column="35" lean-forward="true" selection-start-line="107" selection-start-column="35" selection-end-line="107" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
