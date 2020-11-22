@@ -620,7 +620,8 @@ a.logo span {
 .notify-row {
     float: left;
     margin-top: 15px;
-    margin-left: 92px;
+    margin-left:95px;
+
 }
 
 .notify-row .notification span.label {
@@ -4028,3 +4029,17 @@ q {font-style: italic;font-size:20px;}
 
 /* Add a blue color to the author */
 .author {color: cornflowerblue;font-size:18px;}
+
+
+
+
+You can use media queries. Try to add the following code in your CSS.
+
+CSS:
+
+@media screen and (max-width: 480px) {
+    #login-logo {
+         width: 400px;
+    }
+}
+

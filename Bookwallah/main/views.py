@@ -13,7 +13,7 @@ from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,JsonResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models.functions import Concat
@@ -22,13 +22,7 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 # Create your views here.
 today = date.today()
 
-
-def landing(request):
-    if request.user.is_authenticated:
-        return redirect('profile')
-    else:
-        return redirect('signin')
-
+@user_passes_test(lambda u: u.groups.filter(name__in=['HR Head','Project Lead','Volunteer']).count() == 0)
 @login_required
 @csrf_exempt
 def main_dashboard(request):
@@ -52,6 +46,7 @@ def main_dashboard(request):
     print(c)
     sel_in = Project.objects.all().values_list('country', flat=True)
     data["country_list"] = list(set(sel_in))
+
     data = dashboard.child_attendance(data,con)
     data = dashboard.top_vol(data)
     data = dashboard.top_kid(data)
@@ -123,6 +118,7 @@ def main_dashboard(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/main_dash.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['HR Head','Project Lead','Volunteer']).count() == 0)
 @csrf_exempt
 def p_location(request):
     p = Project.objects.all()
@@ -142,6 +138,7 @@ def p_location(request):
     print(data)
     return HttpResponse(data, content_type='application/json')
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['President','R&D Head','Marketing Head','HR Head','Project Lead','Volunteer','Donor']).count() == 0)
 @csrf_exempt
 def d_location(request):
     p = Donor.objects.all().annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
@@ -167,6 +164,7 @@ def d_location(request):
     print(data)
     return HttpResponse(data, content_type='application/json')
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['R&D Head','Marketing Head','Volunteer','Donor']).count() == 0)
 @csrf_exempt
 @login_required
 def vol_dashboard(request):
@@ -201,6 +199,7 @@ def vol_dashboard(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/vol_dash.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['President','R&D Head','Marketing Head','HR Head','Project Lead','Volunteer','Donor']).count() == 0)
 @login_required
 @csrf_exempt
 def donor_dashboard(request):
@@ -306,6 +305,8 @@ def donor_dashboard(request):
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/donor_dash.html', context=data)
+
+@user_passes_test(lambda u: u.groups.filter(name__in=['HR Head','Project Lead','Volunteer','Donor']).count() == 0)
 @csrf_exempt
 @login_required
 def child_dashboard(request):
@@ -350,6 +351,7 @@ def child_dashboard(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request,'dashboard/child_dash.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['Volunteer']).count() == 0)
 @csrf_exempt
 @login_required
 def proj_dashboard(request):
@@ -421,6 +423,7 @@ def proj_dashboard(request):
 
     return render(request,'dashboard/p_dash.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['R&D Head','Marketing Head','Project Lead','Volunteer','Donor']).count() == 0)
 @csrf_exempt
 @login_required
 def rec_dashboard(request):
@@ -566,6 +569,7 @@ def gallery_op(request,c):
                 f = Project.objects.filter(state=val)
     return data
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['HR Head','Donor']).count() == 0)
 @csrf_exempt
 def session_gallery(request):
     data = gallery_op(request,Session)
@@ -603,6 +607,7 @@ def session_gallery(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['HR Head','Donor']).count() == 0)
 @csrf_exempt
 def project_gallery(request):
     data = gallery_op(request, Project)
@@ -634,7 +639,7 @@ def project_gallery(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
-
+@user_passes_test(lambda u: u.groups.filter(name__in=['Donor','Volunteer','R&D Head','HR Head','Project Lead','Donor']).count() == 0)
 @csrf_exempt
 def donor_gallery(request):
     data = gallery_op(request, Donor)
@@ -672,7 +677,7 @@ def donor_gallery(request):
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
 
-
+@user_passes_test(lambda u: u.groups.filter(name__in=['Donor']).count() == 0)
 @csrf_exempt
 def kid_gallery(request):
     data = gallery_op(request, Kid)
@@ -709,6 +714,7 @@ def kid_gallery(request):
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
+
 
 def signin(request):
     if request.method == "POST":
@@ -801,10 +807,10 @@ def profile(request):
             from io import BytesIO
             imgdata=imgdata.replace("data:image/png;base64,","")+"=="
             im = Image.open(BytesIO(base64.b64decode(imgdata)))
-            url = "avatar/"+request.user.username+".png"
-            im.save(settings.MEDIA_ROOT+url, 'PNG')
+            url = "\\avatar\\"+request.user.username+".png"
+            im.save(settings.MEDIAFILES_DIRS[0]+url, 'PNG')
             pid = Profile.objects.filter(user=request.user.profile.user)
-            print(pid,url)
+            print(pid)
             pid.update(image=url)
 
         elif 'input' in request.POST:
@@ -894,11 +900,15 @@ def profile(request):
         return redirect('profile')
     return render(request, 'profile/profile.html', context=data)
 
+@user_passes_test(lambda u: u.groups.filter(name__in=['Donor']).count() == 0)
 @login_required
 @csrf_exempt
 def calender(request):
     data = {}
     session_kv = {}
+    k = "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=86jm210h5i5hd7&scope=r_fullprofile r_emailaddress rw_company_adminw_share&state=8897239179ramya&redirect_uri=http://127.0.0.1:8000/accounts/profile"
+    k = requests.get(k)
+    print(k.text)
     data['sessions'] = Session.objects.all()
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]

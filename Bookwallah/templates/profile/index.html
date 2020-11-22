@@ -41,8 +41,8 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
-      <div class="centered" style="background-color:white;margin:0 300px;padding:5px 0;">
-        <img height="120px" src="{% static 'img/b_logo.webp' %}">
+      <div class="centered container" style="background-color:white;padding:5px 0;">
+        <img id="login-logo" class="img-responsive" style="display:block;margin:auto;width:300px;height:100px;" src="{% static 'img/b_logo.png' %}">
       </div>
         <form class="form-login" action="{% url 'signin' %}" method="POST">
         <h2 class="form-login-heading">sign in now</h2>

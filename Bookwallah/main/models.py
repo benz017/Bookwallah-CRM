@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
+
 from django_mysql.models import ListCharField
 from django.forms import MultiValueField
 import avinit
@@ -36,7 +36,7 @@ class Project(models.Model):
     project_report = models.FileField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "{} {}".format(self.project_name, self.project_lead)
+        return "[{} - {}, {}, {}]".format(self.project_name, self.state, self.city,self.country)
 
 
 class Session(models.Model):
@@ -60,11 +60,11 @@ class Session(models.Model):
 
 # Create your models here.
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='image', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to='avatar', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True,blank=True)
-    address = models.CharField(max_length=100,null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -76,7 +76,7 @@ class Profile(models.Model):
     future_plans = models.CharField(max_length=100, blank=True, null=True)
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
-    role = models.CharField(max_length=100, null=True)
+    role = models.CharField(max_length=100, blank=True, null=True)
     skype = models.CharField(max_length=500, blank=True,default="")
     zoom = models.CharField(max_length=500, blank=True,default="")
     facebook = models.CharField(max_length=500, blank=True,default="" )
@@ -95,34 +95,23 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-    try:
-        instance.profile.save()
-    except ObjectDoesNotExist:
-        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     if instance.profile.image == "":
-        from PIL import Image
-        from io import BytesIO
         name = instance.get_full_name()
         av = avinit.get_avatar_data_url(name)
         import base64
         imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
-        #imgdata = base64.b64decode(imgdata)
-        im = Image.open(BytesIO(base64.b64decode(imgdata)))
-        url = "avatar/" + instance.username + ".svg"
-        im.save(settings.MEDIA_ROOT + url, 'SVG')
-        #url = "\\avatar\\" + instance.username + ".svg"
-        #filename = settings.MEDIA_ROOT + url
-        #with open(filename, 'wb') as f:
-        #    f.write(imgdata)
+        imgdata = base64.b64decode(imgdata)
+        url = "\\avatar\\" + instance.username + ".svg"
+        filename = settings.MEDIAFILES_DIRS[0] + url
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
         instance.profile.avatar = url
-    try:
-        instance.profile.save()
-    except ObjectDoesNotExist:
-        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 class Attendance(models.Model):
@@ -136,6 +125,7 @@ class Attendance(models.Model):
 
 
 class Donor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True,blank=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=150, blank=True)
@@ -175,7 +165,20 @@ class Donor(models.Model):
     documents = models.FileField(null=True,blank=True)
 
     def __str__(self):
-        return "{} {}".format(self.first_name, self.last_name)
+        return "{} - {} {} - {}".format(self.user, self.first_name,self.last_name, self.project)
+
+@receiver(post_save, sender=User)
+def create_donor_profile(sender, instance, created, **kwargs):
+    if created and instance.is_staff is False:
+        Donor.objects.create(user=instance,
+                             first_name=instance.first_name,
+                             last_name=instance.last_name,
+                             email=instance.email)
+
+@receiver(post_save, sender=User)
+def save_donor_profile(sender, instance, **kwargs):
+    if instance.is_staff is False:
+        instance.donor.save()
 
 
 class Pledge(models.Model):
@@ -299,9 +302,9 @@ class Donor_Testimonial(models.Model):
 
 
 class Highlight(models.Model):
-    #proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-    #proj = ((i, i) for i in proj)
-    project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True)
+    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+    proj = ((i, i) for i in proj)
+    project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
     date = models.DateField( blank=True, null=True)
     highlight = models.CharField(max_length=1000, blank=True, null=True)
     priority = models.BooleanField(default=False)
@@ -311,9 +314,9 @@ class Highlight(models.Model):
 
 
 class Issues(models.Model):
-    #proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-    #proj = ((i, i) for i in proj)
-    project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True)
+    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+    proj = ((i, i) for i in proj)
+    project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
     date = models.DateField(blank=True, null=True)
     issue = models.CharField(max_length=1000, blank=True, null=True)
     priority = models.BooleanField(default=False)
@@ -367,11 +370,11 @@ class Expense(models.Model):
 
 
 class NPSScore(models.Model):
-    #state = list(set(list(Project.objects.all().values_list('state',flat=True))))
-    #state = ((i,i) for i in state)
+    state = list(set(list(Project.objects.all().values_list('state',flat=True))))
+    state = ((i,i) for i in state)
     q = ['Q1','Q2','Q3','Q4']
     q = ((i,i) for i in q)
-    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True)
+    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=state)
     quarter = models.CharField(max_length=10, verbose_name="Quarter", blank=True, null=True,choices=q)
     year = models.CharField(max_length=10, verbose_name="Year", blank=True, null=True)
     score = models.IntegerField(verbose_name="Score (%)", blank=True, null=True)

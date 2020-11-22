@@ -1,7 +1,11 @@
 from import_export.admin import ImportExportModelAdmin
+from django.contrib.auth.admin import UserAdmin as BaseAdmin,GroupAdmin as GAdmin
+from import_export import resources
+from import_export.fields import Field
 from django.contrib import admin
 from django.contrib.auth.models import User,Group
 from .models import *
+from django.contrib.auth.hashers import make_password
 # Register your models here.
 #admin.site.register(Profile)
 #admin.site.register(Session)
@@ -10,6 +14,30 @@ from .models import *
 #admin.site.register(Donation)
 #admin.site.register(Donor)
 #admin.site.register(Expense)
+class UserResource(resources.ModelResource):
+    def before_import_row(self, row, **kwargs):
+        value = row['password']
+        row['password'] = make_password(value)
+
+    class Meta:
+        model = User
+        exclude = ('last_login','date_joined','user_permissions')
+
+class UserAdmin(BaseAdmin, ImportExportModelAdmin):
+    resource_class = UserResource
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
+class GroupResource(resources.ModelResource):
+    class Meta:
+        model = Group
+
+class GroupAdmin(GAdmin, ImportExportModelAdmin):
+    resource_class = GroupResource
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
 
 admin.site.register(Recruit)
 admin.site.register(Task)
