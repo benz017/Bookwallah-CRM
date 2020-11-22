@@ -554,30 +554,32 @@ def don_by_year(data,don='',year=''):
     d_list = []
     print(year)
     if don is '' or don is None:
-        d = Donation.objects.all().order_by("date").values_list('date__year')[0][0]
-        if year is '' or year is None:
-            for i in range(d,today.year+1):
-                d = Donation.objects.filter(date__year=i).aggregate(Sum('amount'))
+        if Donation.objects.exist():
+            d = Donation.objects.all().order_by("date").values_list('date__year')[0][0]
+            if year is '' or year is None:
+                for i in range(d,today.year+1):
+                    d = Donation.objects.filter(date__year=i).aggregate(Sum('amount'))
+                    dy_list.append(i)
+                    d_list.append(d['amount__sum'])
+                data["dy_list"] = dy_list
+                data["d_list"] = [0 if i is None else i for i in d_list]
+            else:
+                for i in range(1, 13):
+                    amt = Donation.objects.filter(date__year=year, date__month=i).aggregate(Sum('amount'))
+                    d_list.append(amt['amount__sum'])
+                d_list = [0 if i is None else i for i in d_list]
+                data["dy_list"] = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
+                data['d_list'] = [0 if i is None else i for i in d_list]
+                data['year'] = year
+    else:
+        if Donation.objects.exist():
+            d = Donation.objects.filter(donated_by__in=don).order_by("date").values_list('date__year')[0][0]
+            for i in range(d, today.year + 1):
+                d = Donation.objects.filter(donated_by__in=don,date__year=i).aggregate(Sum('amount'))
                 dy_list.append(i)
                 d_list.append(d['amount__sum'])
             data["dy_list"] = dy_list
             data["d_list"] = [0 if i is None else i for i in d_list]
-        else:
-            for i in range(1, 13):
-                amt = Donation.objects.filter(date__year=year, date__month=i).aggregate(Sum('amount'))
-                d_list.append(amt['amount__sum'])
-            d_list = [0 if i is None else i for i in d_list]
-            data["dy_list"] = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
-            data['d_list'] = [0 if i is None else i for i in d_list]
-            data['year'] = year
-    else:
-        d = Donation.objects.filter(donated_by__in=don).order_by("date").values_list('date__year')[0][0]
-        for i in range(d, today.year + 1):
-            d = Donation.objects.filter(donated_by__in=don,date__year=i).aggregate(Sum('amount'))
-            dy_list.append(i)
-            d_list.append(d['amount__sum'])
-        data["dy_list"] = dy_list
-        data["d_list"] = [0 if i is None else i for i in d_list]
     if year is '' or year is None:
         data['year'] = today.year
     else:
