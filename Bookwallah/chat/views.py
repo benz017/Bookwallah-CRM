@@ -39,8 +39,9 @@ def lobby(request):
     data = {}
     p_room = Profile.objects.filter(user=request.user).values_list('project__project_name',flat=True)[0]
     data["p_room"] = p_room.replace(" ","_")
-    project_room = Room.objects.filter(name=data["p_room"])
-    data["room"] = project_room[0]
+    if Room.objects.exists():
+        project_room = Room.objects.filter(name=data["p_room"])
+        data["room"] = project_room[0]
     open_room = Room.objects.filter(permission="Open").exclude(name=data["p_room"])
     if len(open_room) > 3:
         open_room = open_room[:3]

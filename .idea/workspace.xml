@@ -152,14 +152,13 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>serverstatus05</find>
       <find>Value(</find>
       <find>email</find>
       <find>Volunteer</find>
       <find>kid_gal</find>
       <find>Mat</find>
       <find>.form-login</find>
-      <find />
+      <find>.active, .dot:hover</find>
       <find>.active</find>
       <find>social_django</find>
       <find>70px</find>
@@ -167,21 +166,22 @@
       <find>form-control</find>
       <find>details</find>
       <find>stage</find>
-      <find />
-      <find />
+      <find>(value !== null || value !== '')</find>
+      <find>border-top: 3px solid black;</find>
       <find>#sh</find>
-      <find />
+      <find>{% url 'mailchimp' %}</find>
       <find>gitignore</find>
-      <find />
-      <find />
+      <find>JOINING DATE</find>
+      <find>TOTAL SESSIONS</find>
       <find>authent</find>
       <find>group</find>
       <find>key</find>
       <find>sb_data</find>
       <find>delta</find>
       <find>top</find>
-      <find />
+      <find>USER STA</find>
       <find>landing</find>
+      <find>rec_</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -209,14 +209,14 @@
       <replace>#session</replace>
       <replace>project</replace>
       <replace>$month_list</replace>
-      <replace />
+      <replace>(value !== null &amp;&amp; value !== '')</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\templates</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah\chat</dir>
       <dir>C:\Projects\BookWalah\Bookwallah\Bookwallah</dir>
       <dir>C:\Projects\BookWalah\Bookwallah</dir>
-      <dir />
+      <dir>C:\Projects\BookWalah\New folder\Bookwallah-CRM</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
