@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/chat/chat_room.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/chat/chat_room.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/chat/lobby.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/chat/lobby.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/child_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/child_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/donor_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/donor_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/proj_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/proj_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/rec_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/rec_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/vol_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/vol_dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/profile/calender.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/profile/calender.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/profile/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/profile/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/profile/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/profile/profile.html" afterDir="false" />
-    </list>
+    <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,19 +11,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Bookwallah/templates/profile/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1870">
-              <caret line="110" selection-start-line="110" selection-end-line="110" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="profile.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bookwallah/templates/profile/profile.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -156,7 +124,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gallery.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gallery.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bookwallah/templates/gallery.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="245">
@@ -166,6 +134,15 @@
                 <element signature="n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#ul#0;n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="445">
+              <caret line="4045" selection-start-line="4045" selection-end-line="4045" />
             </state>
           </provider>
         </entry>
@@ -278,7 +255,6 @@
         <option value="$PROJECT_DIR$/Bookwallah/media/cusp-274414-93a72a5c6ee7.json" />
         <option value="$PROJECT_DIR$/Bookwallah/main/piktorlabs.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/tests.py" />
-        <option value="$PROJECT_DIR$/Bookwallah/main/static/css/style.css" />
         <option value="$PROJECT_DIR$/Bookwallah/Bookwallah/urls.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/util/linkedin.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/static/lib/bootstrap/css/bootstrap.min.css" />
@@ -306,6 +282,7 @@
         <option value="$PROJECT_DIR$/Bookwallah/templates/chat/lobby.html" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/chat/chat_room.html" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/gallery.html" />
+        <option value="$PROJECT_DIR$/Bookwallah/main/static/css/style.css" />
       </list>
     </option>
   </component>
@@ -356,6 +333,14 @@
               <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bookwallah-CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="Bookwallah" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bookwallah-CRM" type="b2602c69:ProjectViewProjectNode" />
@@ -446,19 +431,19 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\media\project" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master\bkp" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
-      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\js" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Projects\BookWalah\New folder\Bookwallah-CRM\Bookwallah\main\static" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\img" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static" />
       <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\static\img" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\media\project" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master\bkp" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\lib\chart-master" />
+      <recent name="C:\Projects\BookWalah\Bookwallah\Bookwallah\main\static\js" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -613,16 +598,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="23" width="1550" height="848" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49673203" visible="true" weight="0.1698612" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49673203" visible="true" weight="0.1698612" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3272472" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067115" side_tool="true" weight="0.32621083" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286517" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.3258427" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.2752809" />
       <window_info id="Structure" order="1" sideWeight="0.503268" side_tool="true" weight="0.22339723" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49932885" visible="true" weight="0.18258427" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49932885" visible="true" weight="0.18258427" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3974719" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24967062" />
@@ -763,13 +747,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/django/db/migrations/graph.py" />
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36839">
-          <caret line="2167" column="3" selection-start-line="2167" selection-start-column="3" selection-end-line="2167" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/lib/bootstrap/css/bootstrap.min.css" />
     <entry file="file://$PROJECT_DIR$/Bookwallah/chat/views.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1058,6 +1035,13 @@
             <element signature="n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
             <element signature="n#ul#0;n#div#2;n#header#0;n#section#0;n#body#0;n#html#0;n#!!top" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/static/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="4045" selection-start-line="4045" selection-end-line="4045" />
         </state>
       </provider>
     </entry>
