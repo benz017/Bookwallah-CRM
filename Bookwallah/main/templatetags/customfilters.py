@@ -9,6 +9,7 @@ from django.forms.fields import CheckboxInput
 from django.apps import apps
 Profile = apps.get_model('main', 'Profile')
 Message = apps.get_model('chat', 'Message')
+Room = apps.get_model('chat', 'Room')
 register = template.Library()
 
 @register.filter
@@ -74,12 +75,13 @@ def nothas_group(user, group_name):
 
 @register.filter(name='members')
 def members(room,arg):
-    if arg == "Private":
-        m = Profile.objects.filter(chat_room=room).count()
-        return m
-    else:
-        m = Profile.objects.all().count()
-        return m
+    if Room.objects.exists():
+        if arg == "Private":
+            m = Profile.objects.filter(chat_room=room).count()
+            return m
+        else:
+            m = Profile.objects.all().count()
+            return m
 
 @register.filter(name='last_activity')
 def last_activity(room):
