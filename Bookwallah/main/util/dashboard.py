@@ -554,7 +554,7 @@ def don_by_year(data,don='',year=''):
     d_list = []
     print(year)
     if don is '' or don is None:
-        if Donation.objects.exist():
+        if Donation.objects.exists():
             d = Donation.objects.all().order_by("date").values_list('date__year')[0][0]
             if year is '' or year is None:
                 for i in range(d,today.year+1):
@@ -572,7 +572,7 @@ def don_by_year(data,don='',year=''):
                 data['d_list'] = [0 if i is None else i for i in d_list]
                 data['year'] = year
     else:
-        if Donation.objects.exist():
+        if Donation.objects.exists():
             d = Donation.objects.filter(donated_by__in=don).order_by("date").values_list('date__year')[0][0]
             for i in range(d, today.year + 1):
                 d = Donation.objects.filter(donated_by__in=don,date__year=i).aggregate(Sum('amount'))
