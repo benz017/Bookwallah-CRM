@@ -4,13 +4,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
-
+from django.apps import apps
+Room = apps.get_model('chat', 'Room')
 from django_mysql.models import ListCharField
 from django.forms import MultiValueField
 import avinit
 import json
 months = ((1,'JAN'),(2,'FEB'),(3,'MAR'),(4,'APR'),(5,'MAY'),(6,'JUN'),(7,'JUL'),(8,'AUG'),(9,'SEP'),(10,'OCT'),(11,'NOV'),(12,'DEC'))
-
 
 
 
@@ -37,6 +37,13 @@ class Project(models.Model):
 
     def __str__(self):
         return "[{} - {}, {}, {}]".format(self.project_name, self.state, self.city,self.country)
+
+@receiver(post_save, sender=Project)
+def create_room(sender, instance, created, **kwargs):
+    from django.apps import apps
+    Room = apps.get_model('chat', 'Room')
+    if created:
+        Room.objects.create(name=instance.project_name.replace(' ','_'),permission='Private')
 
 
 class Session(models.Model):
