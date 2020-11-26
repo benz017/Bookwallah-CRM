@@ -4,8 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
-from django.apps import apps
-Room = apps.get_model('chat', 'Room')
 from django_mysql.models import ListCharField
 from django.forms import MultiValueField
 import avinit

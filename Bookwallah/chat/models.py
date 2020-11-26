@@ -3,8 +3,6 @@ from django.contrib.auth import get_user_model
 #from main.models import Profile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.apps import apps
-Project = apps.get_model('chat', 'Project')
 
 # Create your models here.
 User = get_user_model()
@@ -19,16 +17,6 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
-
-@receiver(post_save, sender=Room)
-def create_room(sender, instance, created, **kwargs):
-    if created:
-        Room.objects.create(name=instance.project_name.replace(' ','_'),permission='Private Room')
-
-@receiver(post_save, sender=User)
-def save_donor_profile(sender, instance, **kwargs):
-    if instance.is_staff is False:
-        instance.donor.save()
 
 
 class Message(models.Model):
