@@ -853,7 +853,7 @@ def profile(request):
             imgdata = imgdata.replace("data:image/png;base64,", "") + "=="
             print(len(imgdata))
             im = Image.open(BytesIO(base64.b64decode(imgdata)))
-            url = "\\avatar\\" + request.user.username + ".png"
+            url = "avatar/" + request.user.username + ".png"
             im.save(os.path.join(settings.MEDIA_ROOT,url), 'PNG')
             pid = Profile.objects.filter(user=request.user)
             print(request.user.profile.user, request.user, os.path.join(settings.MEDIA_ROOT,url), url)
