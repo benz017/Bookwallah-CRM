@@ -1,5 +1,4 @@
 from django.db import models
-import os
 from django.contrib.auth.models import User,Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -112,8 +111,8 @@ def save_user_profile(sender, instance, **kwargs):
         import base64
         imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
         imgdata = base64.b64decode(imgdata)
-        url = "/avatar/" + instance.username + ".svg"
-        filename = os.path.join(settings.MEDIA_ROOT,url)
+        url = "avatar/" + instance.username + ".svg"
+        filename = settings.MEDIA_ROOT+url
         with open(filename, 'wb') as f:
            f.write(imgdata)
         instance.profile.image = url
