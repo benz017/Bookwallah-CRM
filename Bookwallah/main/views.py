@@ -8,6 +8,7 @@ from .integrations.mailchimp import *
 # ------------- Django Libraries ------------ #
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
+import os
 from django.conf import settings
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
@@ -853,9 +854,9 @@ def profile(request):
             print(len(imgdata))
             im = Image.open(BytesIO(base64.b64decode(imgdata)))
             url = "\\avatar\\" + request.user.username + ".png"
-            im.save(settings.MEDIA_ROOT + url, 'PNG')
+            im.save(os.path.join(settings.MEDIA_ROOT,url), 'PNG')
             pid = Profile.objects.filter(user=request.user)
-            print(request.user.profile.user, request.user, pid, url)
+            print(request.user.profile.user, request.user, os.path.join(settings.MEDIA_ROOT,url), url)
             pid.update(image=url)
 
         elif 'input' in request.POST:
