@@ -25,7 +25,7 @@ SECRET_KEY = 'mq6)-bqxzos%kgz)0rzu*--eu=y-4s^s(mg9s)t175^k8if!1q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ASGI_APPLICATION = "Bookwallah.routing.application"
+ASGI_APPLICATION = "Bookwallah.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
