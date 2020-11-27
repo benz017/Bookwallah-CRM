@@ -850,11 +850,12 @@ def profile(request):
             from PIL import Image
             from io import BytesIO
             imgdata = imgdata.replace("data:image/png;base64,", "") + "=="
+            print(len(imgdata))
             im = Image.open(BytesIO(base64.b64decode(imgdata)))
             url = "\\avatar\\" + request.user.username + ".png"
-            im.save(settings.MEDIAFILES_DIRS[0] + url, 'PNG')
-            pid = Profile.objects.filter(user=request.user.profile.user)
-            print(pid)
+            im.save(settings.MEDIA_ROOT + url, 'PNG')
+            pid = Profile.objects.filter(user=request.user)
+            print(request.user.profile.user, request.user, pid, url)
             pid.update(image=url)
 
         elif 'input' in request.POST:

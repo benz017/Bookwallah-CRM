@@ -109,13 +109,14 @@ def save_user_profile(sender, instance, **kwargs):
         name = instance.get_full_name()
         av = avinit.get_avatar_data_url(name)
         import base64
+        from PIL import Image
+        from io import BytesIO
         imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
-        imgdata = base64.b64decode(imgdata)
+        print(len(imgdata))
+        im = Image.open(BytesIO(base64.b64decode(imgdata)))
         url = "\\avatar\\" + instance.username + ".svg"
-        filename = settings.MEDIAFILES_DIRS[0] + url
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
-        instance.profile.avatar = url
+        im.save(settings.MEDIA_ROOT + url, 'PNG')
+        instance.profile.image = url
     instance.profile.save()
 
 
