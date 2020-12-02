@@ -171,5 +171,5 @@ def list_min(data):
         else:
             return min(l)
     else:
-        return data
+        return 0
 

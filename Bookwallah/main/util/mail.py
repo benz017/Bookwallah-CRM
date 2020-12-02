@@ -1,9 +1,10 @@
 # Importing libraries 
-import imaplib, email 
+import imaplib, email
+from ..models import Setting
 from email.header import decode_header
 import json
-user = "ayan1741995@gmail.com"
-password = "mrntgtvfxzajxsyy"
+user = Setting.objects.all().values_list('emailID')#"ayan1741995@gmail.com"
+password = Setting.objects.all().values_list('password')#"mrntgtvfxzajxsyy"
 imap_url = 'imap.gmail.com'
 
 

@@ -38,7 +38,7 @@ class GroupAdmin(GAdmin, ImportExportModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-
+admin.site.register(Setting)
 admin.site.register(Recruit)
 admin.site.register(Task)
 admin.site.register(Pledge)

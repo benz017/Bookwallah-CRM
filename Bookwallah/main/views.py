@@ -37,7 +37,7 @@ def landing(request):
 @csrf_exempt
 def main_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
@@ -45,12 +45,14 @@ def main_dashboard(request):
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
     data["config"] = config
+
     print(data['config'])
-    p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
     y_list = []
-    print(today.year, p)
-    for i in range(today.year, p - 1, -1):
-        y_list.append(i)
+    if Project.objects.exists():
+        p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
+        print(today.year, p)
+        for i in range(today.year, p-1, -1):
+            y_list.append(i)
     data["year"] = y_list
     c = Project.objects.filter(country='India')
     print(c)
@@ -183,7 +185,7 @@ def d_location(request):
 @login_required
 def vol_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -339,7 +341,7 @@ def donor_dashboard(request):
 @login_required
 def child_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -389,33 +391,31 @@ def child_dashboard(request):
 @login_required
 def proj_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
     pid = Profile.objects.filter(user=request.user.profile.user)
+    print(123,)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
     data["config"] = config
     print(data['config'])
-    p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
     y_list = []
-    print(today.year, p)
-    for i in range(today.year, p - 1, -1):
-        y_list.append(i)
+    if Project.objects.exists():
+        p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
+        for i in range(today.year, p-1, -1):
+            y_list.append(i)
     data["year"] = y_list
-    c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
+    if pid.values_list('project', flat=True)[0] is not None:
+        c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
+    else:
+        c = Project.objects.filter(country='India')
     print(c)
     data = dashboard.monthly_session(data, con, c)
     data = dashboard.child_attendance(data, con)
     data = dashboard.session_prog(data, con, c)
     data = dashboard.vol_attendance(data, con, c)
-    data = dashboard.total_revenue(data, con, )
-    data = dashboard.total_expense(data, con, c)
-    data = dashboard.kid_stats(data, con, c)
-    data = dashboard.kid_years(data, con, c)
-    data = dashboard.no_of_kids(data, con, c)
-    data = dashboard.vol_role(data, con, c)
     data = dashboard.volunteer_list(data, c)
     data = dashboard.key_detail(data, c)
     data = dashboard.highlight(data, c)
@@ -437,12 +437,26 @@ def proj_dashboard(request):
                 p = Project.objects.all().values_list('state', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
-        elif 'year' in request.POST:
+        elif 'value' or 'year' in request.POST:
             new_data = {}
-            year = request.POST.get('year')
-            p = Profile.objects.filter(user=request.user).values_list('project', flat=True)[0]
-            f = Project.objects.filter(pk=p)
-            print(f)
+            if request.user.profile.project is not None:
+                year = request.POST.get('year')
+                p = Profile.objects.filter(user=request.user).values_list('project', flat=True)[0]
+                f = Project.objects.filter(pk=p)
+                print(f)
+            else:
+                new_data = {}
+                field = request.POST.get('field')
+                val = request.POST.get('value')
+                year = request.POST.get('year')
+                print(field, val, Project.objects.filter(project_name=val))
+                if field == 'Project':
+                    f = Project.objects.filter(project_name=val)
+                    print(f)
+                elif field == 'Country':
+                    f = Project.objects.filter(country=val)
+                elif field == 'Chapter':
+                    f = Project.objects.filter(state=val)
             new_data = dashboard.child_attendance(new_data, con, f, year)
             new_data = dashboard.vol_attendance(new_data, con, f, year)
             new_data = dashboard.key_detail(new_data, f)
@@ -931,11 +945,12 @@ def profile(request):
                        hobbies=interest,
                        chapter=chapter, future_plans=fplan)
         elif 'addr1' in request.POST:
-            zoom = request.POST.get('zoom') or None
-            skype = request.POST.get('skype') or None
-            linkedin = request.POST.get('linkedin') or None
-            facebook = request.POST.get('facebook') or None
-            instagram = request.POST.get('instagram') or None
+            zoom = request.POST.get('zoom')
+            skype = request.POST.get('skype')
+            linkedin = request.POST.get('linkedin')
+            facebook = request.POST.get('facebook')
+            instagram = request.POST.get('instagram')
+            twitter = request.POST.get('twitter')
             addr1 = request.POST.get('addr1')
             addr2 = request.POST.get('addr2')
             city = request.POST.get('city')
@@ -947,7 +962,7 @@ def profile(request):
             else:
                 address = ""
             pid.update(address=address, city=city, state=state, country=country, contact_number=phone,
-                       zoom=zoom, skype=skype, linkedin=linkedin, facebook=facebook,
+                       zoom=zoom, skype=skype, linkedin=linkedin, facebook=facebook,twitter=twitter,
                        instagram=instagram)
         return redirect('profile')
     return render(request, 'profile/profile.html', context=data)

@@ -676,8 +676,8 @@ def nps_score(data,con,c=None,year=None):
         data['nps_data'] = json.dumps(ds)
         data['nps_label'] = year
     except Exception as ex:
-        data['nps_data'] =""
-        data['nps_label'] =""
+        data['nps_data'] =[]
+        data['nps_label'] =[]
         print(ex)
     return data
 
@@ -874,7 +874,7 @@ def gifts(data,id):
 
 
 def top_vol(data):
-    v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
+    v = Setting.objects.all().values_list('top_volunteer',flat=True)[0]
     if v is not None:
         p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
         jy = p.values_list('user__date_joined__year',flat=True)[0]
@@ -888,7 +888,7 @@ def top_vol(data):
 
 
 def top_kid(data):
-    v = Config.objects.all().values_list('top_kid',flat=True)[0]
+    v = Setting.objects.all().values_list('top_kid',flat=True)[0]
     if v is not None:
         p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
         na = p.values_list('fullname',flat=True)[0]

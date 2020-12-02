@@ -9,6 +9,7 @@ from django.conf import settings
 from django.apps import apps
 import pandas as pd
 Config = apps.get_model('main', 'Config')
+Setting = apps.get_model('main', 'Setting')
 Recruit = apps.get_model('main', 'Recruit')
 now = datetime.now()
 SCOPE = ['https://spreadsheets.google.com/feeds',
@@ -18,8 +19,8 @@ SCOPE = ['https://spreadsheets.google.com/feeds',
          "https://www.googleapis.com/auth/drive.file",
        "https://www.googleapis.com/auth/drive"]
 config = Config.objects.all()
-
-SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
+setting= Setting.objects.all()
+SECRETS_FILE = settings.MEDIA_ROOT + setting.values_list('secret_file', flat=True)[0]
 SPREADSHEET = config.values_list('sheet_name', flat=True)[0]
 credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
 gc = gspread.authorize(credentials)

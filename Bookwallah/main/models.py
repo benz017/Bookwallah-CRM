@@ -32,7 +32,6 @@ class Project(models.Model):
     kids_bookwallah = models.IntegerField(blank=True, null=True)
     sessions_per_year = models.IntegerField(blank=True, null=True)
     project_report = models.FileField(max_length=100, blank=True, null=True)
-
     def __str__(self):
         return "[{} - {}, {}, {}]".format(self.project_name, self.state, self.city,self.country)
 
@@ -87,6 +86,7 @@ class Profile(models.Model):
     facebook = models.CharField(max_length=500, blank=True,default="" )
     linkedin = models.CharField(max_length=500, blank=True,default="" )
     instagram = models.CharField(max_length=500, blank=True,default="")
+    twitter = models.CharField(max_length=500, blank=True, default="")
     leaving_date = models.DateField(null=True, blank=True)
     document = models.FileField(blank=True,null=True)
     is_online = models.BooleanField(null=True,default=False,blank=True)
@@ -307,8 +307,10 @@ class Donor_Testimonial(models.Model):
 
 
 class Highlight(models.Model):
-    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-    proj = ((i, i) for i in proj)
+    proj=()
+    if Project.objects.exists():
+        proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+        proj = ((i, i) for i in proj)
     project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
     date = models.DateField( blank=True, null=True)
     highlight = models.CharField(max_length=1000, blank=True, null=True)
@@ -319,8 +321,10 @@ class Highlight(models.Model):
 
 
 class Issues(models.Model):
-    proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-    proj = ((i, i) for i in proj)
+    proj = ()
+    if Project.objects.exists():
+        proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+        proj = ((i, i) for i in proj)
     project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
     date = models.DateField(blank=True, null=True)
     issue = models.CharField(max_length=1000, blank=True, null=True)
@@ -375,8 +379,10 @@ class Expense(models.Model):
 
 
 class NPSScore(models.Model):
-    state = list(set(list(Project.objects.all().values_list('state',flat=True))))
-    state = ((i,i) for i in state)
+    state=()
+    if Project.objects.exists():
+        state = list(set(list(Project.objects.all().values_list('state',flat=True))))
+        state = ((i,i) for i in state)
     q = ['Q1','Q2','Q3','Q4']
     q = ((i,i) for i in q)
     chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=state)
@@ -424,20 +430,36 @@ class ProSocialBehaviorScore(models.Model):
 
 
 class Config(models.Model):
-    fiscal_month = models.IntegerField(choices=months,default=1)
     sheet_name = models.CharField(max_length=200,blank=True,null=True)
     username_field = models.CharField(max_length=200,blank=True,null=True)
     email_field = models.CharField(max_length=200, blank=True, null=True)
     name_field = models.CharField(max_length=300, blank=True, null=True)
     address_field = models.CharField(max_length=300, blank=True, null=True)
+    country =models.CharField(max_length=200, blank=True, null=True)
+    state =models.CharField(max_length=200, blank=True, null=True)
+    city =models.CharField(max_length=200, blank=True, null=True)
+    pincode = models.CharField(max_length=200, blank=True, null=True)
+    house_number =models.CharField(max_length=200, blank=True, null=True)
     contact_field = models.CharField(max_length=300, blank=True, null=True)
     tenure_field = models.CharField(max_length=300, blank=True, null=True)
     role_field = models.CharField(max_length=300, blank=True, null=True)
     prior_experience_field = models.CharField(max_length=300, blank=True, null=True)
     library_field = models.CharField(max_length=300, blank=True, null=True)
-    secret_file = models.FileField(upload_to='documents',blank=True, null=True)
-    top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},on_delete=models.DO_NOTHING, null=True, blank=True)
+
+
+
+    def __str__(self):
+        return "{}".format(self.sheet_name)
+
+class Setting(models.Model):
+    landing_image = models.ImageField(blank=True)
+    emailID = models.EmailField(max_length=150, blank=True)
+    password = models.CharField(max_length=50, blank=True, null=True)
+    fiscal_month = models.IntegerField(choices=months, default=1)
+    secret_file = models.FileField(upload_to='documents', blank=True, null=True)
+    top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},
+                                      on_delete=models.DO_NOTHING, null=True, blank=True)
     top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.sheet_name)
+        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.emailID)

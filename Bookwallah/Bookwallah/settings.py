@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'Bookwallah.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Bookwallah_DB',
+        'NAME': 'BW',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost'
