@@ -38,20 +38,50 @@ class GroupAdmin(GAdmin, ImportExportModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(Setting)
-admin.site.register(Recruit)
-admin.site.register(Task)
-admin.site.register(Pledge)
-admin.site.register(Gift)
-admin.site.register(Kid_Attendance)
-admin.site.register(Kid_Picture)
-admin.site.register(Session_Picture)
-admin.site.register(Highlight)
-admin.site.register(Issues)
-admin.site.register(Volunteer_Testimonial)
-admin.site.register(Donor_Testimonial)
+
+@admin.register(Recruit)
+class Recruit(ImportExportModelAdmin):
+    pass
+
+@admin.register(Task)
+class Task(ImportExportModelAdmin):
+    pass
+
+@admin.register(Pledge)
+class Pledge(ImportExportModelAdmin):
+    pass
+
+@admin.register(Gift)
+class Gift(ImportExportModelAdmin):
+    pass
+
+@admin.register(Kid_Attendance)
+class Kid_Attendance(ImportExportModelAdmin):
+    pass
+
+@admin.register(Kid_Picture)
+class Kid_Picture(ImportExportModelAdmin):
+    pass
+@admin.register(Session_Picture)
+class Session_Picture(ImportExportModelAdmin):
+    pass
+@admin.register(Highlight)
+class Highlight(ImportExportModelAdmin):
+    pass
+@admin.register(Issues)
+class Issues(ImportExportModelAdmin):
+    pass
+@admin.register(Volunteer_Testimonial)
+class Volunteer_Testimonial(ImportExportModelAdmin):
+    pass
+@admin.register(Donor_Testimonial)
+class Donor_Testimonial(ImportExportModelAdmin):
+    pass
 
 
+@admin.register(Setting)
+class Setting(ImportExportModelAdmin):
+    pass
 
 
 @admin.register(Config)
