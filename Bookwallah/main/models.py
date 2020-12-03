@@ -308,13 +308,16 @@ class Donor_Testimonial(models.Model):
 
 class Highlight(models.Model):
     proj=()
-    if Project.objects.exists():
-        proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-        proj = ((i, i) for i in proj)
-    project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
-    date = models.DateField( blank=True, null=True)
-    highlight = models.CharField(max_length=1000, blank=True, null=True)
-    priority = models.BooleanField(default=False)
+    try:
+        if Project.objects.exists():
+            proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+            proj = ((i, i) for i in proj)
+        project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
+        date = models.DateField( blank=True, null=True)
+        highlight = models.CharField(max_length=1000, blank=True, null=True)
+        priority = models.BooleanField(default=False)
+    except Exception as ex:
+        print(str(ex))
 
     def __str__(self):
         return "{}".format(self.project)
@@ -322,13 +325,17 @@ class Highlight(models.Model):
 
 class Issues(models.Model):
     proj = ()
-    if Project.objects.exists():
-        proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
-        proj = ((i, i) for i in proj)
-    project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
-    date = models.DateField(blank=True, null=True)
-    issue = models.CharField(max_length=1000, blank=True, null=True)
-    priority = models.BooleanField(default=False)
+    try:
+        if Project.objects.exists():
+            proj = list(set(list(Project.objects.all().values_list('project_name', flat=True))))
+            proj = ((i, i) for i in proj)
+        project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
+        date = models.DateField(blank=True, null=True)
+        issue = models.CharField(max_length=1000, blank=True, null=True)
+        priority = models.BooleanField(default=False)
+    except Exception as ex:
+        print(str(ex))
+
 
     def __str__(self):
         return "{}".format(self.project)
@@ -380,15 +387,18 @@ class Expense(models.Model):
 
 class NPSScore(models.Model):
     state=()
-    if Project.objects.exists():
-        state = list(set(list(Project.objects.all().values_list('state',flat=True))))
-        state = ((i,i) for i in state)
-    q = ['Q1','Q2','Q3','Q4']
-    q = ((i,i) for i in q)
-    chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=state)
-    quarter = models.CharField(max_length=10, verbose_name="Quarter", blank=True, null=True,choices=q)
-    year = models.CharField(max_length=10, verbose_name="Year", blank=True, null=True)
-    score = models.IntegerField(verbose_name="Score (%)", blank=True, null=True)
+    try:
+        if Project.objects.exists():
+            state = list(set(list(Project.objects.all().values_list('state',flat=True))))
+            state = ((i,i) for i in state)
+        q = ['Q1','Q2','Q3','Q4']
+        q = ((i,i) for i in q)
+        chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=state)
+        quarter = models.CharField(max_length=10, verbose_name="Quarter", blank=True, null=True,choices=q)
+        year = models.CharField(max_length=10, verbose_name="Year", blank=True, null=True)
+        score = models.IntegerField(verbose_name="Score (%)", blank=True, null=True)
+    except Exception as ex:
+        print(str(ex))
 
     def __str__(self):
         return "{} ({} {})".format(self.chapter, self.quarter, self.year, )
