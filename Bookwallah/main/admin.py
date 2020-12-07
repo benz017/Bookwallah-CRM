@@ -85,9 +85,9 @@ class Volunteer_Testimonial(ImportExportModelAdmin):
 @admin.register(Donor_Testimonial)
 class Donor_Testimonial(ImportExportModelAdmin):
     pass
-@admin.register(Role)
-class Role(ImportExportModelAdmin):
-    pass
+#@admin.register(Role)
+#class Role(ImportExportModelAdmin):
+#    pass
 
 
 @admin.register(NPSScore)

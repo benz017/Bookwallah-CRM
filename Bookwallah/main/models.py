@@ -71,9 +71,9 @@ class Role(models.Model):
 
 # Create your models here.
 class Profile(models.Model):
-    if Role.objects.exists():
-        r = list(set(list(Role.objects.all().values_list('role', flat=True))))
-        r = ((i, i) for i in r)
+    #if Role.objects.exists():
+    #    r = list(set(list(Role.objects.all().values_list('role', flat=True))))
+    #    r = ((i, i) for i in r)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to='avatar', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
