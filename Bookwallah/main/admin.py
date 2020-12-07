@@ -7,7 +7,7 @@ from django.contrib.auth.models import User,Group
 from .models import *
 from django.contrib.auth.hashers import make_password
 # Register your models here.
-#admin.site.register(Profile)
+
 #admin.site.register(Session)
 #admin.site.register(Project)
 #admin.site.register(Kid)
@@ -38,6 +38,14 @@ class GroupAdmin(GAdmin, ImportExportModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
+
+@admin.register(Config)
+class Config(ImportExportModelAdmin):
+    pass
+
+@admin.register(Recruitment_Form_Config)
+class Recruitment_Form_Config(ImportExportModelAdmin):
+    pass
 
 @admin.register(Recruit)
 class Recruit(ImportExportModelAdmin):
@@ -77,16 +85,10 @@ class Volunteer_Testimonial(ImportExportModelAdmin):
 @admin.register(Donor_Testimonial)
 class Donor_Testimonial(ImportExportModelAdmin):
     pass
-
-
-@admin.register(Setting)
-class Setting(ImportExportModelAdmin):
+@admin.register(Role)
+class Role(ImportExportModelAdmin):
     pass
 
-
-@admin.register(Config)
-class Config(ImportExportModelAdmin):
-    pass
 
 @admin.register(NPSScore)
 class NPSScore(ImportExportModelAdmin):

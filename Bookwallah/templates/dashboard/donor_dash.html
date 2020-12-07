@@ -324,8 +324,9 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tbody id="modal-body">
-                <tr><td id="date0">2020-07-24</td><td id="task_name0">Host an event</td><td id="assigned_to0">Anjali</td><td id="status0"><span class="label label-info label-mini">Done</span></td><td><button class="btn btn-success btn-xs approve-btn" value="0"><i class="fa fa-check"></i></button></td></tr><tr><td id="date1">2020-08-26</td><td id="task_name1">Complete this</td><td id="assigned_to1">Tokyo</td><td id="status1"><span class="label label-warning label-mini">Pending</span></td><td><button class="btn btn-success btn-xs approve-btn" value="1"><i class="fa fa-check"></i></button></td></tr></tbody>
+                <tbody id="assigned_task">
+
+                </tbody>
               </table>
             </section>
           </div>
@@ -945,6 +946,26 @@ $(document).ready(function() {
             }
 
         });
+            $date = resp.new_data.date;
+
+            $task = resp.new_data.task;
+            $assigned_to = resp.new_data.assigned_to;
+            $status=resp.new_data.status;
+
+        for (i=0;i<$date.length;i++){
+
+                if ($status[i] == "Done"){
+                $('#assigned_task').append('<tr class="tasks"><td id="date'+i+'">'+$date[i]+'</td><td id="task_name'+i+'">'+$task[i]+'</td><td id="assigned_to'+i+'">'+$assigned_to[i]+'</td><td id="status'+i+'"><span class="label label-info label-mini">'+$status[i]+'</span></td><td><button class="btn btn-success btn-xs approve-btn" value="'+i+'"><i class="fa fa-check"></i></button></td></tr>');
+                }
+                else if ($status[i] == "Approved")
+                {
+                  $('#assigned_task').append('<tr class="tasks"><td id="date'+i+'">'+$date[i]+'</td><td id="task_name'+i+'">'+$task[i]+'</td><td id="assigned_to'+i+'">'+$assigned_to[i]+'</td><td id="status'+i+'"><span class="label label-success label-mini">'+$status[i]+'</span></td><td><button class="btn btn-success btn-xs approve-btn" value="'+i+'"><i class="fa fa-check"></i></button></td></tr>');
+                }
+                else
+                {
+                  $('#assigned_task').append('<tr class="tasks"><td id="date'+i+'">'+$date[i]+'</td><td id="task_name'+i+'">'+$task[i]+'</td><td id="assigned_to'+i+'">'+$assigned_to[i]+'</td><td id="status'+i+'"><span class="label label-warning label-mini">'+$status[i]+'</span></td><td><button class="btn btn-success btn-xs approve-btn" value="'+i+'"><i class="fa fa-check"></i></button></td></tr>');
+                }
+            }
          Object.entries(resp.donation).forEach(function([key, value]){
         $('#dh').append('<tr class="dn donor" style="height:100%;rgba(47, 50, 58, 0.8);"><td >'+key+'</td><td >'+value+'</td></tr>');
         });
@@ -957,6 +978,7 @@ $(document).ready(function() {
         data: {value: $val}
         }).done(function( data) {
           $emails = JSON.parse(data.e_history);
+
 
         for (i=0;i<$emails.length;i++){
           $('#mail_list').append('<tr><td class="emails" style="display: block; width: 100%;text-align: left;" data-toggle="collapse" data-target="#'+i+'"><h4 class="ws">From: '+$emails[i]["From"]+'</h4><h4 class="ws">To: '+$emails[i]["To"]+'</h4><h4 class="ws">Date: '+$emails[i]["Date"]+'</h4><h4 class="ws">Subject: '+$emails[i]["Subject"]+'</h4><div id="'+i+'" style="background-color:rgba(18, 176, 226, 0.3);padding:2px 5px;" class="collapse">'+$emails[i]["Body"]+'</div></td></tr>');

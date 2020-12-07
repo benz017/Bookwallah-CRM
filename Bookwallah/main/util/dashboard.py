@@ -483,7 +483,6 @@ def volunteer_list(data,p=None,year=None):
         b = Profile.objects.filter(user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
     else:
         b = Profile.objects.filter(project__in=p,user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
-
     dl = b.values_list('role', flat=True)
     name = b.values_list('fullname', flat=True)
     av = b.values_list('image', flat=True)
@@ -789,7 +788,6 @@ def email_history( id):
 
 
 
-
 def total_applications(data,year=None):
     if year is None:
        t = Recruit.objects.filter(timestamp__year=today.year).count()
@@ -853,6 +851,17 @@ def rec_role(data,year=None):
     data['r_role_label'] = list(c.values_list('role', flat=True))
     return data
 
+def assigned_donor_tasks(data,donor):
+    at = Task.objects.filter(assigned_for=donor.values_list('id',flat=True)[0],date__month__in=[today.month,today.month+1],date__year=today.year,type='Donor').annotate(
+                    fullname=Concat('user__user__first_name', Value(' '), 'user__user__last_name'))
+    date = [dt.date() for dt in at.values_list('date', flat=True)]
+    task = at.values_list('task', flat=True)
+    assigned_to = at.values_list('fullname', flat=True)
+    status = at.values_list('status', flat=True)
+
+    data.update({'date':list(date),'task':list(task),'assigned_to':list(assigned_to),'status':list(status)})
+    return data
+
 def upcoming_tasks(data):
     ut = Task.objects.filter(date__gte=today,date__month__in=[today.month,today.month+1],date__year=today.year,type='Donor')
     data['up_tasks'] = list(ut)
@@ -874,7 +883,7 @@ def gifts(data,id):
 
 
 def top_vol(data):
-    v = Setting.objects.all().values_list('top_volunteer',flat=True)[0]
+    v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
     if v is not None:
         p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
         jy = p.values_list('user__date_joined__year',flat=True)[0]
@@ -888,7 +897,7 @@ def top_vol(data):
 
 
 def top_kid(data):
-    v = Setting.objects.all().values_list('top_kid',flat=True)[0]
+    v = Config.objects.all().values_list('top_kid',flat=True)[0]
     if v is not None:
         p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
         na = p.values_list('fullname',flat=True)[0]

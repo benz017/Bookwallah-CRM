@@ -278,32 +278,26 @@
             <table style="margin:0 1px; color:black;width:100%; ">
               <tbody id="details">
               <tr class="donor" >
-              <td class="col-sm-4" style="text-align:left;" >Project Name:</td>
-                <td id="pname" class="col-sm-8" style="text-align:right;">{{p_details.project_name}}</td>
+                  <td style="text-align:left;" >Project Name: <span class="pull-right">{{p_details.project_name}}</span></td>
               </tr>
               <tr class="donor" >
-              <td class="col-sm-3" style="text-align:left;" >Description:</td>
-                <td class="col-sm-9" style="text-align:right;">{{p_details.description}}</td>
+                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:right;">{{p_details.description}}</span></td>
               </tr>
               <tr class="donor" >
-              <td class="col-sm-3" style="text-align:left; color:black;">Address:</td>
-                  <td class="col-sm-9" id="add" style="text-align:right;">{{p_details.address}}</td>
+                  <td style="text-align:left; color:black;">Address:  <span class="pull-right">{{p_details.address}}</span></td>
               </tr>
             <tr class="donor" >
-              <td class="col-sm-3" style="text-align:left; color:black;">Contact:</td>
-                <td class="col-sm-9" id="contact" style="text-align:right;">{{p_details.contact_number}}</td>
+                <td style="text-align:left; color:black;">Contact:  <span class="pull-right">{{p_details.contact_number}}</span></td>
             </tr>
               <tr class="donor" >
-              <td class="col-sm-3" style="text-align:left; color:black;">Top Highlights: </td>
-                  <td class="col-sm-9" style="text-align:right;">
-                    <ul id="hlight">
+              <td style="text-align:left; color:black;">Top Highlights: </td>
+                    <ul id="hlight" class="pull-right">
                       {% for h in hi %}
                       {% if forloop.counter < 6 %}
                       <li class="hi">{{h}}</li>
                       {% endif %}
                       {% endfor %}
                     </ul>
-                  </td>
             </tr>
               </tbody>
             </table>

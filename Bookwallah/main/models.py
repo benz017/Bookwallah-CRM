@@ -16,14 +16,14 @@ class Project(models.Model):
     project_name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to='project', blank=True, null=True)
     type = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(max_length=1000, blank=True, null=True)
+    description = models.TextField(max_length=300, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     zip_code = models.IntegerField(blank=True, null=True)
-    highlights = models.CharField(max_length=3000,blank=True, null=True,default='')
-    issues = models.CharField(max_length=3000, blank=True, null=True, default='')
+    highlights = models.CharField(max_length=500,blank=True, null=True,default='')
+    issues = models.CharField(max_length=500, blank=True, null=True, default='')
     contact_person = models.CharField(max_length=15, blank=True, null=True, default='')
     contact_number = models.CharField(max_length=15, blank=True, null=True)
     date = models.DateField(null=True, blank=True)
@@ -57,13 +57,23 @@ class Session(models.Model):
     volunteers_attended = models.CharField(max_length=100, blank=True, null=True)
     cancellation_reason = models.CharField(max_length=300, blank=True, null=True)
     image = models.ImageField(upload_to='session',blank=True, null=True)
-    description = models.TextField(max_length=1000, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
     def __str__(self):
         return "{} - {} - {}".format(self.library_name, self.project,self.date)
 
 
+class Role(models.Model):
+    role = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return "{}".format(self.role)
+
+
 # Create your models here.
 class Profile(models.Model):
+    if Role.objects.exists():
+        r = list(set(list(Role.objects.all().values_list('role', flat=True))))
+        r = ((i, i) for i in r)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to='avatar', null=True, blank=True)
     nick_name = models.CharField(max_length=100, blank=True, null=True)
@@ -80,7 +90,7 @@ class Profile(models.Model):
     future_plans = models.CharField(max_length=100, blank=True, null=True)
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
-    role = models.CharField(max_length=100, blank=True, null=True)
+    role = models.CharField(max_length=100, blank=True)
     skype = models.CharField(max_length=500, blank=True,default="")
     zoom = models.CharField(max_length=500, blank=True,default="")
     facebook = models.CharField(max_length=500, blank=True,default="" )
@@ -98,25 +108,29 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
+    try:
+        if created and instance.is_staff is True:
+            Profile.objects.create(user=instance)
+        instance.profile.save()
+    except Exception as ex:
+        print(str(ex))
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if instance.profile.image == "":
-        name = instance.get_full_name()
-        av = avinit.get_avatar_data_url(name)
-        import base64
-        imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
-        imgdata = base64.b64decode(imgdata)
-        url = "avatar/" + instance.username + ".svg"
-        filename = settings.MEDIA_ROOT+url
-        with open(filename, 'wb') as f:
-           f.write(imgdata)
-        instance.profile.image = url
-    instance.profile.save()
+def save_user_profile(sender, instance,created ,**kwargs):
+    if created and instance.is_staff is True:
+        if instance.profile.image == "":
+            name = instance.get_full_name()
+            av = avinit.get_avatar_data_url(name)
+            import base64
+            imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
+            imgdata = base64.b64decode(imgdata)
+            url = "avatar/" + instance.username + ".svg"
+            filename = settings.MEDIA_ROOT+url
+            with open(filename, 'wb') as f:
+               f.write(imgdata)
+            instance.profile.image = url
+        instance.profile.save()
 
 
 class Attendance(models.Model):
@@ -174,15 +188,18 @@ class Donor(models.Model):
 
 @receiver(post_save, sender=User)
 def create_donor_profile(sender, instance, created, **kwargs):
-    if created and instance.is_staff is False:
-        Donor.objects.create(user=instance,
-                             first_name=instance.first_name,
-                             last_name=instance.last_name,
-                             email=instance.email)
+    try:
+        if created is False and instance.is_staff is False:
+            Donor.objects.create(user=instance,
+                                 first_name=instance.first_name,
+                                 last_name=instance.last_name,
+                                 email=instance.email)
+    except Exception as ex:
+        print(str(ex))
 
 @receiver(post_save, sender=User)
-def save_donor_profile(sender, instance, **kwargs):
-    if instance.is_staff is False:
+def save_donor_profile(sender, instance,created, **kwargs):
+    if created is False and instance.is_staff is False:
         instance.donor.save()
 
 
@@ -210,7 +227,7 @@ class Task(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="assigned_to")
     task = models.CharField(max_length=400, blank=True, null=True)
     assigned_by = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, blank=True, related_name="assigned_by")
-    assigned_for = models.ForeignKey(Donor, default=2, on_delete=models.DO_NOTHING, related_name="assigned_for")
+    assigned_for = models.ForeignKey(Donor, on_delete=models.DO_NOTHING, blank=True, related_name="assigned_for")
     type = models.CharField(max_length=20, default="Project", blank=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=30, blank=True, null=True, default="Pending")
@@ -253,7 +270,7 @@ class Kid(models.Model):
     attending_sessions = models.BooleanField(default=True)
     date = models.DateTimeField(default=timezone.now, verbose_name=u"Joining Date")
     image = models.ImageField(upload_to='kid',blank=True, null=True)
-    description = models.TextField(max_length=1000, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
     def __str__(self):
         return "{} {} -- {}".format(self.first_name,self.last_name,self.project, )
 
@@ -285,12 +302,13 @@ class Session_Picture(models.Model):
         return "{}".format(self.session)
 
 def create_session_pic_obj(sender, **kwargs):
+    print(kwargs)
     if kwargs['created']:
         print(kwargs['instance'].image)
-        kp = Session.objects.create(kid=kwargs['instance'],image=kwargs['instance'].image)
+        kp = Session_Picture.objects.create(session=kwargs['instance'],image=kwargs['instance'].image)
     else:
-        obj,_created= Session.objects.get_or_create(kid=kwargs['instance'])
-        setattr(obj, 'image', kwargs['instance'].imag)
+        obj,_created= Session_Picture.objects.get_or_create(session=kwargs['instance'])
+        setattr(obj, 'image', kwargs['instance'].image)
         obj.save()
 
 post_save.connect(create_session_pic_obj,sender=Session)
@@ -298,12 +316,12 @@ post_save.connect(create_session_pic_obj,sender=Session)
 
 class Volunteer_Testimonial(models.Model):
     volunteer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=True, limit_choices_to={'user__groups__name': "Volunteer"})
-    testimonial = models.TextField(max_length=1000, blank=True, null=True)
+    testimonial = models.TextField(max_length=500, blank=True, null=True)
 
 class Donor_Testimonial(models.Model):
 
     donor = models.ForeignKey(Donor, on_delete=models.DO_NOTHING, null=True)
-    testimonial = models.TextField(max_length=1000, blank=True, null=True)
+    testimonial = models.TextField(max_length=500, blank=True, null=True)
 
 
 class Highlight(models.Model):
@@ -314,7 +332,7 @@ class Highlight(models.Model):
             proj = ((i, i) for i in proj)
         project = models.CharField(max_length=30, verbose_name="Project", blank=True,null=True, choices=proj)
         date = models.DateField( blank=True, null=True)
-        highlight = models.CharField(max_length=1000, blank=True, null=True)
+        highlight = models.CharField(max_length=500, blank=True, null=True)
         priority = models.BooleanField(default=False)
     except Exception as ex:
         print(str(ex))
@@ -331,7 +349,7 @@ class Issues(models.Model):
             proj = ((i, i) for i in proj)
         project = models.CharField(max_length=30, verbose_name="Project", blank=True, null=True, choices=proj)
         date = models.DateField(blank=True, null=True)
-        issue = models.CharField(max_length=1000, blank=True, null=True)
+        issue = models.CharField(max_length=500, blank=True, null=True)
         priority = models.BooleanField(default=False)
     except Exception as ex:
         print(str(ex))
@@ -360,7 +378,7 @@ class Recruit(models.Model):
     contact = models.CharField(max_length=100, null=True, blank=True)
     tenure = models.CharField(max_length=100, null=True, blank=True)
     role = models.CharField(max_length=100, null=True, blank=True)
-    prior_exp = models.CharField(max_length=1000, null=True, blank=True)
+    prior_exp = models.CharField(max_length=500, null=True, blank=True)
     library = models.CharField(max_length=250, null=True, blank=True)
     status = models.CharField(max_length=50, default='Pending',null=True, blank=True,choices=status_choices)
 
@@ -439,7 +457,7 @@ class ProSocialBehaviorScore(models.Model):
         return "{} ({} {})".format(self.project, self.quarter, self.year)
 
 
-class Config(models.Model):
+class Recruitment_Form_Config(models.Model):
     sheet_name = models.CharField(max_length=200,blank=True,null=True)
     username_field = models.CharField(max_length=200,blank=True,null=True)
     email_field = models.CharField(max_length=200, blank=True, null=True)
@@ -461,7 +479,7 @@ class Config(models.Model):
     def __str__(self):
         return "{}".format(self.sheet_name)
 
-class Setting(models.Model):
+class Config(models.Model):
     landing_image = models.ImageField(blank=True)
     emailID = models.EmailField(max_length=150, blank=True)
     password = models.CharField(max_length=50, blank=True, null=True)
@@ -473,3 +491,4 @@ class Setting(models.Model):
 
     def __str__(self):
         return "{} {}".format(months[int(self.fiscal_month)-1][1],self.emailID)
+

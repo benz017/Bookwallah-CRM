@@ -19,7 +19,7 @@ SCOPE = ['https://spreadsheets.google.com/feeds',
          "https://www.googleapis.com/auth/drive.file",
        "https://www.googleapis.com/auth/drive"]
 config = Config.objects.all()
-setting= Setting.objects.all()
+setting= Config.objects.all()
 SECRETS_FILE = settings.MEDIA_ROOT + setting.values_list('secret_file', flat=True)[0]
 SPREADSHEET = config.values_list('sheet_name', flat=True)[0]
 credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)

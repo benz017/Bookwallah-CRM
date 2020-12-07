@@ -37,7 +37,7 @@ def landing(request):
 @csrf_exempt
 def main_dashboard(request):
     data = {}
-    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
@@ -87,7 +87,7 @@ def main_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Config.objects.filter(id=1)
+            config = Recruitment_Form_Config.objects.filter(id=1)
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -156,28 +156,31 @@ def p_location(request):
     name__in=['President', 'R&D Head', 'Marketing Head', 'HR Head', 'Project Lead', 'Volunteer', 'Donor']).count() == 0)
 @csrf_exempt
 def d_location(request):
-    p = Donor.objects.all().annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
-    add1 = p.values_list('address1', flat=True)
-    add2 = p.values_list('address2', flat=True)
-    print(add1, add2)
-    add = [a + b if a is not None and b is not None else "" for a in add1 for b in add2]
+    try:
+        p = Donor.objects.all().annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        add1 = p.values_list('address1', flat=True)
+        add2 = p.values_list('address2', flat=True)
+        print(add1, add2)
+        add = [a + b if a is not None and b is not None else "" for a in add1 for b in add2]
 
-    city = p.values_list('city', flat=True)
-    country = p.values_list('country', flat=True)
-    project_name = p.values_list('fullname', flat=True)
-    loc = []
-    for i in range(len(p)):
-        if dashboard.do_geocode(add[i]) is not None:
-            addr = dashboard.do_geocode(add[i])
-        elif dashboard.do_geocode(city[i] + ", " + country[i]) is not None:
-            addr = dashboard.do_geocode(city[i] + ", " + country[i])
-        else:
-            continue
-        loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
+        city = p.values_list('city', flat=True)
+        country = p.values_list('country', flat=True)
+        project_name = p.values_list('fullname', flat=True)
+        loc = []
+        for i in range(len(p)):
+            if dashboard.do_geocode(add[i]) is not None:
+                addr = dashboard.do_geocode(add[i])
+            elif dashboard.do_geocode(city[i] + ", " + country[i]) is not None:
+                addr = dashboard.do_geocode(city[i] + ", " + country[i])
+            else:
+                continue
+            loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
 
-    data = json.dumps(loc)
-    print(data)
-    return HttpResponse(data, content_type='application/json')
+        data = json.dumps(loc)
+        print(data)
+        return HttpResponse(data, content_type='application/json')
+    except Exception as ex:
+        print(str(ex))
 
 
 @user_passes_test(lambda u: u.groups.filter(name__in=['R&D Head', 'Marketing Head', 'Volunteer', 'Donor']).count() == 0)
@@ -185,7 +188,7 @@ def d_location(request):
 @login_required
 def vol_dashboard(request):
     data = {}
-    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -237,6 +240,7 @@ def donor_dashboard(request):
     if request.method == "GET" and request.is_ajax():
         value = request.GET.get('value')
         donor = Donor.objects.filter(first_name=value.split()[0], last_name=value.split()[1])
+        print(donor)
         result = dashboard.email_history(donor.values_list('email', flat=True)[0])
         print(result)
         json_stuff = json.dumps(result)
@@ -268,9 +272,9 @@ def donor_dashboard(request):
             new_data = dashboard.monthly_donation(new_data, donor, year)
             new_data = dashboard.don_by_year(new_data, donor, year)
             new_data = dashboard.total_donation(new_data, donor)
-
-            print(123, don, gift)
-            json_stuff = json.dumps({'fname': value, 'data': data, 'donation': don, 'gik': gift, 'new_data': new_data})
+            new_data = dashboard.assigned_donor_tasks(new_data,donor)
+            json_stuff = json.dumps({'fname': value, 'data': data, 'donation': don, 'gik': gift, 'new_data': new_data},sort_keys=True, indent=1, cls=DjangoJSONEncoder)
+            print(json_stuff)
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'select' in request.POST:
             new_data = {}
@@ -341,7 +345,7 @@ def donor_dashboard(request):
 @login_required
 def child_dashboard(request):
     data = {}
-    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -391,7 +395,7 @@ def child_dashboard(request):
 @login_required
 def proj_dashboard(request):
     data = {}
-    config = Setting.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
@@ -424,7 +428,7 @@ def proj_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Config.objects.filter(id=1)
+            config = Recruitment_Form_Config.objects.filter(id=1)
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -818,14 +822,8 @@ def profile(request):
     att = (len(attendance) / len(sessions)) * 100 if len(sessions) != 0 else 0
     data['att'] = [len(attendance), len(sessions) - len(attendance)]
     data['att_p'] = att
-    role_dict = {'0': '', '1': 'Psychology Team', '2': 'Graphic Designer', '3': 'Story Teller', '4': 'HR'}
-
-    def get_key(val):
-        for key, value in role_dict.items():
-            if val == value:
-                return key
-
-    role = pid.values_list('role', flat=True)[0]
+    data['roles'] = list(Role.objects.all().values_list('role',flat=True))
+    print(data['roles'])
     c = 3
     for k, v in json.loads(profile)[0].items():
         if k not in ["signup_confirmation", "id", "user_id", "image"]:
@@ -845,8 +843,6 @@ def profile(request):
     data['last_name'] = request.user.last_name
     data['email'] = request.user.email
     data['project'] = request.user.profile.project.project_name if request.user.profile.project is not None else ''
-    data['role_key'] = get_key(role)
-    data['role_val'] = role
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
     data["zoom"] = request.user.profile.zoom

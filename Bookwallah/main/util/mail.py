@@ -1,10 +1,12 @@
 # Importing libraries 
 import imaplib, email
-from ..models import Setting
+from django.apps import apps
+Config = apps.get_model('main', 'Config')
+
 from email.header import decode_header
 import json
-user = Setting.objects.all().values_list('emailID')#"ayan1741995@gmail.com"
-password = Setting.objects.all().values_list('password')#"mrntgtvfxzajxsyy"
+user = Config.objects.all().values_list('emailID',flat=True)[0]
+password = Config.objects.all().values_list('password',flat=True)[0]#"mrntgtvfxzajxsyy"
 imap_url = 'imap.gmail.com'
 
 
@@ -34,6 +36,7 @@ def get_email_num(result_bytes):
 
 
 def get_email(ID):
+    print(124, user, password)
     # this is done to make SSL connnection with GMAIL
     con = imaplib.IMAP4_SSL(imap_url)
 
