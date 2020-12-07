@@ -90,7 +90,7 @@ class Profile(models.Model):
     future_plans = models.CharField(max_length=100, blank=True, null=True)
     chapter = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="project")
-    role = models.CharField(max_length=100, blank=True)
+    role = models.CharField(max_length=100, blank=True, null=True)
     skype = models.CharField(max_length=500, blank=True,default="")
     zoom = models.CharField(max_length=500, blank=True,default="")
     facebook = models.CharField(max_length=500, blank=True,default="" )
