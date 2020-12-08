@@ -189,8 +189,14 @@ class Donor(models.Model):
 
 @receiver(post_save, sender=User)
 def create_donor_profile(sender, instance, created, **kwargs):
+    print(instance.is_staff, created)
     try:
         if created is False and instance.is_staff is False:
+            Donor.objects.create(user=instance,
+                                 first_name=instance.first_name,
+                                 last_name=instance.last_name,
+                                 email=instance.email)
+        elif created and instance.is_staff is False:
             Donor.objects.create(user=instance,
                                  first_name=instance.first_name,
                                  last_name=instance.last_name,
@@ -200,9 +206,9 @@ def create_donor_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_donor_profile(sender, instance,created, **kwargs):
+    print(instance.is_staff, created)
     if created is False and instance.is_staff is False:
         instance.donor.save()
-
 
 class Pledge(models.Model):
     donor = models.ForeignKey(Donor, default=2, on_delete=models.DO_NOTHING, related_name="pledge_donor")
