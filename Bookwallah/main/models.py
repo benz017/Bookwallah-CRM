@@ -495,6 +495,7 @@ class Config(models.Model):
     top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},
                                       on_delete=models.DO_NOTHING, null=True, blank=True)
     top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
+    default_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
         return "{} {}".format(months[int(self.fiscal_month)-1][1],self.emailID)
