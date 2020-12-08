@@ -1,4 +1,3 @@
-from celery import shared_task
 from time import sleep
 import logging
 from celery.contrib import rdb
@@ -9,7 +8,7 @@ from django.conf import settings
 from django.apps import apps
 import pandas as pd
 Config = apps.get_model('main', 'Config')
-Setting = apps.get_model('main', 'Setting')
+Recruitment_Form_Config = apps.get_model('main', 'Recruitment_Form_Config')
 Recruit = apps.get_model('main', 'Recruit')
 now = datetime.now()
 SCOPE = ['https://spreadsheets.google.com/feeds',
@@ -18,10 +17,10 @@ SCOPE = ['https://spreadsheets.google.com/feeds',
          "https://www.googleapis.com/auth/drive.readonly",
          "https://www.googleapis.com/auth/drive.file",
        "https://www.googleapis.com/auth/drive"]
-config = Recruitment_Form_Config.objects.all()
-setting = Recruitment_Form_Config.objects.all()
-SECRETS_FILE = settings.MEDIA_ROOT + setting.values_list('secret_file', flat=True)[0]
-SPREADSHEET = config.values_list('sheet_name', flat=True)[0]
+rec_config = Recruitment_Form_Config.objects.all()
+config= Config.objects.all()
+SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
+SPREADSHEET = rec_configrec_config.values_list('sheet_name', flat=True)[0]
 credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
 gc = gspread.authorize(credentials)
 workbook = gc.open(SPREADSHEET)
@@ -29,21 +28,20 @@ sheet = workbook.sheet1
 logger = logging.getLogger(__name__)
 
 
-@shared_task
 def fetch_data():
     pd.set_option("display.max_rows", None, "display.max_columns", None)
     data = pd.DataFrame(sheet.get_all_records())
     if not data.empty:
         column_names = {'Timestamp': 'timestamp',
-                        config.values_list('username_field', flat=True)[0]: 'username',
-                        config.values_list('email_field', flat=True)[0]: 'email',
-                        config.values_list('name_field', flat=True)[0]: 'rec_name',
-                        config.values_list('address_field', flat=True)[0]: 'address',
-                        config.values_list('contact_field', flat=True)[0]: 'contact',
-                        config.values_list('tenure_field', flat=True)[0]: 'tenure',
-                        config.values_list('role_field', flat=True)[0]: 'role',
-                        config.values_list('prior_experience_field', flat=True)[0]: 'prior_exp',
-                        config.values_list('library_field', flat=True)[0]: 'library',
+                        rec_config.values_list('username_field', flat=True)[0]: 'username',
+                        rec_config.values_list('email_field', flat=True)[0]: 'email',
+                        rec_config.values_list('name_field', flat=True)[0]: 'rec_name',
+                        rec_config.values_list('address_field', flat=True)[0]: 'address',
+                        rec_config.values_list('contact_field', flat=True)[0]: 'contact',
+                        rec_config.values_list('tenure_field', flat=True)[0]: 'tenure',
+                        rec_config.values_list('role_field', flat=True)[0]: 'role',
+                        rec_config.values_list('prior_experience_field', flat=True)[0]: 'prior_exp',
+                        rec_config.values_list('library_field', flat=True)[0]: 'library',
 
                         }
         print(column_names)
