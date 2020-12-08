@@ -278,16 +278,16 @@
             <table style="margin:0 1px; color:black;width:100%; ">
               <tbody id="details">
               <tr class="donor" >
-                  <td style="text-align:left;" >Project Name: <span class="pull-right">{{p_details.project_name}}</span></td>
+                  <td style="text-align:left;" >Project Name: <span class="pull-right" id="pname">{{p_details.project_name}}</span></td>
               </tr>
               <tr class="donor" >
-                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:right;">{{p_details.description}}</span></td>
+                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:right;" id="pdesc">{{p_details.description}}</span></td>
               </tr>
               <tr class="donor" >
-                  <td style="text-align:left; color:black;">Address:  <span class="pull-right">{{p_details.address}}</span></td>
+                  <td style="text-align:left; color:black;">Address:  <span class="pull-right" id="padd">{{p_details.address}}</span></td>
               </tr>
             <tr class="donor" >
-                <td style="text-align:left; color:black;">Contact:  <span class="pull-right">{{p_details.contact_number}}</span></td>
+                <td style="text-align:left; color:black;">Contact:  <span class="pull-right" id="pnum">{{p_details.contact_number}}</span></td>
             </tr>
               <tr class="donor" >
               <td style="text-align:left; color:black;">Top Highlights: </td>
@@ -610,6 +610,14 @@ function interpolateColors(color1, color2, steps) {
         url: "{% url 'proj_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
+
+        $('#pname').text(resp.p_details.project_name);
+        $('#pdesc').text(resp.p_details.description);
+        $('#padd').text(resp.p_details.address);
+        $('#image').remove();
+
+         $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
+        $('#pnum').text(resp.p_details.contact_number);
             $('#serverstatus01').remove();
         $('#serverstatus04').remove();
         $('#serverstatus02').remove();
