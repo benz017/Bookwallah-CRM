@@ -20,7 +20,7 @@ SCOPE = ['https://spreadsheets.google.com/feeds',
 rec_config = Recruitment_Form_Config.objects.all()
 config= Config.objects.all()
 SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
-SPREADSHEET = rec_configrec_config.values_list('sheet_name', flat=True)[0]
+SPREADSHEET = rec_config.values_list('sheet_name', flat=True)[0]
 credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
 gc = gspread.authorize(credentials)
 workbook = gc.open(SPREADSHEET)
