@@ -397,13 +397,10 @@ def proj_dashboard(request):
     config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
-    print('view', config, ml)
     pid = Profile.objects.filter(user=request.user.profile.user)
-    print(123,)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
     data["config"] = config
-    print(data['config'])
     y_list = []
     if Project.objects.exists():
         p = Project.objects.all().order_by("date").values_list('date__year')[0][0]
@@ -414,7 +411,6 @@ def proj_dashboard(request):
         c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
     else:
         c = Project.objects.filter(country='India')
-    print(c)
     data = dashboard.monthly_session(data, con, c)
     data = dashboard.child_attendance(data, con)
     data = dashboard.session_prog(data, con, c)
@@ -422,7 +418,6 @@ def proj_dashboard(request):
     data = dashboard.volunteer_list(data, c)
     data = dashboard.key_detail(data, c)
     data = dashboard.highlight(data, c)
-    print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
