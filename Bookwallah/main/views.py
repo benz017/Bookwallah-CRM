@@ -82,7 +82,6 @@ def main_dashboard(request):
     data = dashboard.highlight(data, c)
     data = dashboard.v_testimonials(data)
     data = dashboard.d_testimonials(data)
-    print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
