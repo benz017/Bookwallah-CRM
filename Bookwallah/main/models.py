@@ -71,6 +71,7 @@ class Role(models.Model):
 
 # Create your models here.
 class Profile(models.Model):
+    r=()
     if Role.objects.exists():
         r = list(set(list(Role.objects.all().values_list('role', flat=True))))
         r = ((i, i) for i in r)
