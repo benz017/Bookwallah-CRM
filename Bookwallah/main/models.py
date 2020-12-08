@@ -118,9 +118,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance,created ,**kwargs):
-    if created and instance.is_staff is True:
-        if instance.profile.image == "":
+def save_user_profile(sender, instance ,**kwargs):
+    if instance.is_staff is True:
+        if instance.profile.image is None or instance.profile.image=="" :
             name = instance.get_full_name()
             av = avinit.get_avatar_data_url(name)
             import base64
