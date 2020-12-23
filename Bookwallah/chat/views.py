@@ -47,15 +47,15 @@ def lobby(request):
             data["rooms"] = project_room
         else:
             project_room = Room.objects.filter(name=data["p_room"])
-            data["rooms"] = project_room[0]
-    open_room = Room.objects.filter(permission="Open").exclude(name=data["p_room"])
+            data["rooms"] = project_room
+    open_room = Room.objects.filter(permission="Open").exclude(name__in=data["rooms"].values_list('name',flat=True))
+    print(open_room,data['rooms'])
     if len(open_room) > 3:
         open_room = open_room[:3]
-    private_room = Room.objects.filter(permission="Private",name=request.user.profile.chat_room).exclude(name=data["p_room"])
+    private_room = Room.objects.filter(permission="Private",name=request.user.profile.chat_room).exclude(name__in=data["rooms"].values_list('name',flat=True))
     if len(private_room) > 2:
         private_room = private_room[:2]
     data["o_users"] = Profile.objects.filter(is_online=True,user__is_superuser=False).exclude(user=request.user)
-    print()
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
