@@ -281,6 +281,7 @@ def no_of_kids(data,con,p=None,year=None):
         else:
             k = Kid.objects.filter(project__in=p,date__year__lte=year).count()
             nk = Kid.objects.filter(project__in=p, date__year=year).count()
+    print(k,nk,data)
     data['no_k'] = k
     data['no_nk'] = nk
     return data
@@ -452,34 +453,41 @@ def kid_session_history(data,k,year=None):
     return data
 
 def kid_bday(data):
-    b = Kid.objects.filter(dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
-    dl = b.values_list('dob',flat=True)
-    name = b.values_list('fullname',flat=True)
-    av = b.values_list('image',flat=True)
-    d = dict(zip(list(name),list(dl)))
-    bday_dict = defaultdict(list)
-    for a in list(av):
-        if a == "":
-            for k,v in d.items():
-                bday_dict[k].append(avinit.get_image_data_url(k))
-                bday_dict[k].append(datetime.strftime(v,"%d %b"))
-    data['k_bday'] = dict(bday_dict)
+    try:
+        b = Kid.objects.filter(dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        dl = b.values_list('dob',flat=True)
+        name = b.values_list('fullname',flat=True)
+        av = b.values_list('image',flat=True)
+        d = dict(zip(list(name),list(dl)))
+        bday_dict = defaultdict(list)
+        for a in list(av):
+            if a == "" and b:
+                for k,v in d.items():
+                    bday_dict[k].append(avinit.get_image_data_url(k))
+                    bday_dict[k].append(datetime.strftime(v,"%d %b"))
+        data['k_bday'] = dict(bday_dict)
+    except Exception as ex:
+        print(str(ex))
     return data
 
 
+
 def mem_ani(data):
-    b = Kid.objects.filter(date__year__lte=today.year, date__month=today.month,date__day__gte=today.day).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
-    dl = b.values_list('date', flat=True)
-    name = b.values_list('fullname', flat=True)
-    av = b.values_list('image', flat=True)
-    d = dict(zip(list(name), list(dl)))
-    mem_list = defaultdict(list)
-    for a in list(av):
-        if a == "":
-            for k,v in d.items():
-                mem_list[k].append(avinit.get_image_data_url(k))
-                mem_list[k].append(datetime.strftime(v,"%d %b"))
-    data['k_mem'] = dict(mem_list)
+    try:
+        b = Kid.objects.filter(date__year__lte=today.year, date__month=today.month,date__day__gte=today.day).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        dl = b.values_list('date', flat=True)
+        name = b.values_list('fullname', flat=True)
+        av = b.values_list('image', flat=True)
+        d = dict(zip(list(name), list(dl)))
+        mem_list = defaultdict(list)
+        for a in list(av):
+            if a == "" and b:
+                for k,v in d.items():
+                    mem_list[k].append(avinit.get_image_data_url(k))
+                    mem_list[k].append(datetime.strftime(v,"%d %b"))
+        data['k_mem'] = dict(mem_list)
+    except Exception as ex:
+        print(str(ex))
     return data
 
 

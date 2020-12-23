@@ -924,9 +924,9 @@ $("#f_m").val({{config}});
       });} ,
         });
     });
-    //groupedbar("schart1",{{nps_label}},{{nps_data|safe}},0);
-    //groupedbar("schart2",{{cp_label|safe}},{{cp_data|safe}},0);
-    //groupedbar("schart3",{{sb_label|safe}},{{sb_data|safe}},{{sb_data|list_min}});
+    groupedbar("schart1",{{nps_label}},{{nps_data|safe}},0);
+    groupedbar("schart2",{{cp_label|safe}},{{cp_data|safe}},0);
+    groupedbar("schart3",{{sb_label|safe}},{{sb_data|safe}},{{sb_data|list_min}});
     chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},title,'pie','exp_chart');
     chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
