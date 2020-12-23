@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d283c0-2d8e-434f-a506-0cb20cc85342" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,7 +15,7 @@
     <splitter split-orientation="horizontal" split-proportion="0.49512842">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="181">
@@ -28,11 +27,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="dashboard.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="dashboard.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="193">
-                  <caret line="302" column="22" selection-start-line="302" selection-start-column="22" selection-end-line="302" selection-end-column="22" />
+                <state relative-caret-position="1264">
+                  <caret line="302" column="5" selection-start-line="302" selection-start-column="5" selection-end-line="302" selection-end-column="5" />
                   <folding>
                     <element signature="e#0#22#0" expanded="true" />
                   </folding>
@@ -64,8 +63,8 @@
           <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="172">
-                  <caret line="15" column="16" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="16" />
+                <state relative-caret-position="104">
+                  <caret line="269" column="42" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
                   <folding>
                     <element signature="e#0#28#0" expanded="true" />
                   </folding>
@@ -133,7 +132,7 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="323">
@@ -162,11 +161,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="main_dash.html" pinned="false" current-in-tab="true">
+          <file leaf-file-name="main_dash.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="219">
-                  <caret line="933" column="116" selection-start-line="933" selection-start-column="104" selection-end-line="933" selection-end-column="116" />
+                <state relative-caret-position="134">
+                  <caret line="928" selection-start-line="928" selection-end-line="929" />
                 </state>
               </provider>
             </entry>
@@ -224,7 +223,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>conf</find>
       <find>secret_file</find>
       <find>Setting.</find>
       <find>email</find>
@@ -248,12 +246,13 @@
       <find>#value</find>
       <find>p_details</find>
       <find>room</find>
-      <find>k_stat</find>
       <find>{{</find>
       <find>value</find>
       <find>id=&quot;value</find>
       <find>&quot;#year&quot;</find>
       <find>id=&quot;va</find>
+      <find>k_stat</find>
+      <find>k_stat_label</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -341,13 +340,13 @@
         <option value="$PROJECT_DIR$/Bookwallah/main/admin.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/util/gform.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/tasks.py" />
-        <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/chat/lobby.html" />
         <option value="$PROJECT_DIR$/Bookwallah/chat/views.py" />
         <option value="$PROJECT_DIR$/Bookwallah/main/views.py" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html" />
-        <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" />
         <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
+        <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" />
+        <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
       </list>
     </option>
   </component>
@@ -1029,30 +1028,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="15" column="16" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/chat/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="54" column="23" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
-          <folding>
-            <element signature="e#51#79#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1071,19 +1050,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="933" column="116" selection-start-line="933" selection-start-column="104" selection-end-line="933" selection-end-column="116" />
+        <state relative-caret-position="1264">
+          <caret line="302" column="5" selection-start-line="302" selection-start-column="5" selection-end-line="302" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
+    <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="302" column="22" selection-start-line="302" selection-start-column="22" selection-end-line="302" selection-end-column="22" />
+        <state relative-caret-position="134">
+          <caret line="928" selection-start-line="928" selection-end-line="929" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="269" column="42" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
           <folding>
-            <element signature="e#0#22#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="54" column="23" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
+          <folding>
+            <element signature="e#51#79#0" expanded="true" />
           </folding>
         </state>
       </provider>
