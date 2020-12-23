@@ -267,7 +267,7 @@ class Kid(models.Model):
     house_name = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=100, blank=True, null=True)
     dob = models.DateField(null=True, blank=True)
-    age = models.CharField(max_length=100, blank=True, null=True)
+    age = models.IntegerField(max_length=3, blank=True, null=True)
     hobbies = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True,verbose_name=u"Library")
     sibling_name = models.CharField(max_length=100, blank=True, null=True)
