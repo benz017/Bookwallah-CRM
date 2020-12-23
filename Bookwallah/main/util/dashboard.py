@@ -350,11 +350,13 @@ def session_galery(data,x=0,y=12):
 def kid_galery(data,k=None,x=0,y=12):
     data["kid_gal"] = []
     if k is None:
-        p = Kid.objects.all().values_list('image',flat=True)
+        p = Kid.objects.all().exclude(image='').exclude(image__isnull=True).values_list('image',flat=True)
+        print(1,p)
         sli = list(p)[x:y]
         data["kid_gal"] = [settings.MEDIA_URL + av for av in sli]
     else:
-        p = Kid_Picture.objects.filter(kid__in=k).values_list('image',flat=True)
+        p = Kid_Picture.objects.filter(kid__in=k).exclude(image='').exclude(image__isnull=True).values_list('image',flat=True)
+        print(2,p)
         sli = list(p)[x:y]
         data["kid_gal"] = [settings.MEDIA_URL + av for av in sli]
     length = list(range(1, int(math.ceil(len(data["kid_gal"]) / 3)) + 1))

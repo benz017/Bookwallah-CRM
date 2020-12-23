@@ -32,8 +32,8 @@
           <file leaf-file-name="dashboard.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="244">
-                  <caret line="283" column="19" selection-start-line="283" selection-start-column="19" selection-end-line="283" selection-end-column="19" />
+                <state relative-caret-position="-11">
+                  <caret line="363" column="20" lean-forward="true" selection-start-line="363" selection-start-column="20" selection-end-line="363" selection-end-column="20" />
                   <folding>
                     <element signature="e#0#22#0" expanded="true" />
                   </folding>
@@ -166,8 +166,8 @@
           <file leaf-file-name="main_dash.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17">
-                  <caret line="926" column="4" selection-start-line="926" selection-start-column="4" selection-end-line="926" selection-end-column="4" />
+                <state relative-caret-position="253">
+                  <caret line="636" column="45" selection-start-line="636" selection-start-column="45" selection-end-line="636" selection-end-column="45" />
                 </state>
               </provider>
             </entry>
@@ -225,7 +225,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>email</find>
       <find>GET</find>
       <find>Role</find>
       <find>modal-body</find>
@@ -255,6 +254,7 @@
       <find>k_stat_label</find>
       <find>avinit.get_image_data_url(k))</find>
       <find>no_k</find>
+      <find>kid_gal</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -347,8 +347,8 @@
         <option value="$PROJECT_DIR$/Bookwallah/main/views.py" />
         <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html" />
         <option value="$PROJECT_DIR$/Bookwallah/main/models.py" />
-        <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" />
         <option value="$PROJECT_DIR$/Bookwallah/main/util/dashboard.py" />
+        <option value="$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html" />
       </list>
     </option>
   </component>
@@ -1039,8 +1039,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/p_dash.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2771">
-          <caret line="163" column="24" selection-start-line="163" selection-start-column="19" selection-end-line="163" selection-end-column="24" />
+        <state relative-caret-position="-35">
+          <caret line="403" column="35" selection-start-line="403" selection-start-column="35" selection-end-line="403" selection-end-column="35" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#section#0;n#section#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#table#0;n#div#0;n#div#0;n#div#1;n#div#0;n#section#0;n#section#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1054,8 +1054,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="269" column="42" selection-start-line="269" selection-start-column="42" selection-end-line="269" selection-end-column="42" />
+        <state relative-caret-position="2040">
+          <caret line="120" column="38" selection-start-line="120" selection-start-column="38" selection-end-line="120" selection-end-column="38" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -1064,28 +1064,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="54" column="23" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
+        <state relative-caret-position="323">
+          <caret line="415" column="23" selection-start-line="415" selection-start-column="14" selection-end-line="415" selection-end-column="23" />
           <folding>
             <element signature="e#51#79#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="926" column="4" selection-start-line="926" selection-start-column="4" selection-end-line="926" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bookwallah/main/util/dashboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="283" column="19" selection-start-line="283" selection-start-column="19" selection-end-line="283" selection-end-column="19" />
+        <state relative-caret-position="-11">
+          <caret line="363" column="20" lean-forward="true" selection-start-line="363" selection-start-column="20" selection-end-line="363" selection-end-column="20" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bookwallah/templates/dashboard/main_dash.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="636" column="45" selection-start-line="636" selection-start-column="45" selection-end-line="636" selection-end-column="45" />
         </state>
       </provider>
     </entry>

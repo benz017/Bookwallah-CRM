@@ -626,7 +626,7 @@
                                 {% for pic in kid_gal %}
                                 {% if forloop.counter|mod:'2' == 1 %}
 
-                                <img width="100%" src="{{ kid_gal|index:forloop.counter0 }}" alt="">
+                                <img width="200px" src="{{ kid_gal|index:forloop.counter0 }}" alt="">
                                 {% endif %}
                                 {% endfor %}
                               </div>
@@ -634,7 +634,7 @@
                             <div class="column mb">
                                {% for pic in kid_gal %}
                                 {% if forloop.counter|mod:'2' == 0 %}
-                                <img width="100%" src="{{ kid_gal|index:forloop.counter0 }}" alt="{{forloop.counter0 }}">
+                                <img width="200px" src="{{ kid_gal|index:forloop.counter0 }}" alt="">
                                 {% endif %}
                                 {% endfor %}
                               </div>
