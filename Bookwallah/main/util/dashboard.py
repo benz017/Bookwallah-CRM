@@ -295,7 +295,7 @@ def kid_stats(data,con,p=None,year=None):
         data['k_m'] = Kid.objects.filter(project__in=p,gender='M').count()
         data['k_f'] = Kid.objects.filter(project__in=p,gender='F').count()
     data['k_stat'] = list(c.values_list('count',flat=True))
-    data['k_stat_label'] = [int(i) for i in list(c.values_list('age', flat=True))]
+    data['k_stat_label'] = [int(i) if i is not None else '' for i in list(c.values_list('age', flat=True))]
     return data
 
 
