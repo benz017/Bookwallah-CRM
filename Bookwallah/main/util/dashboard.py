@@ -287,6 +287,7 @@ def no_of_kids(data,con,p=None,year=None):
 
 
 def kid_stats(data,con,p=None,year=None):
+    print(111,Kid.objects.values('age'))
     if p is None:
         c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
         print(c)
@@ -297,7 +298,10 @@ def kid_stats(data,con,p=None,year=None):
         data['k_m'] = Kid.objects.filter(project__in=p,gender='M').count()
         data['k_f'] = Kid.objects.filter(project__in=p,gender='F').count()
     data['k_stat'] = list(c.values_list('count',flat=True))
-    data['k_stat_label'] = [int(i) if i is not None else '' for i in list(c.values_list('age', flat=True))]
+    print(list(c.values_list('age', flat=True)))
+    data['k_stat_label'] = [int(i) if i is not '' else None for i in list(c.values_list('age', flat=True))]
+    #print(k_stat_label)
+    #data['k_stat_label'] = [] if k_stat_label == [None] else k_stat_label
     return data
 
 
