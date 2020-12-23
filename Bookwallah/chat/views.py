@@ -20,7 +20,8 @@ from django.dispatch import receiver
 def room(request, room_name):
     data={}
     p_room = Profile.objects.filter(user=request.user).values_list('project__project_name', flat=True)[0]
-    data["p_room"] = p_room.replace(" ", "_")
+    if p_room is not None:
+        data["p_room"] = p_room.replace(" ", "_")
     room= Room.objects.get(name=room_name)
     if room.permission == "Private":
         data["team_members"] = Profile.objects.order_by('-is_online').filter(chat_room=room,user__is_superuser=False).exclude(user=request.user)
@@ -38,7 +39,8 @@ def room(request, room_name):
 def lobby(request):
     data = {}
     p_room = Profile.objects.filter(user=request.user).values_list('project__project_name',flat=True)[0]
-    data["p_room"] = p_room.replace(" ","_")
+    if p_room is not None:
+        data["p_room"] = p_room.replace(" ","_")
     if Room.objects.exists():
         project_room = Room.objects.filter(name=data["p_room"])
         data["room"] = project_room[0]
