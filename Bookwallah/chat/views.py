@@ -42,8 +42,12 @@ def lobby(request):
     if p_room is not None:
         data["p_room"] = p_room.replace(" ","_")
     if Room.objects.exists():
-        project_room = Room.objects.filter(name=data["p_room"])
-        data["room"] = project_room[0]
+        if p_room is None:
+            project_room = Room.objects.all()
+            data["rooms"] = project_room
+        else:
+            project_room = Room.objects.filter(name=data["p_room"])
+            data["rooms"] = project_room[0]
     open_room = Room.objects.filter(permission="Open").exclude(name=data["p_room"])
     if len(open_room) > 3:
         open_room = open_room[:3]
