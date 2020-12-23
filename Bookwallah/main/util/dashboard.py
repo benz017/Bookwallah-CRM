@@ -103,6 +103,7 @@ def monthly_session(data,con,p=None,year=None):
 def session_prog(data,con, p=None,year=None):
 
     all = past = 0
+    print(data,con, p,year)
     if p is None:
         if year is None:
             for k,v in get_year_dict(con, today.year).items():
@@ -123,6 +124,7 @@ def session_prog(data,con, p=None,year=None):
                 past += Session.objects.filter(project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
                 print(2,all,past)
     try:
+        print(all,past)
         data['ses_p'] = round((past/all)*100,1)
         data['ses_p_data'] = [past,all-past]
     except ZeroDivisionError:

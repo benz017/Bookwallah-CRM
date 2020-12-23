@@ -54,11 +54,7 @@ def main_dashboard(request):
         for i in range(today.year, p-1, -1):
             y_list.append(i)
     data["year"] = y_list
-    dp = Config.objects.all().values_list('default_project', flat=True)[0]
-    if dp is not None:
-        c = Project.objects.filter(pk=dp)
-    else:
-        c = Project.objects.filter(country='India')
+    c = Project.objects.filter(country='India')
     sel_in = Project.objects.all().values_list('country', flat=True)
     data["country_list"] = list(set(sel_in))
 
@@ -85,6 +81,7 @@ def main_dashboard(request):
     data = dashboard.highlight(data, c)
     data = dashboard.v_testimonials(data)
     data = dashboard.d_testimonials(data)
+    print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
@@ -415,8 +412,14 @@ def proj_dashboard(request):
         c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
     elif dp is not None:
         c = Project.objects.filter(pk=dp)
+        data["def_field"] = "2"
+        data["def_value"] = c.values_list('project_name',flat=True)[0]
+        data["def_list"] = list(set(Project.objects.all().values_list('project_name', flat=True)))
     else:
         c = Project.objects.filter(country='India')
+        data["def_field"] = "4"
+        data["def_value"] = 'India'
+        data["def_list"] = list(set(Project.objects.all().values_list('country', flat=True)))
     data = dashboard.monthly_session(data, con, c)
     data = dashboard.child_attendance(data, con)
     data = dashboard.session_prog(data, con, c)
@@ -424,6 +427,7 @@ def proj_dashboard(request):
     data = dashboard.volunteer_list(data, c)
     data = dashboard.key_detail(data, c)
     data = dashboard.highlight(data, c)
+    print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
