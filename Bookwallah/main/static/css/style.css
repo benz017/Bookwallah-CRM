@@ -3841,6 +3841,10 @@ vertical-align:top;
     background-color:rgba(18, 176, 226, 0.3);
 }
 
+#details .hlt {background-color:rgba(18, 176, 226, 0.3);
+border-spacing}
+
+#details .hlt span{background-color:white;}
 /*Blue Panel */
 .blue-panel {
 	text-align: center;

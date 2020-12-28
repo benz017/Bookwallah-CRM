@@ -275,21 +275,21 @@
                   <div class="blue-header">
                     KEY DETAILS
                   </div>
-            <table style="margin:0 1px; color:black;width:100%; ">
+            <table style="margin:0 1px; color:black;width:100%;  border-collapse: separate;border-spacing: 2px;">
               <tbody id="details">
-              <tr class="donor" >
+              <tr class="hlt" >
                   <td style="text-align:left;" >Project Name: <span class="pull-right" id="pname">{{p_details.project_name}}</span></td>
               </tr>
-              <tr class="donor" >
-                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:right;" id="pdesc">{{p_details.description}}</span></td>
+              <tr class="hlt" >
+                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:left;" id="pdesc">{{p_details.description}}</span></td>
               </tr>
-              <tr class="donor" >
+              <tr class="hlt" >
                   <td style="text-align:left; color:black;">Address:  <span class="pull-right" id="padd">{{p_details.address}}</span></td>
               </tr>
-            <tr class="donor" >
+            <tr class="hlt" >
                 <td style="text-align:left; color:black;">Contact:  <span class="pull-right" id="pnum">{{p_details.contact_number}}</span></td>
             </tr>
-              <tr class="donor" >
+              <tr class="hlt" >
               <td style="text-align:left; color:black;">Top Highlights: </td>
                     <ul id="hlight" class="pull-right">
                       {% for h in hi %}
