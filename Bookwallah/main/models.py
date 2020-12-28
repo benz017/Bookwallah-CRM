@@ -267,7 +267,7 @@ class Kid(models.Model):
     house_name = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=100, blank=True, null=True)
     dob = models.DateField(null=True, blank=True)
-    age = models.IntegerField(max_length=3, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
     hobbies = models.CharField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True,verbose_name=u"Library")
     sibling_name = models.CharField(max_length=100, blank=True, null=True)
@@ -395,12 +395,12 @@ class Recruit(models.Model):
 
 class Expense(models.Model):
     currency = (('USD','USD'),('INR','INR'))
-    type = (('Project Supplies','Project Supplies'), ('Supplies','Supplies'), ('Training','Training'),('Session','Session'),('Bonding','Bonding'),('Staff','Staff'),('Transport','Transport'),('Volunteers','Volunteers'),('Staff','Staff'),('Meals','Meals'),('Volunteer','Volunteer'),('Meals','Meals'),('Telephone','Telephone'),('Rewards','Rewards'),('Others','Others'))
+    type = (('Project Supplies','Project Supplies'), ('Training Session Supplies','Training Session Supplies'), ('Bonding Session Supplies','Bonding Session Supplies'),('Staff Transport','Staff Transport'),('Volunteers Transport','Volunteers Transport'),('Staff Meals','Staff Meals'),('Volunteer Meals','Volunteer Meals'),('Telephone','Telephone'),('Rewards','Rewards'),('Gifts','Gifts'),('Others','Others'))
     name_of_person = models.ForeignKey(Profile,on_delete=models.DO_NOTHING, null=True, related_name="user_name")
     date = models.DateField(null=True, blank=True)
     description = models.CharField(max_length=400, blank=True, null=True)
     expense_type = models.CharField(max_length=100, blank=True, null=True,choices=type)
-    project = models.ForeignKey(Project,on_delete=models.DO_NOTHING, null=True, related_name="expense_project_name")
+    project = models.ForeignKey(Project,on_delete=models.DO_NOTHING, null=True,  blank=True,related_name="expense_project_name")
     receipt = models.FileField(blank=True, null=True)
     currency = models.CharField(max_length=10, choices=currency)
     credit_amount = models.IntegerField(blank=True, null=True)
