@@ -262,10 +262,11 @@ class Donation(models.Model):
 
 
 class Kid(models.Model):
+    gen = (('Male','Male'),('Female','Female'))
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     house_name = models.CharField(max_length=100, blank=True, null=True)
-    gender = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True,choices=gen)
     dob = models.DateField(null=True, blank=True)
     age = models.IntegerField(blank=True, null=True)
     hobbies = models.CharField(max_length=100, blank=True, null=True)
