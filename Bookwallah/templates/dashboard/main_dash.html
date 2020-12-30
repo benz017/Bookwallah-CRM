@@ -546,9 +546,8 @@
             <!-- CALENDAR-->
             <div class="mb">
                 <div class="weather pn">
-                  <i class="fa fa-cloud fa-4x"></i>
-                  <h2>31º C</h2>
-                  <h4>India</h4>
+                  <i class="fa fa-clock-o fa-4x"></i>
+                  <h2 id="ctime">{{curr_time}}</h2> <h3 id="cdate" style="color:white;">{{curr_date}}</h3> <h4 id="ccon">India</h4>
                 </div>
               </div>
             <div class="border-head">
@@ -1044,6 +1043,9 @@ $("#f_m").val({{config}});
          $('#exp_chart').remove();
          $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
          chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+          $('#ccon').text(resp.curr_con);
+          $('#ctime').text(resp.curr_date);
+          $('$cdate').text(resp.curr_time);
           $('#male').text(resp.k_m);
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);

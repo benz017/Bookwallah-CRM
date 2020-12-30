@@ -986,3 +986,11 @@ def d_testimonials(data):
         data["d_name"] =""
         data["d_test"] =""
     return data
+
+def team_strength(data):
+    p= Project.objects.filter(pk=data.project)
+    try:
+        c = Profile.objects.filter(project=p).count()
+        return c
+    except:
+        return "N/A"

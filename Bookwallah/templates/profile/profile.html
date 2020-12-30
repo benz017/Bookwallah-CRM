@@ -166,7 +166,7 @@
                   <h5>JOINING DATE</h5>
                   <h4 class="badge  bg-info" style="color:white;font-size:16px;margin:1px;">{{request.user.date_joined|delta:"-d"}} day(s)</h4>
                   <h5>JOURNEY WITH BOOKWALLAH</h5>
-                  <h4 class="badge  bg-info" style="color:white;font-size:16px;margin:1px;">5</h4>
+                  <h4 class="badge  bg-info" style="color:white;font-size:16px;margin:1px;">{{team_str}}</h4>
                   <h5>TEAM STRENGTH</h5>
                 </div>
               </div>
@@ -215,10 +215,10 @@
                   <div class="weather-2-header">
                     <div class="row" style="margin-top:5px;">
                       <div class="col-sm-6 col-xs-6">
-                          <p><strong>NEW YORK</strong></p>
+                          <p><strong>{{city}}</strong></p>
                       </div>
                       <div class="col-sm-6 col-xs-6 goright">
-                        <p>Thu Apr 14, 2014</p>
+                        <p>{{curr_date}}</p>
                       </div>
                     </div>
                   </div>
@@ -227,15 +227,8 @@
                     <img src="{% static 'img/ny.jpg' %}" class="img-circle" width="120">
                   </div>
                   <div class="row data">
-                    <div class="col-sm-6 col-xs-6 goleft">
-                      <h4 style="margin-left:0px;"><b>16 ºC</b></h4>
-                      <h6>21º max</h6>
-                      <h6>8º min</h6>
-                    </div>
-                    <div class="col-sm-6 col-xs-6 goright">
-                      <h5><i class="fa fa-sun-o fa-2x"></i></h5>
-                      <h6><b>Sunny</b></h6>
-                      <h5>7:15 am</h5>
+                    <div class="col-sm-12 col-xs-12" style="text-align: center;margin-top:10px;">
+                      <h2 style="color:#12b0e2;">{{curr_time}}</h2>
                     </div>
                   </div>
                 </div>

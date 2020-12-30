@@ -14,20 +14,23 @@ register = template.Library()
 
 @register.filter
 def delta(date,arg):
-    now = datetime.now()
-    #date = date.replace(tzinfo=pytz.timezone('Asia/Kolkata'))
-    dif = date-now
-    days = dif.days
-    hr = date.hour
-    min = date.minute
-    if arg == "d":
-        return days
-    if arg == "-d":
-        return abs(days)
-    elif arg == "h":
-        return hr
-    elif arg == "m":
-        return min
+    if date is not None:
+        now = datetime.now()
+        #date = date.replace(tzinfo=pytz.timezone('Asia/Kolkata'))
+        dif = date-now
+        days = dif.days
+        hr = date.hour
+        min = date.minute
+        if arg == "d":
+            return days
+        if arg == "-d":
+            return abs(days)
+        elif arg == "h":
+            return hr
+        elif arg == "m":
+            return min
+    else:
+        pass
 
 
 @register.filter

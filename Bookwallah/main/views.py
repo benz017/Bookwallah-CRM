@@ -4,7 +4,7 @@ from .models import *
 from datetime import date, datetime
 from .util import dashboard, gallery
 from .integrations.mailchimp import *
-
+import time
 # ------------- Django Libraries ------------ #
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -57,7 +57,9 @@ def main_dashboard(request):
     c = Project.objects.filter(country='India')
     sel_in = Project.objects.all().values_list('country', flat=True)
     data["country_list"] = list(set(sel_in))
-
+    data["city"] = request.user.profile.city or "N/A"
+    data["curr_date"] = time.strftime("%a %b %d, %Y", time.localtime())
+    data["curr_time"] = time.strftime("%I:%M %p", time.localtime())
     data = dashboard.child_attendance(data, con)
     data = dashboard.top_vol(data)
     data = dashboard.top_kid(data)
@@ -112,6 +114,9 @@ def main_dashboard(request):
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
                 f = Project.objects.filter(state=val)
+            new_data["curr_con"] = f.values_list('country',flat=True)[0]
+            new_data["curr_date"] = time.strftime("%a %b %d, %Y", time.localtime())
+            new_data["curr_time"] = time.strftime("%I:%M %p", time.localtime())
             new_data = dashboard.child_attendance(new_data, con, f, year)
             new_data = dashboard.vol_attendance(new_data, con, f, year)
             new_data = dashboard.key_detail(new_data, f)
@@ -842,6 +847,10 @@ def profile(request):
             if v not in [None, '', "[]", "0", "+91-", []]:
                 c += 1
     percent = int((c / 19) * 100)
+    data["team_str"] = dashboard.team_strength(request.user.profile)
+    data["city"] = request.user.profile.city or  "N/A"
+    data["curr_date"] = datetime.today().strftime('%a %b %d, %Y')
+    data["curr_time"] = datetime.today().strftime('%I:%M %p')
     data['strength'] = percent
     data['first_name'] = request.user.first_name
     data['last_name'] = request.user.last_name
@@ -974,10 +983,8 @@ def profile(request):
 def calender(request):
     data = {}
     session_kv = {}
-    k = "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=86jm210h5i5hd7&scope=r_fullprofile r_emailaddress rw_company_adminw_share&state=8897239179ramya&redirect_uri=http://127.0.0.1:8000/accounts/profile"
-    k = requests.get(k)
-    print(k.text)
     data['sessions'] = Session.objects.all()
+    print(data)
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     if av == "":

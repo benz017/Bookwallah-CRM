@@ -570,12 +570,14 @@ $(function() {
   // build trival night events for example data
   var events = [
   {% for session in sessions %}
+    {% if session.date != None %}
     {
       title: "{{session.library_name}}",
       start: moment().hour({{session.date|date:'G'}}).minute({{session.date|date:'i'}}).add({{session.date|delta:'d'}}, 'days').toISOString(),
       allDay:false,
       url: '#'
     },
+    {% endif %}
     {% endfor %}
   ];
 
