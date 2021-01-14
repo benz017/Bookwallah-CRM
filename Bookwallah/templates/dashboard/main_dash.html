@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="zoom">
 
 <head>
   <meta charset="utf-8">
@@ -57,25 +57,7 @@
           <li><a class="logout" href="{% url 'signout' %}">Sign Out</a></li>
         </ul>
       </div>
-      <div class="nav notify-row" id="top_menu">
-        <!--  notification start -->
-        <ul class="nav pull-right top-menu">
-          <!-- settings start -->
-          <!-- inbox dropdown end -->
-          <!-- notification dropdown start-->
-          <li id="header_notification_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-              <i class="fa fa-bell-o"></i>
-              <span class="badge bg-warning">0</span>
-              </a>
-            <ul class="dropdown-menu extended notification">
 
-            </ul>
-          </li>
-          <!-- notification dropdown end -->
-        </ul>
-        <!--  notification end -->
-      </div>
     </header>
     <!--header end-->
     <!-- **********************************************************************************************************************************************************
@@ -322,7 +304,40 @@
                   </div>
               </div>
             <div class="row mt">
-            <div class="col-md-4 col-sm-4 mb">
+
+                <div class="col-md-6 col-sm-6 mb">
+                <div class="blue-panel pn" style="height:400px;">
+                  <div class="blue-header">
+                      <h5>KID STATISTICS (<small><span>by Age group/Gender</span></small>)</h5>
+                  </div>
+                    <div id="graph3">
+                  <canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>
+                  </div>
+                        <footer>
+                    <div class="pull-left" style="margin-left:20px;">
+                      <h5><span>Male: </span><span id="male">{{k_m}}</span></h5>
+                    </div>
+                    <div class="pull-right" style="margin-right:20px;">
+                      <h5><span>Female: </span><span id="female">{{k_f }}</span></h5>
+                    </div>
+                  </footer>
+                </div>
+                <!--  /darkblue panel -->
+              </div>
+                <div class="col-md-6 col-sm-6 mb">
+                <div class="blue-panel pn" style="height:400px;">
+                    <div class="blue-header" style="margin-bottom:0px;" >
+                    <h5>NO. OF YEARS KIDS ATTENDING</h5>
+                  </div>
+
+                    <div id="graph2">
+                  <canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:5px;"></canvas>
+                  </div>
+                </div>
+                </div>
+            </div>
+            <div class="row mt mb">
+                 <div class="col-md-4 col-sm-4 mb">
                 <div class="blue-panel pn">
                   <div class="blue-header" style="margin-bottom:0px;">
                     <h5>NO. OF KIDS ATTENDING</h5>
@@ -337,39 +352,7 @@
                 </div>
                 <!--  /darkblue panel -->
               </div>
-                <div class="col-md-4 col-sm-4 mb">
-                <div class="blue-panel pn">
-                  <div class="blue-header">
-                      <h5>KID STATISTICS (<small><span>by Age group/Gender</span></small>)</h5>
-                  </div>
-                    <div id="graph3">
-                  <canvas id="serverstatus03" height="150" width="300" style="margin:0 auto;"></canvas>
-                  </div>
-                        <footer>
-                    <div class="pull-left" style="margin-left:20px;">
-                      <h5><span>Male: </span><span id="male">{{k_m}}</span></h5>
-                    </div>
-                    <div class="pull-right" style="margin-right:20px;">
-                      <h5><span>Female: </span><span id="female">{{k_f }}</span></h5>
-                    </div>
-                  </footer>
-                </div>
-                <!--  /darkblue panel -->
-              </div>
-                <div class="col-md-4 col-sm-4 mb">
-                <div class="blue-panel pn">
-                    <div class="blue-header" style="margin-bottom:0px;" >
-                    <h5>NO. OF YEARS KIDS ATTENDING</h5>
-                  </div>
-
-                    <div id="graph2">
-                  <canvas id="barchart2" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>
-                  </div>
-                </div>
-                </div>
-            </div>
-            <div class="row mt mb">
-              <div class="col-md-12 col-sm-12 mb">
+              <div class="col-md-8 col-sm-8 mb">
                 <div class="blue-panel pn">
                     <div class="blue-header" style="margin-bottom:0px;" >
                     <h5>TESTIMONIALS</h5>
@@ -1038,7 +1021,7 @@ $("#f_m").val({{config}});
         $('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
          chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
-         $('#graph3').append('<canvas id="serverstatus03" height="150" width="300" style="margin:0 auto;"></canvas>');
+         $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
          chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
          $('#exp_chart').remove();
          $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
@@ -1056,7 +1039,7 @@ $("#f_m").val({{config}});
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
-          $('#graph2').append('<canvas id="barchart2" height="200" width="350" style="margin:0 auto;margin-top:10px;"></canvas>');
+          $('#graph2').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
           $('.desc').remove();                               w
 

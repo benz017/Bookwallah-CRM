@@ -173,6 +173,9 @@ font-weight: normal;
 src: local('Arial Rounded MT ExtraBold'), url('../fonts/ARIALROUNDEDMTEXTRABOLD.woff') format('woff');
 }
 
+.zoom {
+    zoom: 0.8;
+}
 /* BASIC THEME CONFIGURATION */
 body {
     color: #34495e;
