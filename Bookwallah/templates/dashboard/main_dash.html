@@ -971,6 +971,87 @@ $("#f_m").val({{config}});
         }
         });
     });
+    $("#year").change(function(){
+        $('.hi').remove();
+
+        $value= $("#value option:selected").text();
+        $field= $("#field option:selected").text();
+        $year = $("#year option:selected").text();
+        //${'#hlight').empty();
+        $.ajax({
+        type:"POST",
+        url: "{% url 'main_dashboard' %}",
+        data:{value: $value, field:$field, year:$year},
+        success: function(resp){
+        $('#image').remove();
+
+          $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
+          $('#pname').text(resp.p_details.project_name);
+          $('#contact').text(resp.p_details.contact_number);
+          $('#add').text(resp.p_details.address);
+          if ((resp.hi !== '') || (resp.is !== '')){
+          for (i=0;i<4;i++){
+                $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
+          }
+          }
+            $('#kd').show();
+            for (i=0;i<resp.m.length;i++){
+            $hi = '';
+            $is = '';
+            if (resp.hi[i]!==undefined){$hi=resp.hi[i];}
+            if (resp.is[i]!==undefined){$is=resp.is[i];}
+            $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+$hi+'</td><td>'+$is+'</td></tr>');
+
+          }
+        //document.getElementById('hlight').innerHTML = '';
+        $('#serverstatus01').remove();
+        $('#serverstatus04').remove();
+        $('#serverstatus02').remove();
+        $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
+        $('#graph4').append('<canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>');
+         $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
+        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
+        chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
+        chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
+        $('#vol_att').text(resp.vol_att+"%");
+        $('#c_att').text(resp.c_att+"%");
+        $('#ses_p').text(resp.ses_p+"%");
+        $('#t_exp').text('$'+resp.t_exp);
+        $('#serverstatus05').remove();
+        $('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
+         chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
+         $('#serverstatus03').remove();
+         $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
+         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
+         $('#exp_chart').remove();
+         $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
+         chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+          $('#ccon').text(resp.curr_con);
+          $('#ctime').text(resp.curr_date);
+          $('$cdate').text(resp.curr_time);
+          $('#male').text(resp.k_m);
+          $('#female').text(resp.k_f);
+          $('#no_nk').text(resp.no_nk);
+          $('#no_k').text(resp.no_k);
+          $('#barchart').remove();
+
+         $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
+          chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+
+          $('#barchart2').remove();
+          $('#graph2').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
+          chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+          $('.desc').remove();                               w
+
+          for (i=0;i<Object.keys(resp.v_list).length;i++){
+            var key = Object.keys(resp.v_list)[i];
+            $('#v_list').append('<div class="desc"><div class="thumb"><img class="img-circle" src="'+resp.v_list[key][0]+'" width="35px" height="35" align=""></div><div class="details"><p style="margin-bottom:0px;"><a href="#">'+key+'</a><br/><muted>'+resp.v_list[key][1]+'</muted></p></div></div>');
+          }
+
+
+          }
+      });
+    });
      $("#value").change(function(){
         $('.hi').remove();
 

@@ -65,8 +65,10 @@ def get_month_range(c):
 def get_year(con,i,year):
     if con[0] != 1:
         if i < con[0]:
+            print(int(year)+1)
             return int(year)+1
         else:
+            print(year)
             return year
     else:
         return year
@@ -82,7 +84,7 @@ def get_year_dict(c,year):
 def monthly_session(data,con,p=None,year=None):
     data['months'] = []
     #print(config)
-    print(p)
+    print(1111,con,p,year)
     for i in con:
         if p is None:
             if year is None:
@@ -97,6 +99,7 @@ def monthly_session(data,con,p=None,year=None):
             else:
                 c = Session.objects.filter(project__in=p,date__year=year, date__month=i).count()
         data['months'].append(c)
+
     return data
 
 

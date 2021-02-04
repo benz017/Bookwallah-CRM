@@ -165,11 +165,39 @@
                 <div class="profile-pic">
                   <p><img src="{{image}}" class="img-circle" height="200" width="200"></p>
                 </div>
+                <a data-toggle="modal" href="#resetPass"><i class="fa fa-unlock-alt"></i>  Reset Password</a>
               </div>
               <!-- /col-md-4 -->
             </div>
             <!-- /row -->
           </div>
+          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="resetPass" class="modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Reset Password</h4>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="passresetform" class="form-horizontal" method="POST" action="{% url 'profile' %}">
+                    {% csrf_token %}
+                      {% for field in form %}
+                        {{field.label}} {{ field }}
+                      {% for error in field.errors %}
+                      <p style="color: red">{{ error }}</p>
+                      {% endfor %}
+                        {% endfor %}
+                      <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                <button id="resetpassbtn" class="btn btn-theme" type="submit">Submit</button>
+              </div>
+                  </form>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
           <!-- /col-lg-12 -->
           <div class="col-lg-12 mt">
             <div class="row content-panel">
@@ -780,6 +808,7 @@ $(function() {
   });
 });
     </script>
+
 <script type="text/javascript">
     $(document).ready(function() {
     $('#form1').submit(function(e) {

@@ -1,5 +1,5 @@
 # ------------- External Libraries ------------- #
-from .forms import LogInForm
+from .forms import LogInForm,PasswordChangeCustomForm
 from .models import *
 from datetime import date, datetime
 from .util import dashboard, gallery
@@ -9,6 +9,7 @@ import time
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 import os
+from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
@@ -88,7 +89,7 @@ def main_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Recruitment_Form_Config.objects.filter(id=1)
+            config = Config.objects.filter(id=1)
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -437,7 +438,7 @@ def proj_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Recruitment_Form_Config.objects.filter(id=1)
+            config = Config.objects.filter(id=1)
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -867,6 +868,10 @@ def profile(request):
     data['tasks'] = task_list
     print(task_list)
     if request.method == "POST":
+        form = PasswordChangeCustomForm(request.user,data=request.POST)
+        data['form'] = form
+
+
         if 'imgbase64' in request.POST:
             imgdata = request.POST.get('imgbase64')
             print(imgdata)
@@ -881,6 +886,23 @@ def profile(request):
             pid = Profile.objects.filter(user=request.user)
             #print(request.user.profile.user, request.user, os.path.join(settings.MEDIA_ROOT,url), url)
             pid.update(image=url)
+
+        elif 'old_password' in request.POST:
+            old_password = request.POST.get('old_password')
+            new_password1 = request.POST.get('new_password1')
+            new_password2 = request.POST.get('new_password2')
+            #print(old_password,request.user.check_password(old_password))
+            if request.user.check_password(old_password):
+                if new_password1 == new_password2:
+                    request.user.set_password(new_password1)
+                    request.user.save()
+                    return redirect('signin')
+                else:
+                    messages.error(request, "* New Passwords didn't match. Please Check.")
+            else:
+                messages.error(request, "* Password incorrect. Please Check.")
+            return HttpResponse()
+
 
         elif 'input' in request.POST:
             input = request.POST.get('input')
@@ -974,6 +996,9 @@ def profile(request):
                        zoom=zoom, skype=skype, linkedin=linkedin, facebook=facebook,twitter=twitter,
                        instagram=instagram)
         return redirect('profile')
+    else:
+        form = PasswordChangeCustomForm(request.user)
+        data['form'] = form
     return render(request, 'profile/profile.html', context=data)
 
 
