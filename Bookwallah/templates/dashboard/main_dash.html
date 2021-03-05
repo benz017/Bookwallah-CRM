@@ -40,6 +40,7 @@
 
 <body>
 {% block body %}
+{% load thumbnail %}
   <section id="container">
     <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
@@ -144,7 +145,7 @@
             <!--CUSTOM CHART START -->
             <div  class="row" style="padding-bottom:15px; ">
             <div id="img-container" >
-          <div id="image" class="col-lg-12 parallax" style="background-image: url('/static/img/12_Mantuga.jpg');min-height:400px;">
+          <div id="image" class="col-lg-12 parallax" style="background-image: url('{%block landing_image %}{%endblock%}');min-height:400px;">
               </div>
             </div></div>
              <div class="row">

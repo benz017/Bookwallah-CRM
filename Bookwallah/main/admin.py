@@ -23,6 +23,17 @@ class UserResource(resources.ModelResource):
         model = User
         exclude = ('last_login','date_joined','user_permissions')
 
+    def after_save_instance(self, instance: User, using_transactions: bool, dry_run: bool,):
+        from django.apps import apps
+        config = apps.get_model('main', 'EmailConfig')
+        if dry_run is False:
+            print('Task starting!!')
+            ec = config.objects.all()
+            passwd = ec.values_list('user_default_password', flat=True)[0]
+            subject = ec.values_list('welcome_email_subject', flat=True)[0]
+            msg = ec.values_list('welcome_email_message', flat=True)[0]
+            email_users.delay(instance.username, instance.email, passwd,subject,msg)
+
 class UserAdmin(BaseAdmin, ImportExportModelAdmin):
     resource_class = UserResource
 
@@ -39,8 +50,11 @@ class GroupAdmin(GAdmin, ImportExportModelAdmin):
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 
-@admin.register(Config)
-class Config(ImportExportModelAdmin):
+@admin.register(EmailConfig)
+class EmailConfig(ImportExportModelAdmin):
+    pass
+@admin.register(AppConfig)
+class AppConfig(ImportExportModelAdmin):
     pass
 
 @admin.register(Recruitment_Form_Config)

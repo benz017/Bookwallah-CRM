@@ -38,10 +38,11 @@ def landing(request):
 @csrf_exempt
 def main_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.all().values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
+    data["landing_image"] = AppConfig.objects.all().values_list('landing_image', flat=True)[0]
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
@@ -89,7 +90,7 @@ def main_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Config.objects.filter(id=1)
+            config = AppConfig.objects.first()
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -193,7 +194,7 @@ def d_location(request):
 @login_required
 def vol_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -350,7 +351,7 @@ def donor_dashboard(request):
 @login_required
 def child_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -400,7 +401,7 @@ def child_dashboard(request):
 @login_required
 def proj_dashboard(request):
     data = {}
-    config = Config.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -413,7 +414,7 @@ def proj_dashboard(request):
         for i in range(today.year, p-1, -1):
             y_list.append(i)
     data["year"] = y_list
-    dp = Config.objects.all().values_list('default_project',flat=True)[0]
+    dp = AppConfig.objects.all().values_list('default_project',flat=True)[0]
     if pid.values_list('project', flat=True)[0] is not None:
         c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
     elif dp is not None:
@@ -438,7 +439,7 @@ def proj_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = Config.objects.filter(id=1)
+            config = AppConfig.objects.filter(id=1)
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')

@@ -38,11 +38,21 @@ ALLOWED_HOSTS = ['127.0.0.1']
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # # Application definition
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'bookwallahhr@gmail.com'
+EMAIL_HOST_PASSWORD = 'tyjpqertlkccpuhw' #past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Bookwallah HR team'
+DEFAULT_PASSWORD = 'bookwallah@123'
+
 INSTALLED_APPS = [
     'django_celery_beat',
     'channels',
     'chat',
     'main',
+    'sorl.thumbnail',
     'django_mysql',
     'import_export',
     'django.contrib.admin',

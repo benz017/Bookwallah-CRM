@@ -4856,7 +4856,7 @@ function englishMoment(mom) {
     }
     return mom;
 }
-// Config
+// AppConfig
 // ---------------------------------------------------------------------------------------------------------------------
 /*
 Inserted between chunks in the fake ("intermediate") formatting string.

@@ -4,6 +4,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
+from PIL import Image
+from sorl.thumbnail import ImageField, get_thumbnail
+from .util.compress_image import compress
+from django.core.mail import send_mail
+from .tasks import email_users
 from django_mysql.models import ListCharField
 from django.forms import MultiValueField
 import avinit
@@ -11,6 +16,16 @@ import json
 months = ((1,'JAN'),(2,'FEB'),(3,'MAR'),(4,'APR'),(5,'MAY'),(6,'JUN'),(7,'JUL'),(8,'AUG'),(9,'SEP'),(10,'OCT'),(11,'NOV'),(12,'DEC'))
 
 
+class EmailConfig(models.Model):
+    emailID = models.EmailField(max_length=150, blank=True)
+    password = models.CharField(max_length=50, blank=True, null=True)
+    user_default_password = models.CharField(max_length=24, blank=True, null=True)
+    secret_file = models.FileField(upload_to='documents', blank=True, null=True)
+    welcome_email_subject = models.CharField(max_length=500, blank=True, null=True)
+    welcome_email_message = models.TextField(max_length=5000, blank=True, null=True)
+
+    def __str__(self):
+        return "Email: {} -- User Default Password: {}".format(self.emailID, self.user_default_password)
 
 class Project(models.Model):
     project_name = models.CharField(max_length=100, blank=True, null=True)
@@ -55,9 +70,11 @@ class Session(models.Model):
     activity_name = models.CharField(max_length=100, blank=True, null=True)
     activity_desc = models.CharField(max_length=100, blank=True, null=True)
     volunteers_attended = models.CharField(max_length=100, blank=True, null=True)
-    cancellation_reason = models.CharField(max_length=300, blank=True, null=True)
     image = models.ImageField(upload_to='session',blank=True, null=True)
-    description = models.TextField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=5000, blank=True, null=True)
+    cancel = models.BooleanField(default=False)
+    cancellation_reason = models.CharField(max_length=300, blank=True, null=True)
+
     def __str__(self):
         return "{} - {} - {}".format(self.library_name, self.project,self.date)
 
@@ -112,6 +129,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     try:
         if created and instance.is_staff is True:
             Profile.objects.create(user=instance)
+
         instance.profile.save()
     except Exception as ex:
         print(str(ex))
@@ -131,6 +149,7 @@ def save_user_profile(sender, instance ,**kwargs):
             with open(filename, 'wb') as f:
                f.write(imgdata)
             instance.profile.image = url
+
         instance.profile.save()
 
 
@@ -196,19 +215,23 @@ def create_donor_profile(sender, instance, created, **kwargs):
                                  first_name=instance.first_name,
                                  last_name=instance.last_name,
                                  email=instance.email)
+
         elif created and instance.is_staff is False:
             Donor.objects.create(user=instance,
                                  first_name=instance.first_name,
                                  last_name=instance.last_name,
                                  email=instance.email)
+
     except Exception as ex:
         print(str(ex))
+
 
 @receiver(post_save, sender=User)
 def save_donor_profile(sender, instance,created, **kwargs):
     print(instance.is_staff, created)
     if created is False and instance.is_staff is False:
         instance.donor.save()
+
 
 class Pledge(models.Model):
     donor = models.ForeignKey(Donor, default=2, on_delete=models.DO_NOTHING, related_name="pledge_donor")
@@ -403,7 +426,7 @@ class Expense(models.Model):
     expense_type = models.CharField(max_length=100, blank=True, null=True,choices=type)
     project = models.ForeignKey(Project,on_delete=models.DO_NOTHING, null=True,  blank=True,related_name="expense_project_name")
     receipt = models.FileField(blank=True, null=True)
-    currency = models.CharField(max_length=10, choices=currency)
+    currency = models.CharField(max_length=10, choices=currency, null=True)
     credit_amount = models.IntegerField(blank=True, null=True)
     reimbursement_amount = models.IntegerField(blank=True, null=True)
 
@@ -487,17 +510,19 @@ class Recruitment_Form_Config(models.Model):
     def __str__(self):
         return "{}".format(self.sheet_name)
 
-class Config(models.Model):
-    landing_image = models.ImageField(blank=True)
-    emailID = models.EmailField(max_length=150, blank=True)
-    password = models.CharField(max_length=50, blank=True, null=True)
+
+class AppConfig(models.Model):
+    landing_image = models.ImageField(upload_to='main/',blank=True,null=True)
     fiscal_month = models.IntegerField(choices=months, default=1)
-    secret_file = models.FileField(upload_to='documents', blank=True, null=True)
     top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},
-                                      on_delete=models.DO_NOTHING, null=True, blank=True)
+                                on_delete=models.DO_NOTHING, null=True, blank=True)
     top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
     default_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.emailID)
+        return "{} {}".format(months[int(self.fiscal_month)-1][1],self.default_project)
 
+    def save(self,*args,**kwargs):
+        if self.landing_image:
+            self.landing_image = get_thumbnail(self.landing_image, '800x400', quality=70, format='JPEG')
+        super(AppConfig, self).save(*args, **kwargs)

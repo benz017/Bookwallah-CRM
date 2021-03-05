@@ -1,12 +1,12 @@
 # Importing libraries 
 import imaplib, email
 from django.apps import apps
-Config = apps.get_model('main', 'Config')
+EmailConfig = apps.get_model('main', 'EmailConfig')
 
 from email.header import decode_header
 import json
-user = Config.objects.all().values_list('emailID',flat=True)[0]
-password = Config.objects.all().values_list('password',flat=True)[0]#"mrntgtvfxzajxsyy"
+user = EmailConfig.objects.all().values_list('emailID',flat=True)[0]
+password = EmailConfig.objects.all().values_list('password',flat=True)[0]#"mrntgtvfxzajxsyy"
 imap_url = 'imap.gmail.com'
 
 

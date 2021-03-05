@@ -88,16 +88,16 @@ def monthly_session(data,con,p=None,year=None):
     for i in con:
         if p is None:
             if year is None:
-                c = Session.objects.filter(date__year=get_year(con,i,today.year),date__month=i).count()
+                c = Session.objects.filter(cancel=False,date__year=get_year(con,i,today.year),date__month=i).count()
 
             else:
-                c = Session.objects.filter(date__year=get_year(con,i,year), date__month=i).count()
+                c = Session.objects.filter(cancel=False,date__year=get_year(con,i,year), date__month=i).count()
         else:
             if year is None:
-                c = Session.objects.filter(project__in=p,date__year=today.year,date__month=i).count()
+                c = Session.objects.filter(cancel=False,project__in=p,date__year=today.year,date__month=i).count()
 
             else:
-                c = Session.objects.filter(project__in=p,date__year=year, date__month=i).count()
+                c = Session.objects.filter(cancel=False,project__in=p,date__year=year, date__month=i).count()
         data['months'].append(c)
 
     return data
@@ -110,21 +110,21 @@ def session_prog(data,con, p=None,year=None):
     if p is None:
         if year is None:
             for k,v in get_year_dict(con, today.year).items():
-                all += Session.objects.filter(date__year=v,date__month=k).count()
-                past += Session.objects.filter(date__year=v,date__month=k,date__lte=today,cancellation_reason=None).count()
+                all += Session.objects.filter(cancel=False,date__year=v,date__month=k).count()
+                past += Session.objects.filter(cancel=False,date__year=v,date__month=k,date__lte=today,cancellation_reason=None).count()
         else:
             for k,v in get_year_dict(con, year).items():
-                all += Session.objects.filter(date__year=v,date__month=k).count()
-                past += Session.objects.filter(date__year=v,date__month=k,date__lte=today,cancellation_reason=None).count()
+                all += Session.objects.filter(cancel=False,date__year=v,date__month=k).count()
+                past += Session.objects.filter(cancel=False,date__year=v,date__month=k,date__lte=today,cancellation_reason=None).count()
     else:
         if year is None:
             for k, v in get_year_dict(con, today.year).items():
-                all += Session.objects.filter(project__in=p,date__year=v,date__month=k).count()
-                past += Session.objects.filter(project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
+                all += Session.objects.filter(cancel=False,project__in=p,date__year=v,date__month=k).count()
+                past += Session.objects.filter(cancel=False,project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
         else:
             for k, v in get_year_dict(con, year).items():
-                all += Session.objects.filter(project__in=p,date__year=v,date__month=k).count()
-                past += Session.objects.filter(project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
+                all += Session.objects.filter(cancel=False,project__in=p,date__year=v,date__month=k).count()
+                past += Session.objects.filter(cancel=False,project__in=p,date__year=v,date__month=k,date__lte=today, cancellation_reason=None).count()
                 print(2,all,past)
     try:
         print(all,past)
@@ -144,7 +144,7 @@ def vol_attendance(data,con,p=None,year=None):
 
             for p in pid:
                 for k, v in get_year_dict(con, today.year).items():
-                    all +=Session.objects.filter(date__year=v,date__month=k,project=p.project).count()
+                    all +=Session.objects.filter(cancel=False,date__year=v,date__month=k,project=p.project).count()
             for k, v in get_year_dict(con, today.year).items():
                 att += Attendance.objects.filter(session__date__year=v,session__date__month=k,attendance_approved=True).count()
             print(all,att)
@@ -153,7 +153,7 @@ def vol_attendance(data,con,p=None,year=None):
             all = 0
             for p in pid:
                 for k, v in get_year_dict(con, year).items():
-                    all += Session.objects.filter(project=p.project,date__year=v, date__month=k,).count()
+                    all += Session.objects.filter(cancel=False,project=p.project,date__year=v, date__month=k,).count()
             for k, v in get_year_dict(con, year).items():
                 att += Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                  attendance_approved=True).count()
@@ -163,14 +163,14 @@ def vol_attendance(data,con,p=None,year=None):
             pid = Profile.objects.filter(user__groups__name="Volunteer",project__in=p)
             pi = pid.count()
             for k, v in get_year_dict(con, today.year).items():
-                c = Session.objects.filter(date__year=v, date__month=k,project__in=pid.values_list('project'))
+                c = Session.objects.filter(cancel=False,date__year=v, date__month=k,project__in=pid.values_list('project'))
                 all += pi*c.count()
                 att += Attendance.objects.filter(session__date__year=v, session__date__month=k,attendance_approved=True,session__in=c).count()
         else:
             pid = Profile.objects.filter(user__groups__name="Volunteer", project__in=p)
             pi = pid.count()
             for k, v in get_year_dict(con, year).items():
-                c = Session.objects.filter(date__year=v, date__month=k,project__in=pid.values_list('project'))
+                c = Session.objects.filter(cancel=False,date__year=v, date__month=k,project__in=pid.values_list('project'))
                 all += pi*c.count()
                 att += Attendance.objects.filter(session__date__year=v, session__date__month=k,attendance_approved=True,session__in=c).count()
 
@@ -386,7 +386,7 @@ def child_attendance(data,con,p=None,year=None,k=None):
 
                 for p in kid:
                     for k, v in get_year_dict(con, today.year).items():
-                        all += Session.objects.filter(date__year=v, date__month=k, project=p).count()
+                        all += Session.objects.filter(cancel=False,date__year=v, date__month=k, project=p).count()
                 for k, v in get_year_dict(con, today.year).items():
                     att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                      attendance=True).count()
@@ -396,7 +396,7 @@ def child_attendance(data,con,p=None,year=None,k=None):
                 all = 0
                 for p in kid:
                     for k, v in get_year_dict(con, year).items():
-                        all += Session.objects.filter(project=p.project, date__year=v, date__month=k, ).count()
+                        all += Session.objects.filter(cancel=False,project=p.project, date__year=v, date__month=k, ).count()
                 for k, v in get_year_dict(con, year).items():
                     att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                          attendance=True).count()
@@ -406,7 +406,7 @@ def child_attendance(data,con,p=None,year=None,k=None):
                 kid = Kid.objects.filter(project__in=p)
                 pi = kid.count()
                 for k, v in get_year_dict(con, today.year).items():
-                    c = Session.objects.filter(date__year=v, date__month=k, project__in=kid.values_list('project'))
+                    c = Session.objects.filter(cancel=False,date__year=v, date__month=k, project__in=kid.values_list('project'))
                     all += pi * c.count()
                     att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                          attendance=True, session__in=c).count()
@@ -414,7 +414,7 @@ def child_attendance(data,con,p=None,year=None,k=None):
                 pid = Profile.objects.filter(user__groups__name="Volunteer", project__in=p)
                 pi = pid.count()
                 for k, v in get_year_dict(con, year).items():
-                    c = Session.objects.filter(date__year=v, date__month=k, project__in=pid.values_list('project'))
+                    c = Session.objects.filter(cancel=False,date__year=v, date__month=k, project__in=pid.values_list('project'))
                     all += pi * c.count()
                     att += Kid_Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                          attendance=True, session__in=c).count()
@@ -422,12 +422,12 @@ def child_attendance(data,con,p=None,year=None,k=None):
         p = Kid.objects.filter(pk=k).values_list('project',flat=True)[0]
         print(12,p, k)
         if year is None:
-            all = Session.objects.filter(date__year=today.year, project=p).count()
+            all = Session.objects.filter(cancel=False,date__year=today.year, project=p).count()
             att = Kid_Attendance.objects.filter(kid=k,session__date__year=today.year,
                                               attendance=True).count()
             print(all, att)
         else:
-            all = Session.objects.filter(project=p, date__year=year, ).count()
+            all = Session.objects.filter(cancel=False,project=p, date__year=year, ).count()
             att = Kid_Attendance.objects.filter(kid=k, session__date__year=year,
                                                      attendance=True).count()
 
@@ -901,7 +901,7 @@ def gifts(data,id):
 
 
 def top_vol(data):
-    v = Config.objects.all().values_list('top_volunteer',flat=True)[0]
+    v = AppConfig.objects.all().values_list('top_volunteer',flat=True)[0]
     if v is not None:
         p = Profile.objects.filter(pk=v).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
         jy = p.values_list('user__date_joined__year',flat=True)[0]
@@ -915,7 +915,7 @@ def top_vol(data):
 
 
 def top_kid(data):
-    v = Config.objects.all().values_list('top_kid',flat=True)[0]
+    v = AppConfig.objects.all().values_list('top_kid',flat=True)[0]
     if v is not None:
         p = Kid.objects.filter(pk=v).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
         na = p.values_list('fullname',flat=True)[0]

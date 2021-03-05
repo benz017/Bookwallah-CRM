@@ -1,6 +1,8 @@
 from time import sleep
 from celery import shared_task
 import logging
+from celery.utils.log import get_task_logger
+from django.core.mail import send_mail
 from celery.contrib import rdb
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -8,9 +10,7 @@ from datetime import datetime
 from django.conf import settings
 from django.apps import apps
 import pandas as pd
-Config = apps.get_model('main', 'Config')
-Recruitment_Form_Config = apps.get_model('main', 'Recruitment_Form_Config')
-Recruit = apps.get_model('main', 'Recruit')
+logger = get_task_logger(__name__)
 now = datetime.now()
 SCOPE = ['https://spreadsheets.google.com/feeds',
          "https://www.googleapis.com/auth/spreadsheets.readonly",
@@ -18,18 +18,33 @@ SCOPE = ['https://spreadsheets.google.com/feeds',
          "https://www.googleapis.com/auth/drive.readonly",
          "https://www.googleapis.com/auth/drive.file",
        "https://www.googleapis.com/auth/drive"]
-rec_config = Recruitment_Form_Config.objects.all()
-config= Config.objects.all()
-SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
-SPREADSHEET = rec_config.values_list('sheet_name', flat=True)[0]
-credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
-gc = gspread.authorize(credentials)
-workbook = gc.open(SPREADSHEET)
-sheet = workbook.sheet1
+
 logger = logging.getLogger(__name__)
 
+@shared_task
+def email_users(username,email,passwd,subject,msg):
+    print("Task started!")
+    message = msg + '\n\nUsername: ' + username + '\nPassword ' + passwd + '''
+                \n\n\nNOTE: Kindly Reset your password after Logging in ASAP.'''
 
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject, message, email_from, recipient_list)
+    print('Email Sent!')
+
+@shared_task
 def fetch_data():
+    EmailConfig = apps.get_model('main', 'EmailConfig')
+    Recruitment_Form_Config = apps.get_model('main', 'Recruitment_Form_Config')
+    Recruit = apps.get_model('main', 'Recruit')
+    rec_config = Recruitment_Form_Config.objects.all()
+    config = EmailConfig.objects.all()
+    SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
+    SPREADSHEET = rec_config.values_list('sheet_name', flat=True)[0]
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
+    gc = gspread.authorize(credentials)
+    workbook = gc.open(SPREADSHEET)
+    sheet = workbook.sheet1
     pd.set_option("display.max_rows", None, "display.max_columns", None)
     data = pd.DataFrame(sheet.get_all_records())
     if not data.empty:
@@ -62,6 +77,16 @@ def fetch_data():
 
 @shared_task
 def purge_sheet():
+    EmailConfig = apps.get_model('main', 'EmailConfig')
+    Recruitment_Form_Config = apps.get_model('main', 'Recruitment_Form_Config')
+    config = EmailConfig.objects.all()
+    rec_config = Recruitment_Form_Config.objects.all()
+    SECRETS_FILE = settings.MEDIA_ROOT + config.values_list('secret_file', flat=True)[0]
+    SPREADSHEET = rec_config.values_list('sheet_name', flat=True)[0]
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(SECRETS_FILE, scopes=SCOPE)
+    gc = gspread.authorize(credentials)
+    workbook = gc.open(SPREADSHEET)
+    sheet = workbook.sheet1
     pd.set_option("display.max_rows", None, "display.max_columns", None)
     data = pd.DataFrame(sheet.get_all_records())
     if not data.empty:
