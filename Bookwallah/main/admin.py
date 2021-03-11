@@ -7,7 +7,7 @@ from django.contrib.auth.models import User,Group
 from .models import *
 from django.contrib.auth.hashers import make_password
 # Register your models here.
-
+from .tasks import email_users
 #admin.site.register(Session)
 #admin.site.register(Project)
 #admin.site.register(Kid)

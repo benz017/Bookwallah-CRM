@@ -44,7 +44,7 @@ EMAIL_HOST_USER = 'bookwallahhr@gmail.com'
 EMAIL_HOST_PASSWORD = 'tyjpqertlkccpuhw' #past the key or password app here
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'Bookwallah HR team'
+DEFAULT_FROM_EMAIL = 'Bookwallah HR team <bookwallahhr@gmail.com>'
 DEFAULT_PASSWORD = 'bookwallah@123'
 
 INSTALLED_APPS = [
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'main',
-    'sorl.thumbnail',
+    'image_optimizer',
     'django_mysql',
     'import_export',
     'django.contrib.admin',
@@ -75,7 +75,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Bookwallah.urls'
-
+OPTIMIZED_IMAGE_METHOD = 'pillow'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

@@ -43,6 +43,7 @@ def main_dashboard(request):
     data["m_list"] = ml
     print('view', config, ml)
     data["landing_image"] = AppConfig.objects.all().values_list('landing_image', flat=True)[0]
+
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
