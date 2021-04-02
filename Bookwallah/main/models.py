@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
-from image_optimizer.fields import OptimizedImageField
 import avinit
 import json
 months = ((1,'JAN'),(2,'FEB'),(3,'MAR'),(4,'APR'),(5,'MAY'),(6,'JUN'),(7,'JUL'),(8,'AUG'),(9,'SEP'),(10,'OCT'),(11,'NOV'),(12,'DEC'))
@@ -23,10 +22,9 @@ class EmailConfig(models.Model):
 
 class Project(models.Model):
     project_name = models.CharField(max_length=100, blank=True, null=True)
-    image = OptimizedImageField(upload_to='project',
-                                optimized_image_output_size=(1200, 600),
-                                optimized_image_resize_method='cover',
-                                blank=True, null=True)
+    image = models.ImageField(upload_to='project',
+                                blank=True, null=True
+                              , verbose_name=u"image (Recommended: 1200X600)")
     type = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(max_length=300, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
@@ -67,10 +65,9 @@ class Session(models.Model):
     activity_name = models.CharField(max_length=100, blank=True, null=True)
     activity_desc = models.CharField(max_length=100, blank=True, null=True)
     volunteers_attended = models.CharField(max_length=100, blank=True, null=True)
-    image = OptimizedImageField(upload_to='session',
-                                optimized_image_output_size=(800, 400),
-                                optimized_image_resize_method='cover',
-                                blank=True, null=True)
+    image = models.ImageField(upload_to='session',
+                                blank=True, null=True
+                              , verbose_name=u"image (Recommended: 800X400)")
     description = models.TextField(max_length=5000, blank=True, null=True)
     cancel = models.BooleanField(default=False)
     cancellation_reason = models.CharField(max_length=300, blank=True, null=True)
@@ -93,10 +90,9 @@ class Profile(models.Model):
         r = list(set(list(Role.objects.all().values_list('role', flat=True))))
         r = ((i, i) for i in r)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    image = OptimizedImageField(upload_to='avatar',
-                                optimized_image_output_size=(200, 200),
-                                optimized_image_resize_method='cover',
-                                null=True, blank=True)
+    image = models.ImageField(upload_to='avatar',
+                                null=True, blank=True,
+                              verbose_name=u"image (Recommended: 200X200)")
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True,blank=True)
     address = models.CharField(max_length=100, blank=True, null=True)
@@ -171,10 +167,8 @@ class Donor(models.Model):
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=150, blank=True)
-    image = OptimizedImageField(upload_to='donor',
-                                optimized_image_output_size=(200, 200),
-                                optimized_image_resize_method='cover',
-                                null=True, blank=True)
+    image = models.ImageField(upload_to='donor',
+                                null=True, blank=True, verbose_name=u"image (Recommended: 200X200)")
     nick_name = models.CharField(max_length=100, blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
     address1 = models.CharField(max_length=100, blank=True, null=True)
@@ -306,10 +300,8 @@ class Kid(models.Model):
     wish_to_pursue = models.CharField(max_length=100, blank=True, null=True)
     attending_sessions = models.BooleanField(default=True)
     date = models.DateTimeField(default=timezone.now, verbose_name=u"Joining Date")
-    image = OptimizedImageField(upload_to='kid',
-                                optimized_image_output_size=(200, 200),
-                                optimized_image_resize_method='cover',
-                                blank=True, null=True)
+    image = models.ImageField(upload_to='kid',
+                                blank=True, null=True, verbose_name=u"image (Recommended: 200X200)")
     description = models.TextField(max_length=500, blank=True, null=True)
     def __str__(self):
         return "{} {} -- {}".format(self.first_name,self.last_name,self.project, )
@@ -317,10 +309,9 @@ class Kid(models.Model):
 
 class Kid_Picture(models.Model):
     kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
-    image = OptimizedImageField(upload_to='kid',
-                                optimized_image_output_size=(400, 400),
-                                optimized_image_resize_method='cover',
-                                blank=True, null=True)
+    image = models.ImageField(upload_to='kid',
+                                blank=True, null=True
+                              , verbose_name=u"image (Recommended: 200X200)")
 
     def __str__(self):
         return "{}".format(self.kid)
@@ -339,10 +330,8 @@ post_save.connect(create_kid_pic_obj,sender=Kid)
 
 class Session_Picture(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    image = OptimizedImageField(upload_to='session',
-                                optimized_image_output_size=(800, 400),
-                                optimized_image_resize_method='cover',
-                                blank=True, null=True)
+    image = models.ImageField(upload_to='session',
+                                blank=True, null=True, verbose_name=u"image (Recommended: 800X400)")
 
     def __str__(self):
         return "{}".format(self.session)
@@ -527,9 +516,7 @@ class Recruitment_Form_Config(models.Model):
 
 
 class AppConfig(models.Model):
-    landing_image = OptimizedImageField(upload_to='main/',
-                                        optimized_image_output_size=(1200, 600),
-                                        optimized_image_resize_method='cover',
+    landing_image = models.ImageField(upload_to='main/', verbose_name=u"image (Recommended: 1200X600)",
                                         blank=True,null=True)
     fiscal_month = models.IntegerField(choices=months, default=1)
     top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},
