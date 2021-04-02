@@ -1001,3 +1001,4 @@ def team_strength(data):
         return c
     except:
         return "N/A"
+

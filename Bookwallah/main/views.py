@@ -858,6 +858,8 @@ def profile(request):
     data['att'] = [len(attendance), len(sessions) - len(attendance)]
     data['att_p'] = att
     data['roles'] = list(Role.objects.all().values_list('role',flat=True))
+    data['total_ses'] = attendance.count()
+    data['cmp_task'] = Task.objects.filter(user=request.user.profile,status="Done").count()
     print(data['roles'])
     c = 3
     for k, v in json.loads(profile)[0].items():
