@@ -173,6 +173,9 @@ font-weight: normal;
 src: local('Arial Rounded MT ExtraBold'), url('../fonts/ARIALROUNDEDMTEXTRABOLD.woff') format('woff');
 }
 
+.zoom {
+    zoom: 0.8;
+}
 /* BASIC THEME CONFIGURATION */
 body {
     color: #34495e;
@@ -620,7 +623,8 @@ a.logo span {
 .notify-row {
     float: left;
     margin-top: 15px;
-    margin-left: 92px;
+    margin-left:95px;
+
 }
 
 .notify-row .notification span.label {
@@ -3736,11 +3740,6 @@ ul.chat-available-user li a:hover {
   opacity: .9;
 }
 
-
-.menu-list{
-    margin-left:-40px;
-}
-
 .s_data{
     font-family:"Arial Rounded MT Regular";
 }
@@ -3845,6 +3844,10 @@ vertical-align:top;
     background-color:rgba(18, 176, 226, 0.3);
 }
 
+#details .hlt {background-color:rgba(18, 176, 226, 0.3);
+border-spacing}
+
+#details .hlt span{background-color:white;}
 /*Blue Panel */
 .blue-panel {
 	text-align: center;
@@ -4019,7 +4022,7 @@ vertical-align:top;
 }
 
 /* Add a background color to the active dot/circle */
-.actv, .dot:hover {
+#dot .active, .dot:hover {
   background-color: #717171;
 }
 
@@ -4028,3 +4031,69 @@ q {font-style: italic;font-size:20px;}
 
 /* Add a blue color to the author */
 .author {color: cornflowerblue;font-size:18px;}
+
+
+
+
+You can use media queries. Try to add the following code in your CSS.
+
+CSS:
+
+@media screen and (max-width: 480px) {
+    #login-logo {
+         width: 400px;
+    }
+}
+
+.form-control-2 {
+ display:block;
+ width:100%;
+ height:34px;
+ padding:6px 12px;
+ font-size:14px;
+ line-height:1.42857143;
+ color:#555;
+ background-color:#fff;
+ background-image:none;
+ border:1px solid #ccc;
+ border-radius:4px;
+ -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+ box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+ -webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+ -o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+ transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+ /*! margin-left:70px; */
+}
+.form-control-2:focus {
+ border-color:#66afe9;
+ outline:0;
+ -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+ box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.form-control-2::-moz-placeholder {
+ color:#999;
+ opacity:1
+}
+.form-control-2:-ms-input-placeholder {
+ color:#999
+}
+.form-control-2::-webkit-input-placeholder {
+ color:#999
+}
+.form-control-2::-ms-expand {
+ background-color:transparent;
+ border:0
+}
+.form-control-2[disabled],
+.form-control-2[readonly],
+fieldset[disabled] .form-control-2 {
+ background-color:#eee;
+ opacity:1
+}
+.form-control-2[disabled],
+fieldset[disabled] .form-control-2 {
+ cursor:not-allowed
+}
+textarea.form-control-2 {
+ height:auto
+}

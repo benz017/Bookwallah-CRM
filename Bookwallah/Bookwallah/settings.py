@@ -35,6 +35,8 @@ CHANNEL_LAYERS = {
     },
 }
 ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS =  ['35.154.243.159','ec2-35-154-243-159.ap-south-1.compute.amazonaws.com','bookwallahdashboard.org','www.bookwallahdashboard.org']
+
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # # Application definition
 
@@ -52,7 +54,6 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'main',
-    'image_optimizer',
     'django_mysql',
     'import_export',
     'django.contrib.admin',
@@ -73,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'Bookwallah.urls'
 OPTIMIZED_IMAGE_METHOD = 'pillow'
@@ -108,6 +110,16 @@ DATABASES = {
     }
 }
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'bw',
+#        'USER': 'bookwallah',
+#        'PASSWORD': 'B00kwallah@123',
+#        'HOST': 'localhost'
+#    }
+#}
+
 
 
 # Password validation
@@ -134,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 
@@ -177,7 +189,7 @@ CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ENABLE_UTC = False
-CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_TIMEZONE = 'America/Chicago'
 
 CELERY_BEAT_SCHEDULE = {
     'fetch_data': {

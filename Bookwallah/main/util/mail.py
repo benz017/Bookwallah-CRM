@@ -1,6 +1,8 @@
 # Importing libraries 
 import imaplib, email
 from django.apps import apps
+from django.core.mail import send_mail
+from django.conf import settings
 EmailConfig = apps.get_model('main', 'EmailConfig')
 
 from email.header import decode_header
@@ -119,3 +121,13 @@ def get_email(ID):
     con.close()
     con.logout()
     return json.dumps(msg_json)
+
+def email_users(username,email,passwd,subject,msg):
+    print("Task started!")
+    message = msg + '\n\nUsername: ' + username + '\nPassword ' + passwd + '''
+                \n\n\nNOTE: Kindly Reset your password after Logging in ASAP.'''
+
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject, message, email_from, recipient_list)
+    print('Email Sent!')

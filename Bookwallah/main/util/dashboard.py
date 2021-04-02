@@ -9,7 +9,7 @@ from django.db.models import Value
 from dateutil.relativedelta import relativedelta
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
-import avinit
+from avinit import get_avatar_data_url
 import json
 from django.core import serializers
 from django.conf import settings
@@ -19,16 +19,16 @@ now =datetime.now()
 
 month_dict = {1:'JAN',2: 'FEB',3: 'MAR', 4:'APR', 5:'MAY', 6:'JUN', 7:'JUL',8: 'AUG', 9:'SEP', 10:'OCT', 11:'NOV', 12:'DEC'}
 
+
 def do_geocode(address, attempt=1, max_attempts=5):
-    geolocator = Nominatim(user_agent="http")
+    geolocator = Nominatim(user_agent="bookwallah")
     try:
-        return geolocator.geocode(address)
-    except GeocoderTimedOut:
+        return geolocator.geocode(address,timeout=10)
+    except GeocoderTimedOut as e:
+        print("Error: geocode failed on input %s with message %s" % (address, e.message))
         if attempt <= max_attempts:
             return do_geocode(address, attempt=attempt+1)
         raise
-
-
 
 
 def key_detail(data,arg=None):
@@ -141,7 +141,6 @@ def vol_attendance(data,con,p=None,year=None):
     if p is None:
         if year is None:
             pid = Profile.objects.filter(user__groups__name="Volunteer")
-
             for p in pid:
                 for k, v in get_year_dict(con, today.year).items():
                     all +=Session.objects.filter(cancel=False,date__year=v,date__month=k,project=p.project).count()
@@ -150,15 +149,14 @@ def vol_attendance(data,con,p=None,year=None):
             print(all,att)
         else:
             pid = Profile.objects.filter(user__groups__name="Volunteer")
-            all = 0
             for p in pid:
                 for k, v in get_year_dict(con, year).items():
-                    all += Session.objects.filter(cancel=False,project=p.project,date__year=v, date__month=k,).count()
+                    all += Session.objects.filter(cancel=False, date__year=v, date__month=k, project=p.project).count()
             for k, v in get_year_dict(con, year).items():
                 att += Attendance.objects.filter(session__date__year=v, session__date__month=k,
                                                  attendance_approved=True).count()
+            print(all, att)
     else:
-        print(p)
         if year is None:
             pid = Profile.objects.filter(user__groups__name="Volunteer",project__in=p)
             pi = pid.count()
@@ -170,9 +168,11 @@ def vol_attendance(data,con,p=None,year=None):
             pid = Profile.objects.filter(user__groups__name="Volunteer", project__in=p)
             pi = pid.count()
             for k, v in get_year_dict(con, year).items():
-                c = Session.objects.filter(cancel=False,date__year=v, date__month=k,project__in=pid.values_list('project'))
-                all += pi*c.count()
-                att += Attendance.objects.filter(session__date__year=v, session__date__month=k,attendance_approved=True,session__in=c).count()
+                c = Session.objects.filter(cancel=False, date__year=v, date__month=k,
+                                           project__in=pid.values_list('project'))
+                all += pi * c.count()
+                att += Attendance.objects.filter(session__date__year=v, session__date__month=k,
+                                                 attendance_approved=True, session__in=c).count()
 
     try:
         data['vol_att'] = int((att/(all))*100)
@@ -322,7 +322,7 @@ def kid_years(data,con,p=None,year=None):
     return data
 
 
-def vol_role(data,p=None,year=None):
+def vol_role(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
         c = Profile.objects.filter(user__in=uid).values('role').order_by('role').annotate(count=Count('role'))
@@ -333,9 +333,14 @@ def vol_role(data,p=None,year=None):
     return data
 
 
-def no_story_teller(data):
+def no_story_teller(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
-    c = Profile.objects.filter(user__in=uid,role="Story Teller").values('project__project_name').order_by('project').annotate(count=Count('role'))
+    if p is None:
+        c = Profile.objects.filter(user__in=uid,role="Storyteller").values('project__project_name').order_by('project').annotate(count=Count('role'))
+    else:
+        c = Profile.objects.filter(user__in=uid, role="Storyteller").values('project__project_name').order_by(
+            'project').annotate(count=Count('role'))
+    print(uid,c)
     data['v_st'] = list(c.values_list('count',flat=True))
     data['v_st_label'] = list(c.values_list('project__project_name', flat=True))
     return data
@@ -467,7 +472,7 @@ def kid_bday(data):
         for a in list(av):
             if a == "" and b:
                 for k,v in d.items():
-                    bday_dict[k].append(avinit.get_image_data_url(k))
+                    bday_dict[k].append(get_avatar_data_url(k))
                     bday_dict[k].append(datetime.strftime(v,"%d %b"))
         data['k_bday'] = dict(bday_dict)
     except Exception as ex:
@@ -487,7 +492,7 @@ def mem_ani(data):
         for a in list(av):
             if a == "" and b:
                 for k,v in d.items():
-                    mem_list[k].append(avinit.get_image_data_url(k))
+                    mem_list[k].append(get_avatar_data_url(k))
                     mem_list[k].append(datetime.strftime(v,"%d %b"))
         data['k_mem'] = dict(mem_list)
     except Exception as ex:
@@ -497,10 +502,12 @@ def mem_ani(data):
 
 def volunteer_list(data,p=None,year=None):
     uid = User.objects.filter(groups__name="Volunteer")
+    print(uid)
     if p is None:
         b = Profile.objects.filter(user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
     else:
         b = Profile.objects.filter(project__in=p,user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+    print(b)
     dl = b.values_list('role', flat=True)
     name = b.values_list('fullname', flat=True)
     av = b.values_list('image', flat=True)
@@ -509,7 +516,7 @@ def volunteer_list(data,p=None,year=None):
 
     for i, (k, v) in enumerate(d.items()):
         if list(av)[i] == "":
-            v_list[k].append(avinit.get_image_data_url(k))
+            v_list[k].append(get_avatar_data_url(k))
         else:
             v_list[k].append(settings.MEDIA_URL+list(av)[i])
         v_list[k].append(v)
@@ -518,7 +525,7 @@ def volunteer_list(data,p=None,year=None):
     return data
 
 
-def vol_bday(data,p=None,year=None):
+def vol_bday(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
         b = Profile.objects.filter(user__in=uid,dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
@@ -532,7 +539,7 @@ def vol_bday(data,p=None,year=None):
     for a in list(av):
         if a == "":
             for k,v in d.items():
-                bday_dict[k].append(avinit.get_image_data_url(k))
+                bday_dict[k].append(get_avatar_data_url(k))
                 bday_dict[k].append(datetime.strftime(v,"%d %b"))
         else:
             for k,v in d.items():
@@ -542,7 +549,7 @@ def vol_bday(data,p=None,year=None):
     return data
 
 
-def vol_ani(data,p=None,year=None):
+def vol_ani(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
         b = Profile.objects.filter(user__in=uid, user__date_joined__month=today.month,user__date_joined__day__gte=today.day).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
@@ -556,7 +563,7 @@ def vol_ani(data,p=None,year=None):
     for a in list(av):
         if a == "":
             for k,v in d.items():
-                mem_list[k].append(avinit.get_image_data_url(k))
+                mem_list[k].append(get_avatar_data_url(k))
                 mem_list[k].append(datetime.strftime(v,"%d %b"))
         else:
             for k,v in d.items():
@@ -910,7 +917,7 @@ def top_vol(data):
         data["tv_na"] = p.values_list('fullname',flat=True)[0]
         data["tv_jy"] = jy
         data["tv_av"] = settings.MEDIA_URL +av
-        data["tv_hrs"] = a*8
+        data["tv_ses"] = a
     return data
 
 
@@ -928,12 +935,6 @@ def top_kid(data):
         data["tk_count"] = a
     return data
 
-
-def regular_vol(data):
-    #p = Profile.objects.filter(user__groups_name="Volunteer").annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
-    a = Attendance.objects.filter(attendance_approved=True).annotate(total=Count('pk')).aggregate(
-        max=Max('total'))
-    print(a)
 
 
 def highlight(data,f,y=None,field = None):
@@ -980,6 +981,8 @@ def v_testimonials(data):
         data["t_test"] =""
 
     return data
+
+
 def d_testimonials(data):
     if Donor_Testimonial.objects.exists():
         d = Donor_Testimonial.objects.all().order_by('-id')[0]
@@ -990,8 +993,9 @@ def d_testimonials(data):
         data["d_test"] =""
     return data
 
+
 def team_strength(data):
-    p= Project.objects.filter(pk=data.project)
+    p= data.project
     try:
         c = Profile.objects.filter(project=p).count()
         return c

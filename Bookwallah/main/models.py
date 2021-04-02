@@ -163,7 +163,7 @@ class Attendance(models.Model):
     attendance_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} - {}".format(self.user,self.session)
+        return "{} {} - {}".format(self.user.user.first_name,self.user.user.last_name,self.session.library_name)
 
 
 class Donor(models.Model):
@@ -453,11 +453,11 @@ class NPSScore(models.Model):
     state=()
     try:
         if Project.objects.exists():
-            state = list(set(list(Project.objects.all().values_list('state',flat=True))))
-            state = ((i,i) for i in state)
+            city = list(set(list(Project.objects.all().values_list('city',flat=True))))
+            city = ((i,i) for i in city)
         q = ['Q1','Q2','Q3','Q4']
         q = ((i,i) for i in q)
-        chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=state)
+        chapter = models.CharField(max_length=30, verbose_name="Chapter", blank=True, null=True,choices=city)
         quarter = models.CharField(max_length=10, verbose_name="Quarter", blank=True, null=True,choices=q)
         year = models.CharField(max_length=10, verbose_name="Year", blank=True, null=True)
         score = models.IntegerField(verbose_name="Score (%)", blank=True, null=True)
@@ -533,7 +533,7 @@ class AppConfig(models.Model):
                                         blank=True,null=True)
     fiscal_month = models.IntegerField(choices=months, default=1)
     top_volunteer = models.ForeignKey(Profile, limit_choices_to={'user__groups__name': "Volunteer"},
-                                on_delete=models.DO_NOTHING, null=True, blank=True)
+                                on_delete=models.DO_NOTHING, null=True, blank=True,related_name="top_vol")
     top_kid = models.ForeignKey(Kid, on_delete=models.DO_NOTHING, null=True, blank=True)
     default_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True, blank=True)
 

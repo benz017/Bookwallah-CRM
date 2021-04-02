@@ -172,16 +172,20 @@
               <div class="col-md-6 col-sm-6 mb" >
                 <div class="blue-panel pn" style="height:350px;" >
                   <div class="blue-header">
-                    <h5>MOST REGULAR VOLUNTEER</h5>
+                    <h5>TOP VOLUNTEER</h5>
                   </div>
-                  <p><img src="{% static 'img/ui-zac.jpg' %}" class="img-circle" width="200"></p>
-                  <p><b>Zac Snider</b></p>
-
-                  <footer>
-                    <div class="centered">
-                      <h3><i class="fa fa-calendar"></i> 207<small> Sessions</small></h3>
+                  <p><img src="{{tv_av}}" class="img-circle" width="150" height="150" ></p>
+                  <p><b>{{tv_na}}</b></p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p class="">MEMBER SINCE</p>
+                      <p>{{tv_jy}}</p>
                     </div>
-                  </footer>
+                    <div class="col-md-6">
+                      <p class="">TOTAL SESSIONS</p>
+                      <p>{{tv_ses}}</p>
+                    </div>
+                  </div>
                 </div>
                 <!--  /darkblue panel -->
               </div>
@@ -268,28 +272,11 @@
                 <div id="details">
 
                 </div>
-                <div class="blue-panel pn mb w2">
-                  <div class="blue-header">
-                    <h5>TOP VOLUNTEER</h5>
-                  </div>
-                  <p><img src="{{tv_av}}" class="img-circle" width="80" height="80" ></p>
-                  <p><b>{{tv_na}}</b></p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <p class="">MEMBER SINCE</p>
-                      <p>{{tv_jy}}</p>
-                    </div>
-                    <div class="col-md-6">
-                      <p class="">TOTAL HOURS</p>
-                      <p>{{tv_hrs}}</p>
-                    </div>
-                  </div>
-                </div>
             <!--new earning end-->
             <!-- RECENT ACTIVITIES SECTION -->
 
             <!-- USERS ONLINE SECTION -->
-            <div class="blue-panel pn mb w2" style="height:100%;">
+            <div class="blue-panel pn mb w2" style="height:350px;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING BIRTHDAYS</h5>
                   </div>
@@ -312,7 +299,7 @@
               </div>
             <!-- Fourth Member -->
             <!-- CALENDAR-->
-            <div class="blue-panel pn mb w2" style="height:100%;">
+            <div class="blue-panel pn mb w2" style="height:350px;">
                   <div class="blue-header" style="margin-bottom:0px;">
                 <h5>UPCOMING WORK ANNIVERSARIES</h5>
                   </div>
@@ -434,19 +421,19 @@
 <script>
 
     function setValue(e){
-    $val = e.target.text;
-         $('#toggle-menu').hide();
+        $val = e.target.text;
+        $('#toggle-menu').hide();
         $('#search').val($val);
         $.ajax({
         type:'POST',
         url: "{% url 'vol_dashboard' %}",
-        data: { value: $val },
+        data: { in_value: $val },
         success: function(resp){
         $('.donor').remove();
         $('.w2').hide();
         $('.w1').show();
         $data = JSON.parse(resp.data);
-        $('#av').append('<div class="profile-pic centered donor" ><p><img width="128px" height="128px" src="/media/'+$data[0].fields.image+'" class="img-circle"></p></div>');
+        $('#av').append('<div class="profile-pic centered donor" ><p><img width="128px" height="128px" src="'+resp.img+'" class="img-circle"></p></div>');
         $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Full Name:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.fname+'</div></div>');
         Object.entries($data[0].fields).forEach(function([key, value]){
             if (key === 'role'){
@@ -567,7 +554,7 @@ function interpolateColors(color1, color2, steps) {
         $field= $("#field option:selected").text();
         $.ajax({
         type:"POST",
-        url: "{% url 'main_dashboard' %}",
+        url: "{% url 'vol_dashboard' %}",
         data:{value: $value, field:$field},
         success: function(resp){
         $('#serverstatus01').remove();

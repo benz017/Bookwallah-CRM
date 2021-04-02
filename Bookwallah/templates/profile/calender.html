@@ -165,6 +165,7 @@
                   {% if request.user|nothas_group:"Volunteer" %}
                   <div class="row mt" style=" background:white;">
                   <h4 class="mb" style="text-align:center;">My Approvals</h4>
+
                   <form role="form" id="approval-form" class="form-horizontal" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
 
                       <div class="form-group">
@@ -260,10 +261,6 @@
                 <tr>
                   <th><i class="fa fa-map-marker"></i> Location</th>
                     <td class="s_data" id="location"></td>
-                </tr>
-                <tr>
-                    <th><i class="fa fa-group"></i> Volunteers</th>
-                    <td class="s_data" id="att_status"></td>
                 </tr>
               </table>
                     </div>
@@ -548,14 +545,13 @@
 $(function() {
   // for now, there is something adding a click handler to 'a'
   var tues = moment().day(2).hour(19);
-
   // build trival night events for example data
   var events = [
   {% for session in sessions %}
     {% if session.date != None %}
     {
       title: "{{session.library_name}}",
-      start: moment().hour({{session.date|date:'G'}}).minute({{session.date|date:'i'}}).add({{session.date|delta:'d'}}, 'days').toISOString(),
+      start: "{{session.date|date:'Y-m-d H:i'}}",
       allDay:false,
       url: '#'
     },
@@ -564,14 +560,17 @@ $(function() {
   ];
 
 
+
   // setup a few events
   $('#calendar').fullCalendar({
+    events,
     header: {
       left: 'prev,next today',
       center: 'title',
       right: 'month,agendaWeek,agendaDay,listWeek'
     },
   });
+
 });
 
     $(document).on('click','.fc-day-grid-event',function () {

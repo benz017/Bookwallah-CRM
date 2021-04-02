@@ -433,16 +433,16 @@
           </div>
               </div>
             <!--COMPLETED ACTIONS DONUTS CHART-->
-            <div class="donut-main mb" style="height:200px;">
+            <div class="donut-main mb" style="height:220px;">
               <h4>SESSION PROGRESS</h4>
                 <div id="graph4">
-              <canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>
+              <canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;position:relative;z-index:2;"></canvas>
                 </div>
                     <h3 id="ses_p" style="position:relative; bottom:120px;">{{ses_p}}%</h3>
 
             </div>
-            <!--NEW EARNING STATS -->
-          <div class="panel terques-chart" style="margin-bottom:0px;">
+
+          <!--<div class="panel terques-chart" style="margin-bottom:0px;">
               <div class="panel-body">
                 <div class="chart">
                     <h4 style="font-size:18px;">EXPENSES</h4>
@@ -455,7 +455,7 @@
                   <canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>
 
                     </div>
-                      <!--div id="graph6" class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="{{m_exp}}"></div-->
+
 
                     </div>
               </div>
@@ -473,13 +473,13 @@
               </div>
 
 
-            </div>
+            </div>-->
 
             <!--new earning end-->
             <!-- RECENT ACTIVITIES SECTION -->
 
             <!-- USERS ONLINE SECTION -->
-              <div class="blue-panel pn mb" style="height:100%;">
+              <div class="blue-panel pn mt mb" style="height:100%;">
 
               <div style="overflow:auto; height:220px;">
             <!-- First Member -->
@@ -667,8 +667,8 @@
      $.ajax({
         url: "{% url 'p_location' %}",
         }).done(function( data) {
-            var loc = data;
-    var map_obj = new Maplace({
+      var loc = data;
+      var map_obj = new Maplace({
       locations: loc,
       map_div: '#gmap-list',
       controls_div: '#controls-tabs',
@@ -694,9 +694,6 @@
 
       return false;
         });
-
-
-
     });
   </script>
 <script>
@@ -944,12 +941,12 @@ $("#f_m").val({{config}});
     groupedbar("schart1",{{nps_label}},{{nps_data|safe}},0);
     groupedbar("schart2",{{cp_label|safe}},{{cp_data|safe}},0);
     groupedbar("schart3",{{sb_label|safe}},{{sb_data|safe}},{{sb_data|list_min}});
-    chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},title,'pie','exp_chart');
+    //chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},title,'pie','exp_chart');
     chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
     chart({{ses_p_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{ses_p_data|length}}),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
     chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
-    chart({{m_exp}},"",month_list,[''],title,'line','serverstatus05');
+    //chart({{m_exp}},"",month_list,[''],title,'line','serverstatus05');
     chart({{months}},"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
     chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
 
@@ -1017,15 +1014,15 @@ $("#f_m").val({{config}});
         $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
         $('#t_exp').text('$'+resp.t_exp);
-        $('#serverstatus05').remove();
-        $('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
-         chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
+        //$('#serverstatus05').remove();
+        //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
+         //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
          $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
          chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
-         $('#exp_chart').remove();
-         $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
-         chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+         //$('#exp_chart').remove();
+        // $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
+        // chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
           $('#ccon').text(resp.curr_con);
           $('#ctime').text(resp.curr_date);
           $('$cdate').text(resp.curr_time);
@@ -1098,15 +1095,15 @@ $("#f_m").val({{config}});
         $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
         $('#t_exp').text('$'+resp.t_exp);
-        $('#serverstatus05').remove();
-        $('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
-         chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
+        //$('#serverstatus05').remove();
+        //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
+         //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
          $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
          chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
-         $('#exp_chart').remove();
-         $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
-         chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+         //$('#exp_chart').remove();
+         //$('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
+         //chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
           $('#ccon').text(resp.curr_con);
           $('#ctime').text(resp.curr_date);
           $('$cdate').text(resp.curr_time);

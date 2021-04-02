@@ -9,6 +9,7 @@ import time
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 import os
+from avinit import get_avatar_data_url
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from django.core import serializers
@@ -38,7 +39,7 @@ def landing(request):
 @csrf_exempt
 def main_dashboard(request):
     data = {}
-    config = AppConfig.objects.all().values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.values_list('fiscal_month', flat=True).first()
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     print('view', config, ml)
@@ -69,15 +70,14 @@ def main_dashboard(request):
     data = dashboard.monthly_session(data, con, c)
     data = dashboard.session_prog(data, con, c)
     data = dashboard.vol_attendance(data, con, c)
-    data = dashboard.total_revenue(data, con, )
-    data = dashboard.total_expense(data, con, c)
+    #data = dashboard.total_revenue(data, con, )
+    #data = dashboard.total_expense(data, con, c)
     data = dashboard.kid_stats(data, con, c)
     data = dashboard.kid_years(data, con, c)
     data = dashboard.no_of_kids(data, con, c)
-    data = dashboard.vol_role(data, con, c)
     data = dashboard.volunteer_list(data, c)
     data = dashboard.key_detail(data, c)
-    data = dashboard.expense_type(data, con, c)
+    #data = dashboard.expense_type(data, con, c)
     data = dashboard.session_galery(data)
     data = dashboard.kid_galery(data)
     data = dashboard.nps_score(data, con)
@@ -142,16 +142,14 @@ def main_dashboard(request):
 @csrf_exempt
 def p_location(request):
     p = Project.objects.all()
-    add = p.values_list('address', flat=True)
+    #add = p.values_list('address', flat=True)
     city = p.values_list('city', flat=True)
     country = p.values_list('country', flat=True)
     project_name = p.values_list('project_name', flat=True)
     loc = []
     for i in range(len(p)):
-        if dashboard.do_geocode(add[i]) is not None:
-            addr = dashboard.do_geocode(add[i])
-        else:
-            addr = dashboard.do_geocode(city[i] + ", " + country[i])
+        #print(add[i],city[i] + ", " + country[i])
+        addr = dashboard.do_geocode(city[i] + ", " + country[i])
         loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
 
     data = json.dumps(loc)
@@ -195,13 +193,12 @@ def d_location(request):
 @login_required
 def vol_dashboard(request):
     data = {}
-    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.values_list('fiscal_month', flat=True).first()
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
-    dashboard.regular_vol(data)
     data = dashboard.top_vol(data)
     data = dashboard.vol_attendance(data, con)
     data = dashboard.vol_role(data)
@@ -218,12 +215,38 @@ def vol_dashboard(request):
             vol = pid.values_list('fullname', flat=True)
             json_stuff = json.dumps({'volunteer': list(vol)})
             return HttpResponse(json_stuff, content_type="application/json")
-        elif 'value' in request.POST:
-            value = request.POST.get('value')
+        elif 'in_value' in request.POST:
+            value = request.POST.get('in_value')
             vol = Profile.objects.filter(user__first_name=value.split()[0], user__last_name=value.split()[1],
                                          user__groups__name="Volunteer")
             data = serializers.serialize('json', list(vol))
-            json_stuff = json.dumps({'fname': value, 'data': data})
+            if json.loads(data)[0]["fields"]["image"] == "":
+                img = get_avatar_data_url(value)
+            else:
+                img = settings.MEDIA_URL + json.loads(data)[0]["fields"]["image"]
+            print(img)
+            json_stuff = json.dumps({'fname': value, 'data': data,'img':img})
+            return HttpResponse(json_stuff, content_type="application/json")
+        elif 'value' in request.POST:
+            new_data = {}
+            field = request.POST.get('field')
+            val = request.POST.get('value')
+            print(field, val, Project.objects.filter(project_name=val))
+            if field == 'Project':
+                f = Project.objects.filter(project_name=val)
+                print(f)
+            elif field == 'Country':
+                f = Project.objects.filter(country=val)
+            elif field == 'Chapter':
+                f = Project.objects.filter(state=val)
+            new_data = dashboard.top_vol(new_data)
+            new_data = dashboard.vol_attendance(new_data, con,f)
+            new_data = dashboard.vol_role(new_data,f)
+            new_data = dashboard.no_story_teller(new_data,f)
+            new_data = dashboard.vol_bday(new_data,f)
+            new_data = dashboard.vol_ani(new_data,f)
+            json_stuff = json.dumps(new_data)
+            print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'dashboard/vol_dash.html', context=data)
 
@@ -352,7 +375,7 @@ def donor_dashboard(request):
 @login_required
 def child_dashboard(request):
     data = {}
-    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.values_list('fiscal_month', flat=True).first()
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -402,7 +425,7 @@ def child_dashboard(request):
 @login_required
 def proj_dashboard(request):
     data = {}
-    config = AppConfig.objects.filter(id=1).values_list('fiscal_month', flat=True)[0]
+    config = AppConfig.objects.values_list('fiscal_month', flat=True).first()
     con, ml = dashboard.get_month_range(config)
     data["m_list"] = ml
     pid = Profile.objects.filter(user=request.user.profile.user)
@@ -440,7 +463,7 @@ def proj_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = AppConfig.objects.filter(id=1)
+            config = AppConfig.objects.first()
             config.update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
@@ -1011,12 +1034,12 @@ def calender(request):
     data = {}
     session_kv = {}
     data['sessions'] = Session.objects.all()
-    print(data)
+    #print(data)
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     if av == "":
         name = request.user.get_full_name()
-        data["image"] = avinit.get_image_data_url(name)
+        data["image"] = get_avatar_data_url(name)
     else:
         data["image"] = settings.MEDIA_URL + av
     if request.method == "POST":
@@ -1060,16 +1083,16 @@ def calender(request):
         elif 'input' in request.POST:
             input = request.POST.get('input')
             print(input)
-            uid = User.objects.filter(username__startswith=input, groups__name="Volunteer")
-            volunteer = uid.values_list('username', flat=True)
+            uid = User.objects.annotate(fullname=Concat('first_name', Value(' '), 'last_name',Value(' - '),'username')).filter(fullname__startswith=input, groups__name="Volunteer")
+            volunteer = uid.values_list('fullname', flat=True)
             json_stuff = json.dumps({'volunteer': list(volunteer)})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'value' in request.POST:
             value = request.POST.get('value')
-            print(value)
-            uid = User.objects.get(username=value)
-            aid = Attendance.objects.filter(user=uid.id, attendance_submitted=True, attendance_approved=False)
-            print(aid.values_list('session', flat=True))
+            username = value.split('-')[1].strip()
+            uid = User.objects.get(username=username)
+            aid = Attendance.objects.filter(user__user=uid, attendance_submitted=True, attendance_approved=False)
+            print(aid)
             sid = Session.objects.filter(id__in=aid.values_list('session', flat=True))
             session = sid.values_list('library_name', flat=True)
             location = sid.values_list('location', flat=True)
@@ -1100,8 +1123,9 @@ def calender(request):
         elif 'volunteer' in request.POST:
             volunteer = request.POST.get('volunteer')
             approval = request.POST.getlist('approval')
-            print(volunteer, approval)
-            aid = Attendance.objects.filter(user=Profile.objects.get(user=User.objects.get(username=volunteer)),
+            username = volunteer.split('-')[1].strip()
+            print(123,volunteer, approval)
+            aid = Attendance.objects.filter(user=Profile.objects.get(user=User.objects.get(username=username)),
                                             session__in=approval)
             aid.update(attendance_approved=True)
     return render(request, 'profile/calender.html', context=data)
