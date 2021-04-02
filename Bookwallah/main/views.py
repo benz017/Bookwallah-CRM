@@ -142,14 +142,21 @@ def main_dashboard(request):
 @csrf_exempt
 def p_location(request):
     p = Project.objects.all()
-    #add = p.values_list('address', flat=True)
+    add = p.values_list('address', flat=True)
     city = p.values_list('city', flat=True)
     country = p.values_list('country', flat=True)
     project_name = p.values_list('project_name', flat=True)
     loc = []
     for i in range(len(p)):
         #print(add[i],city[i] + ", " + country[i])
-        addr = dashboard.do_geocode(city[i] + ", " + country[i])
+        if add[i] is not None and dashboard.do_geocode(add[i]) is not None:
+            addr = dashboard.do_geocode(add[i])
+        elif city[i] is not None and country[i] is not None and dashboard.do_geocode(city[i] + ", " + country[i]) is not None:
+            addr = dashboard.do_geocode(city[i] + ", " + country[i])
+        elif country[i] is not None and dashboard.do_geocode(country[i]) is not None:
+            addr = dashboard.do_geocode(country[i])
+        else:
+            continue
         loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
 
     data = json.dumps(loc)
@@ -173,10 +180,13 @@ def d_location(request):
         project_name = p.values_list('fullname', flat=True)
         loc = []
         for i in range(len(p)):
-            if dashboard.do_geocode(add[i]) is not None:
+            if add[i] is not None and dashboard.do_geocode(add[i]) is not None:
                 addr = dashboard.do_geocode(add[i])
-            elif dashboard.do_geocode(city[i] + ", " + country[i]) is not None:
+            elif city[i] is not None and country[i] is not None and dashboard.do_geocode(
+                    city[i] + ", " + country[i]) is not None:
                 addr = dashboard.do_geocode(city[i] + ", " + country[i])
+            elif country[i] is not None and dashboard.do_geocode(country[i]) is not None:
+                addr = dashboard.do_geocode(country[i])
             else:
                 continue
             loc.append({'lat': addr.latitude, 'lon': addr.longitude, 'title': project_name[i]})
