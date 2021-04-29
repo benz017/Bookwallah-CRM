@@ -250,23 +250,23 @@ color:white;
             <div class="row mt w2">
               <!-- SERVER STATUS PANELS -->
               <div class="col-md-6 col-sm-6 mb">
-                <div class="blue-panel pn" style="height:350px;">
+                <div class="blue-panel pn" style="height:650px;">
                     <div class="blue-header" style="margin-bottom:0px;" >
                     <h5>NO. OF YEARS KIDS ATTENDING</h5>
                   </div>
                     <div id="graph1">
-                  <canvas id="barchart2" height="300" width="550" style="margin:0 auto;"></canvas>
+                  <canvas id="barchart2" height="600" width="550" style="margin:0 auto;"></canvas>
                   </div>
                 </div>
                 <!-- /blue-panel -->
               </div>
                 <div class="col-md-6 col-sm-6 mb">
-                    <div class="blue-panel pn" style="height:350px;">
+                    <div class="blue-panel pn" style="height:650px;">
                   <div class="blue-header ">
                       <h5>KID STATISTICS (<small><span>by Age group/Gender</span></small>)</h5>
                   </div>
                   <div id="graph2" >
-                  <canvas id="serverstatus03" height="220" width="600" style="margin:0 auto;"></canvas>
+                  <canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>
                   </div>
                   <footer class="mt">
                     <div class="pull-left" style="margin-left:20px;">
@@ -486,8 +486,8 @@ function interpolateColors(color1, color2, steps) {
         $('#serverstatus03').remove();
         $('#serverstatus02').remove();
         $('#barchart2').remove();
-        $('#graph1').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;"></canvas>');
-        $('#graph2').append('<canvas id="serverstatus03" height="220" width="600" style="margin:0 auto;"></canvas>');
+        $('#graph1').append('<canvas id="barchart2" height="600" width="550" style="margin:0 auto;"></canvas>');
+        $('#graph2').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
         chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
 

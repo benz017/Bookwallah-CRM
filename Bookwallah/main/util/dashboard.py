@@ -688,13 +688,11 @@ def nps_score(data,c=None,year=None):
                 ds[2]['data'].append(q3)
         else:
 
-            chapters = list(c.objects.values_list('city',flat=True))
-            print(chapters,year)
+            chapters = [city.city for city in c]
             for i in year:
                 q1 = list(NPSScore.objects.filter(year=i,quarter='Q1',chapter__in=chapters).values_list('score',flat=True))
                 q2 = list(NPSScore.objects.filter(year=i, quarter='Q2',chapter__in=chapters).values_list('score',flat=True))
                 q3 = list(NPSScore.objects.filter(year=i, quarter='Q3',chapter__in=chapters).values_list('score',flat=True))
-                print(chapters,q1,q2,q3)
                 q1 = sum(q1)/len(q1) if len(q1) != 0 else 0
                 q2 = sum(q2) / len(q2) if len(q2) != 0 else 0
                 q3 = sum(q3) / len(q3) if len(q3) != 0 else 0
