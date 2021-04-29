@@ -9,18 +9,15 @@ from .models import *
 from django.contrib.auth.hashers import make_password
 # Register your models here.
 from .tasks import email_users
-#admin.site.register(Session)
-#admin.site.register(Project)
-#admin.site.register(Kid)
-#admin.site.register(Donation)
-#admin.site.register(Donor)
-#admin.site.register(Expense)
 
 
 class UserResource(resources.ModelResource):
     def before_import_row(self, row, **kwargs):
-        value = row['password']
-        row['password'] = make_password(value)
+        from django.apps import apps
+        config = apps.get_model('main', 'EmailConfig')
+        ec = config.objects.all()
+        passwd = ec.values_list('user_default_password', flat=True)[0]
+        row['password'] = make_password(passwd)
         ids = list(Group.objects.all().values_list('id', flat=True))
         name = list(Group.objects.all().values_list('name', flat=True))
         name = [x.lower() for x in name]
@@ -29,7 +26,7 @@ class UserResource(resources.ModelResource):
 
     class Meta:
         model = User
-        exclude = ('last_login','date_joined','user_permissions')
+        exclude = ('password','last_login','date_joined','user_permissions')
 
     def after_save_instance(self, instance: User, using_transactions: bool, dry_run: bool,):
         from django.apps import apps

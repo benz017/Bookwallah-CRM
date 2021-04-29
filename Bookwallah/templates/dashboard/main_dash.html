@@ -306,12 +306,12 @@
             <div class="row mt">
 
                 <div class="col-md-6 col-sm-6 mb">
-                <div class="blue-panel pn" style="height:400px;">
+                <div class="blue-panel pn" style="height:600px;">
                   <div class="blue-header">
                       <h5>KID STATISTICS (<small><span>by Age group/Gender</span></small>)</h5>
                   </div>
                     <div id="graph3">
-                  <canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>
+                  <canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>
                   </div>
                         <footer>
                     <div class="pull-left" style="margin-left:20px;">
@@ -325,13 +325,13 @@
                 <!--  /darkblue panel -->
               </div>
                 <div class="col-md-6 col-sm-6 mb">
-                <div class="blue-panel pn" style="height:400px;">
+                <div class="blue-panel pn" style="height:600px;">
                     <div class="blue-header" style="margin-bottom:0px;" >
                     <h5>NO. OF YEARS KIDS ATTENDING</h5>
                   </div>
 
                     <div id="graph2">
-                  <canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:5px;"></canvas>
+                  <canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:5px;"></canvas>
                   </div>
                 </div>
                 </div>
@@ -1018,7 +1018,7 @@ $("#f_m").val({{config}});
         //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
          //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
-         $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
+         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
          chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
          //$('#exp_chart').remove();
         // $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
@@ -1036,10 +1036,12 @@ $("#f_m").val({{config}});
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
-          $('#graph2').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
+          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
           $('.desc').remove();                               w
-
+            $('#schart1').remove();
+          $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
+          groupedbar("schart1",resp.nps_label,resp.nps_data,0);
           for (i=0;i<Object.keys(resp.v_list).length;i++){
             var key = Object.keys(resp.v_list)[i];
             $('#v_list').append('<div class="desc"><div class="thumb"><img class="img-circle" src="'+resp.v_list[key][0]+'" width="35px" height="35" align=""></div><div class="details"><p style="margin-bottom:0px;"><a href="#">'+key+'</a><br/><muted>'+resp.v_list[key][1]+'</muted></p></div></div>');
@@ -1061,8 +1063,8 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
-        $('#image').remove();
-
+        nps_data = JSON.parse(resp.nps_data);
+          $('#image').remove();
           $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
           $('#pname').text(resp.p_details.project_name);
           $('#contact').text(resp.p_details.contact_number);
@@ -1079,7 +1081,6 @@ $("#f_m").val({{config}});
             if (resp.hi[i]!==undefined){$hi=resp.hi[i];}
             if (resp.is[i]!==undefined){$is=resp.is[i];}
             $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+$hi+'</td><td>'+$is+'</td></tr>');
-
           }
         //document.getElementById('hlight').innerHTML = '';
         $('#serverstatus01').remove();
@@ -1087,7 +1088,7 @@ $("#f_m").val({{config}});
         $('#serverstatus02').remove();
         $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
         $('#graph4').append('<canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>');
-         $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
+        $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
         chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
         chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
         chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
@@ -1099,7 +1100,7 @@ $("#f_m").val({{config}});
         //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
          //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
-         $('#graph3').append('<canvas id="serverstatus03" height="300" width="300" style="margin:0 auto;"></canvas>');
+         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
          chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
          //$('#exp_chart').remove();
          //$('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
@@ -1112,12 +1113,13 @@ $("#f_m").val({{config}});
           $('#no_nk').text(resp.no_nk);
           $('#no_k').text(resp.no_k);
           $('#barchart').remove();
-
-         $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
+          $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
-
+            $('#schart1').remove();
+          $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
+          groupedbar("schart1",resp.nps_label,nps_data,0);
           $('#barchart2').remove();
-          $('#graph2').append('<canvas id="barchart2" height="300" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
+          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
           $('.desc').remove();                               w
 

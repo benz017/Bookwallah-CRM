@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
 import avinit
+from django.core.exceptions import ObjectDoesNotExist
 import json
 months = ((1,'JAN'),(2,'FEB'),(3,'MAR'),(4,'APR'),(5,'MAY'),(6,'JUN'),(7,'JUL'),(8,'AUG'),(9,'SEP'),(10,'OCT'),(11,'NOV'),(12,'DEC'))
 
@@ -136,20 +137,22 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance ,**kwargs):
-    if instance.is_staff is True:
-        if instance.profile.image is None or instance.profile.image=="" :
-            name = instance.get_full_name()
-            av = avinit.get_avatar_data_url(name)
-            import base64
-            imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
-            imgdata = base64.b64decode(imgdata)
-            url = "avatar/" + instance.username + ".svg"
-            filename = settings.MEDIA_ROOT+url
-            with open(filename, 'wb') as f:
-               f.write(imgdata)
-            instance.profile.image = url
-
-        instance.profile.save()
+    try:
+        if instance.is_staff is True:
+            if instance.profile.image is None or instance.profile.image=="" :
+                name = instance.get_full_name()
+                av = avinit.get_avatar_data_url(name)
+                import base64
+                imgdata = av.replace("data:image/svg+xml;base64,", "") + "=="
+                imgdata = base64.b64decode(imgdata)
+                url = "avatar/" + instance.username + ".svg"
+                filename = settings.MEDIA_ROOT+url
+                with open(filename, 'wb') as f:
+                   f.write(imgdata)
+                instance.profile.image = url
+    except ObjectDoesNotExist:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 class Attendance(models.Model):

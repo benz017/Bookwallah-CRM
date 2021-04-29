@@ -656,7 +656,8 @@ def total_donation(data,d=''):
     return data
 
 
-def nps_score(data,con,c=None,year=None):
+def nps_score(data,c=None,year=None):
+    print(c,year,NPSScore.objects.all().values_list('score',flat=True))
     ds = [{
             'label': "Q1",
             'data': []
@@ -669,44 +670,69 @@ def nps_score(data,con,c=None,year=None):
             'label': "Q3",
             'data': []
         }]
-    try:
-        if year is None:
-            year = list(range(today.year - 2, today.year + 1))
-            if c is None:
-                for i in year:
-                    q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
-                    q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
-                    q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
-                    q1 = sum(q1)/len(q1)
-                    q2 = sum(q2) / len(q2)
-                    q3 = sum(q3) / len(q3)
-                    ds[0]['data'].append(q1)
-                    ds[1]['data'].append(q2)
-                    ds[2]['data'].append(q3)
-        else:
-            year = list(range(year - 2, year + 1))
-            if c is None:
-                for i in year:
-                    q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
-                    q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
-                    q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
-                    q1 = sum(q1)/len(q1)
-                    q2 = sum(q2) / len(q2)
-                    q3 = sum(q3) / len(q3)
-                    ds[0]['data'].append(q1)
-                    ds[1]['data'].append(q2)
-                    ds[2]['data'].append(q3)
 
-        data['nps_data'] = json.dumps(ds)
-        data['nps_label'] = year
-    except Exception as ex:
-        data['nps_data'] =[]
-        data['nps_label'] =[]
-        print(ex)
+    if year is None:
+        year = list(range(today.year - 2, today.year + 1))
+        print(c,year)
+        if c is None:
+            for i in year:
+                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
+                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
+                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
+                print(i,q1,q2,q3)
+                q1 = sum(q1)/len(q1) if len(q1) != 0 else 0
+                q2 = sum(q2) / len(q2) if len(q2) != 0 else 0
+                q3 = sum(q3) / len(q3) if len(q3) != 0 else 0
+                ds[0]['data'].append(q1)
+                ds[1]['data'].append(q2)
+                ds[2]['data'].append(q3)
+        else:
+
+            chapters = list(c.objects.values_list('city',flat=True))
+            print(chapters,year)
+            for i in year:
+                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1',chapter__in=chapters).values_list('score',flat=True))
+                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2',chapter__in=chapters).values_list('score',flat=True))
+                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3',chapter__in=chapters).values_list('score',flat=True))
+                print(chapters,q1,q2,q3)
+                q1 = sum(q1)/len(q1) if len(q1) != 0 else 0
+                q2 = sum(q2) / len(q2) if len(q2) != 0 else 0
+                q3 = sum(q3) / len(q3) if len(q3) != 0 else 0
+                ds[0]['data'].append(q1)
+                ds[1]['data'].append(q2)
+                ds[2]['data'].append(q3)
+    else:
+        year = list(range(int(year) - 2, int(year) + 1))
+        if c is None:
+            for i in year:
+                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1').values_list('score',flat=True))
+                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2').values_list('score',flat=True))
+                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3').values_list('score',flat=True))
+                q1 = sum(q1)/len(q1) if len(q1) != 0 else 0
+                q2 = sum(q2) / len(q2) if len(q2) != 0 else 0
+                q3 = sum(q3) / len(q3) if len(q3) != 0 else 0
+                ds[0]['data'].append(q1)
+                ds[1]['data'].append(q2)
+                ds[2]['data'].append(q3)
+        else:
+
+            chapters = [city.city for city in c]
+            for i in year:
+                q1 = list(NPSScore.objects.filter(year=i,quarter='Q1',chapter__in=chapters).values_list('score',flat=True))
+                q2 = list(NPSScore.objects.filter(year=i, quarter='Q2',chapter__in=chapters).values_list('score',flat=True))
+                q3 = list(NPSScore.objects.filter(year=i, quarter='Q3',chapter__in=chapters).values_list('score',flat=True))
+                q1 = sum(q1) / len(q1) if len(q1) != 0 else 0
+                q2 = sum(q2) / len(q2) if len(q2) != 0 else 0
+                q3 = sum(q3) / len(q3) if len(q3) != 0 else 0
+                ds[0]['data'].append(q1)
+                ds[1]['data'].append(q2)
+                ds[2]['data'].append(q3)
+    data['nps_data'] = json.dumps(ds)
+    data['nps_label'] = year
     return data
 
 
-def child_psychology(data,con,p=None,year=None):
+def child_psychology(data,p=None,year=None):
     label = ["Empathy","Hope","Perseverance","Social Conduct"]
     ds = []
     if p is None:
@@ -760,7 +786,7 @@ def child_psychology(data,con,p=None,year=None):
     return data
 
 
-def social_behavior(data,con,p=None,year=None):
+def social_behavior(data,p=None,year=None):
     label = ["Control", "Treatment"]
     ds = []
     if p is None:
@@ -803,14 +829,13 @@ def social_behavior(data,con,p=None,year=None):
     return data
 
 
-def email_history( id):
+def email_history(id):
     data={}
     from .mail import get_email
     eh = get_email(id)
     print(eh)
     data["e_history"] = eh
     return data
-
 
 
 def total_applications(data,year=None):
@@ -823,6 +848,7 @@ def total_applications(data,year=None):
     data['t_app'] = t
     data['m_app'] = m
     return data
+
 
 def pending_applications(data,year=None):
     if year is None:
@@ -855,6 +881,7 @@ def in_process_applications(data,year=None):
     data['im_app'] = m
     return data
 
+
 def approved_applications(data,year=None):
     if year is None:
        t = Recruit.objects.filter(timestamp__year=today.year,status="Approved").count()
@@ -876,6 +903,7 @@ def rec_role(data,year=None):
     data['r_role_label'] = list(c.values_list('role', flat=True))
     return data
 
+
 def assigned_donor_tasks(data,donor):
     at = Task.objects.filter(assigned_for=donor.values_list('id',flat=True)[0],date__month__in=[today.month,today.month+1],date__year=today.year,type='Donor').annotate(
                     fullname=Concat('user__user__first_name', Value(' '), 'user__user__last_name'))
@@ -887,10 +915,12 @@ def assigned_donor_tasks(data,donor):
     data.update({'date':list(date),'task':list(task),'assigned_to':list(assigned_to),'status':list(status)})
     return data
 
+
 def upcoming_tasks(data):
     ut = Task.objects.filter(date__gte=today,date__month__in=[today.month,today.month+1],date__year=today.year,type='Donor')
     data['up_tasks'] = list(ut)
     return data
+
 
 def upcoming_pledges(data):
     up = Pledge.objects.filter(date__gte=today,date__month__in=[today.month,today.month+1],date__year=today.year)
@@ -934,7 +964,6 @@ def top_kid(data):
         data["tk_av"] = settings.MEDIA_URL +av
         data["tk_count"] = a
     return data
-
 
 
 def highlight(data,f,y=None,field = None):
