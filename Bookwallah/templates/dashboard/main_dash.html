@@ -980,6 +980,10 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
+        nps_data = JSON.parse(resp.nps_data);
+        $('#schart1').remove();
+            $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
+          groupedbar("schart1",resp.nps_label,nps_data,0);
         $('#image').remove();
 
           $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
@@ -1038,10 +1042,9 @@ $("#f_m").val({{config}});
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
-          $('.desc').remove();                               w
-            $('#schart1').remove();
-          $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
-          groupedbar("schart1",resp.nps_label,resp.nps_data,0);
+          $('.desc').remove();
+
+          $('#barchart2').remove();
           for (i=0;i<Object.keys(resp.v_list).length;i++){
             var key = Object.keys(resp.v_list)[i];
             $('#v_list').append('<div class="desc"><div class="thumb"><img class="img-circle" src="'+resp.v_list[key][0]+'" width="35px" height="35" align=""></div><div class="details"><p style="margin-bottom:0px;"><a href="#">'+key+'</a><br/><muted>'+resp.v_list[key][1]+'</muted></p></div></div>');
@@ -1064,6 +1067,10 @@ $("#f_m").val({{config}});
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
         nps_data = JSON.parse(resp.nps_data);
+        $('#schart1').remove();
+          $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
+          groupedbar("schart1",resp.nps_label,nps_data,0);
+        alert(nps_data.length);
           $('#image').remove();
           $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
           $('#pname').text(resp.p_details.project_name);
@@ -1115,13 +1122,11 @@ $("#f_m").val({{config}});
           $('#barchart').remove();
           $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
-            $('#schart1').remove();
-          $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
-          groupedbar("schart1",resp.nps_label,nps_data,0);
+
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
-          $('.desc').remove();                               w
+          $('.desc').remove();
 
           for (i=0;i<Object.keys(resp.v_list).length;i++){
             var key = Object.keys(resp.v_list)[i];

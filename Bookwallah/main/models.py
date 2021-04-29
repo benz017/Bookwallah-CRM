@@ -21,6 +21,7 @@ class EmailConfig(models.Model):
     def __str__(self):
         return "Email: {} -- User Default Password: {}".format(self.emailID, self.user_default_password)
 
+
 class Project(models.Model):
     project_name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to='project',
