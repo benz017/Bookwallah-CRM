@@ -1070,7 +1070,6 @@ $("#f_m").val({{config}});
         $('#schart1').remove();
           $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
           groupedbar("schart1",resp.nps_label,nps_data,0);
-        alert(nps_data.length);
           $('#image').remove();
           $('#img-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
           $('#pname').text(resp.p_details.project_name);
