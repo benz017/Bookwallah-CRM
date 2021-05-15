@@ -355,30 +355,49 @@
               <div class="col-md-8 col-sm-8 mb">
                 <div class="blue-panel pn">
                     <div class="blue-header" style="margin-bottom:0px;" >
-                    <h5>TESTIMONIALS</h5>
+                    <h5>TESTIMONIALS </h5>
                   </div>
                   <div class="slideshow-container">
 <a class="prev" onclick="plusSlides(-1)">❮</a>
+{% for i in t_name %}
 <div class="mySlides">
-  <q >{{d_test}}</q>
-  <p class="author">- {{d_name}}</p>
-</div>
+  <q>{{ t_test|index:forloop.counter0 }}</q>
+  <p class="author">- {{ t_name|index:forloop.counter0}} ( {{ t_role|index:forloop.counter0 }} )</p>
 
-<div class="mySlides">
-  <q>{{t_test}}</q>
-  <p class="author">- {{t_name}}</p>
 </div>
-
+{% endfor %}
 <a class="next" onclick="plusSlides(1)">❯</a>
             </div>
-                  <div id="dot" class="dot-container">
-  <span class="dot" onclick="currentSlide(1)"></span>
-  <span class="dot" onclick="currentSlide(2)"></span>
-</div>
+
                 </div>
                 </div>
             </div>
+<script>
+    var slideIndex = 0;
+showSlides();
 
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 5000); // Change image every 2 seconds
+}
+</script>
 
                <div class="row mt mb">
               <div class="col-md-12 col-sm-12">
@@ -664,6 +683,7 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function() {
+
      $.ajax({
         url: "{% url 'p_location' %}",
         }).done(function( data) {

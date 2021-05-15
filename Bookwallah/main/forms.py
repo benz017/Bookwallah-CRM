@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import Form
+from django.forms import DateField, CharField, ChoiceField, TextInput
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
@@ -33,3 +35,18 @@ class PasswordChangeCustomForm(PasswordChangeForm):
                                   'class': 'form-control-2'}),validators=[MinLengthValidator(8)],
                               error_messages={
                                   'required': 'Please re-enter the new password.'})
+
+
+class SearchForm(forms.ModelForm):
+    first_name = CharField(required=False)
+    date = DateField(required=False, widget=TextInput(
+        attrs={
+            'filter_method': '__gte',
+        }
+    ))
+
+class YourFormSearch(Form):
+    gen = (('Male', 'Male'), ('Female', 'Female'))
+    first_name = CharField(required=False)
+    last_name = CharField(required=False)
+    gender = ChoiceField(required=False,choices=gen)

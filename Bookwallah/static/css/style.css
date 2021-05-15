@@ -3956,6 +3956,7 @@ border-spacing}
 
 /* Slideshow container */
 .slideshow-container {
+  min-height: 200px;
   margin:0;
   position: relative;
   background: #f1f1f1f1;

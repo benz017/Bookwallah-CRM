@@ -84,8 +84,7 @@ def main_dashboard(request):
     data = dashboard.child_psychology(data)
     data = dashboard.social_behavior(data)
     data = dashboard.highlight(data, c)
-    data = dashboard.v_testimonials(data)
-    data = dashboard.d_testimonials(data)
+    data = dashboard.testimonials(data)
     print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
@@ -101,7 +100,7 @@ def main_dashboard(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'value' in request.POST:
@@ -116,7 +115,7 @@ def main_dashboard(request):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
             new_data["curr_con"] = f.values_list('country',flat=True)[0]
             new_data["curr_date"] = time.strftime("%a %b %d, %Y", time.localtime())
             new_data["curr_time"] = time.strftime("%I:%M %p", time.localtime())
@@ -251,7 +250,7 @@ def vol_dashboard(request):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
             new_data = dashboard.top_vol(new_data)
             new_data = dashboard.vol_attendance(new_data, con,f)
             new_data = dashboard.vol_role(new_data,f)
@@ -486,7 +485,7 @@ def proj_dashboard(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'value' or 'year' in request.POST:
@@ -508,7 +507,7 @@ def proj_dashboard(request):
                 elif field == 'Country':
                     f = Project.objects.filter(country=val)
                 elif field == 'Chapter':
-                    f = Project.objects.filter(state=val)
+                    f = Project.objects.filter(city=val)
             new_data = dashboard.child_attendance(new_data, con, f, year)
             new_data = dashboard.vol_attendance(new_data, con, f, year)
             new_data = dashboard.key_detail(new_data, f)
@@ -653,7 +652,7 @@ def gallery_op(request, c):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
 
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
@@ -669,7 +668,7 @@ def gallery_op(request, c):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
     return data
 
 
@@ -690,7 +689,7 @@ def session_gallery(request):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
             if year == 'ALL':
                 year = None
             if month == 'ALL':
@@ -706,7 +705,7 @@ def session_gallery(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
@@ -739,7 +738,7 @@ def project_gallery(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
@@ -763,7 +762,7 @@ def donor_gallery(request):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
             if year == 'ALL':
                 year = None
             if month == 'ALL':
@@ -779,7 +778,7 @@ def donor_gallery(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)
@@ -802,7 +801,7 @@ def kid_gallery(request):
             elif field == 'Country':
                 f = Project.objects.filter(country=val)
             elif field == 'Chapter':
-                f = Project.objects.filter(state=val)
+                f = Project.objects.filter(city=val)
             if year == 'ALL':
                 year = None
             if month == 'ALL':
@@ -818,7 +817,7 @@ def kid_gallery(request):
             elif sel == 'Country':
                 p = Project.objects.all().values_list('country', flat=True)
             elif sel == 'Chapter':
-                p = Project.objects.all().values_list('state', flat=True)
+                p = Project.objects.all().values_list('city', flat=True)
             json_stuff = json.dumps({'value': list(set(p))})
             return HttpResponse(json_stuff, content_type="application/json")
     return render(request, 'gallery.html', context=data)

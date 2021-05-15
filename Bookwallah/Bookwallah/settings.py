@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'main',
+    'django_admin_search',
     'django_mysql',
     'import_export',
     'django.contrib.admin',
@@ -154,16 +155,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86jm210h5i5hd7'    #Client ID
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'J8AXYsRzMoGygeUu'  #Client Secret
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress','r_fullprofile']
-
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address','positions', 'headline','summary','picture-url','site-standard-profile-request','public-profile-url','location','interests','skills','languages',]
-
-LINKEDIN_EXTRA_DATA = [('id', 'id'), ('first-name', 'first_name'), ('last-name', 'last_name'), ('email-address', 'email_address'), ('positions', 'positions'), ('summary', 'summary'), ('headline', 'headline'), ('picture-url', 'picture_url'),
- ('site-standard-profile-request', 'site_standard_profile_request'), ('public-profile-url', 'public_profile_url'), ('location', 'location'), ('interests', 'interests'), ('skills', 'skills'), ('languages', 'languages'),]
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "main", "static"),

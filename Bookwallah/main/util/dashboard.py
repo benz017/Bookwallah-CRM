@@ -968,25 +968,25 @@ def highlight(data,f,y=None,field = None):
     if field == 'Project' or field is None:
         if y is None:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year).values())
         else:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y).values())
 
     elif field == 'Chapter':
         if y is None:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
         else:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
     elif field == 'Country':
         if y is None:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name',flat=True),date__year=today.year,priority=True).values())
         else:
             h = list(Highlight.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
-            i = list(Issues.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
+            i = list(Issue.objects.filter(project__in=f.values_list('project_name', flat=True),date__year=y,priority=True).values())
     print(h,i)
     h = [x['highlight'] for x in h if x['highlight'] is not None]
     i = [x['issue'] for x in i if x['issue'] is not None]
@@ -998,26 +998,17 @@ def highlight(data,f,y=None,field = None):
     return data
 
 
-def v_testimonials(data):
-    if Volunteer_Testimonial.objects.exists():
-        v = Volunteer_Testimonial.objects.all().order_by('-id')[0]
-        data["t_name"] = v.volunteer.user.first_name+" "+v.volunteer.user.last_name
-        data["t_test"] = v.testimonial
+def testimonials(data):
+    if Testimonial.objects.exists():
+        t = Testimonial.objects.all().order_by('-id')
+        data["t_name"] = t.values_list("name",flat=True)
+        data["t_role"] = t.values_list("designation",flat=True)
+        data["t_test"] = t.values_list("testimonial",flat=True)
     else:
         data["t_name"] =""
+        data["t_role"] = ""
         data["t_test"] =""
 
-    return data
-
-
-def d_testimonials(data):
-    if Donor_Testimonial.objects.exists():
-        d = Donor_Testimonial.objects.all().order_by('-id')[0]
-        data["d_name"] = d.donor.first_name+" "+d.donor.last_name
-        data["d_test"] = d.testimonial
-    else:
-        data["d_name"] =""
-        data["d_test"] =""
     return data
 
 

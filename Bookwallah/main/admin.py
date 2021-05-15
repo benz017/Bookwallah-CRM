@@ -9,6 +9,10 @@ from .models import *
 from django.contrib.auth.hashers import make_password
 # Register your models here.
 from .tasks import email_users
+from django_admin_search.admin import AdvancedSearchAdmin
+from .forms import YourFormSearch,SearchForm
+
+
 
 
 class UserResource(resources.ModelResource):
@@ -99,15 +103,13 @@ class Session_Picture(ImportExportModelAdmin):
 @admin.register(Highlight)
 class Highlight(ImportExportModelAdmin):
     pass
-@admin.register(Issues)
-class Issues(ImportExportModelAdmin):
+@admin.register(Issue)
+class Issue(ImportExportModelAdmin):
     pass
-@admin.register(Volunteer_Testimonial)
-class Volunteer_Testimonial(ImportExportModelAdmin):
+@admin.register(Testimonial)
+class Testimonial(ImportExportModelAdmin):
     pass
-@admin.register(Donor_Testimonial)
-class Donor_Testimonial(ImportExportModelAdmin):
-    pass
+
 @admin.register(Role)
 class Role(ImportExportModelAdmin):
     pass
@@ -135,8 +137,15 @@ class Project(ImportExportModelAdmin):
 class Profile(ImportExportModelAdmin):
     pass
 
+from import_export.admin import ImportExportMixin
+
 @admin.register(Kid)
-class Kid(ImportExportModelAdmin):
+class KidAdmin(AdvancedSearchAdmin):
+    search_form = YourFormSearch
+
+
+@admin.register(Kid_Import_Export)
+class KidImportExport(ImportExportModelAdmin):
     pass
 
 @admin.register(Donation)
