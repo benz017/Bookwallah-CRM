@@ -7,9 +7,12 @@ EmailConfig = apps.get_model('main', 'EmailConfig')
 
 from email.header import decode_header
 import json
-if EmailConfig.objects.exists():
-    user = EmailConfig.objects.all().values_list('emailID',flat=True)[0]
-    password = EmailConfig.objects.all().values_list('password',flat=True)[0]#"mrntgtvfxzajxsyy"
+try:
+    if EmailConfig.objects.exists():
+        user = EmailConfig.objects.all().values_list('emailID',flat=True)[0]
+        password = EmailConfig.objects.all().values_list('password',flat=True)[0]#"mrntgtvfxzajxsyy"
+except Exception as e:
+    print(str(e))
 imap_url = 'imap.gmail.com'
 
 
