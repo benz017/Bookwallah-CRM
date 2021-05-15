@@ -366,6 +366,9 @@ class Testimonial(models.Model):
     testimonial = models.TextField(max_length=500, blank=True, null=True)
 
 
+    def __str__(self):
+        return "{} - {} ({})".format(self.testimonial,self.name,self.designation)
+
 class Highlight(models.Model):
     proj=()
     try:
@@ -448,7 +451,7 @@ class Expense(models.Model):
 
 
 class NPSScore(models.Model):
-    state=()
+    city=()
     try:
         if Project.objects.exists():
             city = list(set(list(Project.objects.all().values_list('city',flat=True))))
