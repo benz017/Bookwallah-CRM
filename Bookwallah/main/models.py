@@ -92,8 +92,8 @@ class Profile(models.Model):
         if Role.objects.exists():
             r = list(set(list(Role.objects.all().values_list('role', flat=True))))
             r = ((i, i) for i in r)
-    except Exception as ex:
-        print(str(ex))
+    except Exception as e:
+        print(str(e))
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to='avatar',
                                 null=True, blank=True,
@@ -161,7 +161,7 @@ def save_user_profile(sender, instance ,**kwargs):
 
 class Attendance(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
     attendance_submitted = models.BooleanField(default=False)
     attendance_approved = models.BooleanField(default=False)
 
@@ -313,6 +313,9 @@ class Kid(models.Model):
     def __str__(self):
         return "{} {} -- {}".format(self.first_name,self.last_name,self.project, )
 
+class Kid_Import_Export(Kid):
+    class Meta:
+        proxy = True
 
 class Kid_Picture(models.Model):
     kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
@@ -324,11 +327,13 @@ class Kid_Picture(models.Model):
         return "{}".format(self.kid)
 
 def create_kid_pic_obj(sender, **kwargs):
+    print(kwargs)
     if kwargs['created']:
         print(kwargs['instance'].image)
         kp = Kid_Picture.objects.create(kid=kwargs['instance'],image=kwargs['instance'].image)
     else:
-        obj, _created = Kid_Picture.objects.get_or_create(kid=kwargs['instance'])
+
+        obj = Kid_Picture.objects.filter(kid=kwargs['instance'],image__exact='')[0]
         setattr(obj, 'image', kwargs['instance'].image)
         obj.save()
 
@@ -349,22 +354,20 @@ def create_session_pic_obj(sender, **kwargs):
         print(kwargs['instance'].image)
         kp = Session_Picture.objects.create(session=kwargs['instance'],image=kwargs['instance'].image)
     else:
-        obj,_created= Session_Picture.objects.get_or_create(session=kwargs['instance'])
+        obj,_created= Session_Picture.objects.filter(session=kwargs['instance'],image__exact='')[0]
         setattr(obj, 'image', kwargs['instance'].image)
         obj.save()
 
 post_save.connect(create_session_pic_obj,sender=Session)
 
-
-class Volunteer_Testimonial(models.Model):
-    volunteer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=True, limit_choices_to={'user__groups__name': "Volunteer"})
+class Testimonial(models.Model):
+    name = models.CharField(max_length=150,null=True)
+    designation = models.CharField(max_length=20,choices=(("Volunteer","Volunteer"),("Donor","Donor")))
     testimonial = models.TextField(max_length=500, blank=True, null=True)
 
-class Donor_Testimonial(models.Model):
 
-    donor = models.ForeignKey(Donor, on_delete=models.DO_NOTHING, null=True)
-    testimonial = models.TextField(max_length=500, blank=True, null=True)
-
+    def __str__(self):
+        return "{} - {} ({})".format(self.testimonial,self.name,self.designation)
 
 class Highlight(models.Model):
     proj=()
@@ -384,7 +387,7 @@ class Highlight(models.Model):
         return "{}".format(self.project)
 
 
-class Issues(models.Model):
+class Issue(models.Model):
     proj = ()
     try:
         if Project.objects.exists():
@@ -536,4 +539,3 @@ class AppConfig(models.Model):
 
     def __str__(self):
         return "{} {}".format(months[int(self.fiscal_month)-1][1],self.default_project)
-
