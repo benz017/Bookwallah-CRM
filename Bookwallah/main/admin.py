@@ -11,7 +11,9 @@ from django.contrib.auth.hashers import make_password
 from .tasks import email_users
 from django_admin_search.admin import AdvancedSearchAdmin
 from .forms import YourFormSearch,SearchForm
+from django.conf.locale.es import formats as es_formats
 
+es_formats.DATETIME_FORMAT = "d M Y H:i:s"
 
 
 

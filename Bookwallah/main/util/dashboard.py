@@ -136,51 +136,49 @@ def session_prog(data,con, p=None,year=None):
     return data
 
 
-def vol_attendance(data,con,p=None,year=None):
-    all = att = 0
-    if p is None:
-        if year is None:
-            pid = Profile.objects.filter(user__groups__name="Volunteer")
-            for p in pid:
-                for k, v in get_year_dict(con, today.year).items():
-                    all +=Session.objects.filter(cancel=False,date__year=v,date__month=k,project=p.project).count()
-            for k, v in get_year_dict(con, today.year).items():
-                att += Attendance.objects.filter(session__date__year=v,session__date__month=k,attendance_approved=True).count()
-            print(all,att)
-        else:
-            pid = Profile.objects.filter(user__groups__name="Volunteer")
-            for p in pid:
-                for k, v in get_year_dict(con, year).items():
-                    all += Session.objects.filter(cancel=False, date__year=v, date__month=k, project=p.project).count()
-            for k, v in get_year_dict(con, year).items():
-                att += Attendance.objects.filter(session__date__year=v, session__date__month=k,
-                                                 attendance_approved=True).count()
-            print(all, att)
-    else:
-        if year is None:
-            pid = Profile.objects.filter(user__groups__name="Volunteer",project__in=p)
-            pi = pid.count()
-            for k, v in get_year_dict(con, today.year).items():
-                c = Session.objects.filter(cancel=False,date__year=v, date__month=k,project__in=pid.values_list('project'))
-                all += pi*c.count()
-                att += Attendance.objects.filter(session__date__year=v, session__date__month=k,attendance_approved=True,session__in=c).count()
-        else:
-            pid = Profile.objects.filter(user__groups__name="Volunteer", project__in=p)
-            pi = pid.count()
-            for k, v in get_year_dict(con, year).items():
-                c = Session.objects.filter(cancel=False, date__year=v, date__month=k,
-                                           project__in=pid.values_list('project'))
-                all += pi * c.count()
-                att += Attendance.objects.filter(session__date__year=v, session__date__month=k,
-                                                 attendance_approved=True, session__in=c).count()
+def vol_attendance(data,con,p,year=None):
+    no_vol = all_att =tot_vol = 0
+    if year is None:
+        for proj in p:
+            pid = Profile.objects.filter(user__groups__name="Volunteer" ,project=proj)
+            no_vol = pid.count()
+            no_ses = Session.objects.filter(project=proj, cancel=False).count()
+            print(pid,no_vol,no_ses)
+            tot_vol+=(no_vol*no_ses)
+        all_att = Attendance.objects.filter(session__date__year=today.year, session__project__in=p,
+                                                attendance_approved=True).count()
+        print(all_att)
 
+    else:
+        for proj in p:
+            pid = Profile.objects.filter(user__groups__name="Volunteer" ,project=proj)
+            no_vol = pid.count()
+            no_ses = Session.objects.filter(project=proj, cancel=False,date__year=year).count()
+            print(pid,no_vol,no_ses)
+            tot_vol+=(no_vol*no_ses)
+        all_att = Attendance.objects.filter(session__date__year=year, session__project__in=p,
+                                                attendance_approved=True).count()
     try:
-        data['vol_att'] = int((att/(all))*100)
-        data['vol_att_data'] = [att,all-att]
+        data['vol_att'] = round(((all_att/tot_vol) * 100),2)
+        data['vol_att_data'] = [all_att,tot_vol-all_att]
     except ZeroDivisionError:
         data['vol_att'] = 0
         data['vol_att_data'] = [0, 0]
     return data
+
+
+def indi_vol_att(vol):
+    print(vol)
+    date = vol.values_list('user__date_joined',flat=True)[0]
+    tot_ses = Session.objects.filter(project=vol[0].project,date__gte=date).count()
+    tot_att = Attendance.objects.filter(session__project=vol[0].project,session__date__gte=date).count()
+    try:
+        vol_att = round(((tot_att/tot_ses)*100),2)
+        vol_att_data = [tot_att,tot_ses-tot_att]
+    except ZeroDivisionError:
+        vol_att = 0
+        vol_att_data = [0, 0]
+    return vol_att,vol_att_data
 
 
 #def child_attendance(data):#
@@ -291,20 +289,63 @@ def no_of_kids(data,con,p=None,year=None):
 
 
 def kid_stats(data,con,p=None,year=None):
+    age_group = ["<5","5-8", "8-12","12-15","15-18"]
+    c1 = c2 = c3 = c4 = c5 = 0
+    k_stat = {}
     if p is None:
         c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
-        print(c)
+        print(111,c,list(c.values_list('age', flat=True)))
+        for obj in list(c):
+            if obj["age"] == None:
+                continue
+            elif obj['age'] < 5:
+                c1 += obj["count"]
+                k_stat[age_group[0]] = c1
+            elif obj['age'] >= 5 and obj["age"] < 8:
+                c2 += obj["count"]
+                k_stat[age_group[1]] = c2
+            elif obj['age'] >= 8 and obj["age"] < 12:
+                c3 += obj["count"]
+                k_stat[age_group[2]] = c3
+            elif obj['age'] >= 12 and obj["age"] < 15:
+                c4 += obj["count"]
+                k_stat[age_group[3]] = c4
+            elif obj['age'] >= 15 and obj["age"] < 18:
+                c5 += obj["count"]
+                k_stat[age_group[4]] = c5
+            print(k_stat,obj["age"],obj["count"],k_stat[age_group[1]])
         data['k_m'] = Kid.objects.filter(gender='Male').count()
         data['k_f'] = Kid.objects.filter(gender='Female').count()
     else:
         c = Kid.objects.filter(project__in=p).values('age').order_by('age').annotate(count=Count('age'))
+
+        for obj in list(c):
+            if obj["age"] == None:
+                continue
+            elif obj['age'] < 5:
+                c1 +=obj["count"]
+                k_stat[age_group[0]] = c1
+            elif obj['age'] >= 5 and obj["age"] < 8:
+                c2 += obj["count"]
+                k_stat[age_group[1]] = c2
+            elif obj['age'] >= 8 and obj["age"] < 12:
+                c3 += obj["count"]
+                k_stat[age_group[2]] = c3
+            elif obj['age'] >= 12 and obj["age"] < 15:
+                c4 += obj["count"]
+                k_stat[age_group[3]] = c4
+            elif obj['age'] >= 15 and obj["age"] < 18:
+                c5 += obj["count"]
+                k_stat[age_group[4]] = c5
+            print(k_stat, obj["age"], obj["count"],k_stat[age_group[1]])
+        print(111, c, list(c.values_list('age', flat=True)))
         data['k_m'] = Kid.objects.filter(project__in=p,gender='Male').count()
         data['k_f'] = Kid.objects.filter(project__in=p,gender='Female').count()
-    data['k_stat'] = list(c.values_list('count',flat=True))
-    print(list(c.values_list('age', flat=True)))
-    k_stat_label = [int(i) for i in list(c.values_list('age', flat=True)) if i is not None]
-    #print(k_stat_label)
-    data['k_stat_label'] = [] if k_stat_label == [None] else k_stat_label
+    data['k_stat'] = []
+    data['k_stat_label'] = []
+    for k,v in k_stat.items():
+        data['k_stat'].append(v)
+        data['k_stat_label'].append(k)
     return data
 
 
@@ -312,11 +353,11 @@ def kid_years(data,con,p=None,year=None):
     ky = []
     if p is None:
         for i in range(1,6):
-            c = Kid.objects.filter(attending_sessions=True,date__lte=datetime.now()-relativedelta(years=i)).count()
+            c = Kid.objects.filter(attending_sessions=True,date__lte=datetime.now()-relativedelta(years=i),date__gte=datetime.now()-relativedelta(years=i+1)).count()
             ky.append(c)
     else:
         for i in range(1, 6):
-            c = Kid.objects.filter(project__in=p,attending_sessions=True,date__lte=datetime.now() - relativedelta(years=i)).count()
+            c = Kid.objects.filter(project__in=p,attending_sessions=True,date__lte=datetime.now() - relativedelta(years=i),date__gte=datetime.now()-relativedelta(years=i+1)).count()
             ky.append(c)
     data['k_years']=ky
     return data
@@ -346,11 +387,26 @@ def no_story_teller(data,p=None):
     return data
 
 
-def session_galery(data,x=0,y=12):
-    p = Session.objects.all().values_list('image',flat=True)
-    sli = list(p)[x:y]
-    data["ses_gal"] = [settings.MEDIA_URL + av for av in sli]
-
+def session_galery(data,p=None,x=0,y=12):
+    if p is None:
+        p = Session.objects.all().values_list('image',flat=True)
+        sli = list(p)[x:y]
+        data["ses_gal"] = [settings.MEDIA_URL + av for av in sli]
+    else:
+        p = Session_Picture.objects.filter(session__project__in=p).exclude(image='').exclude(image__isnull=True).values_list('image',flat=True)
+        sli = list(p)[x:y]
+        data["ses_gal"] = [settings.MEDIA_URL + av for av in sli]
+    length = list(range(1, int(math.ceil(len(data["ses_gal"]) / 3)) + 1))
+    row_list = []
+    for i in length:
+        l = len(data["ses_gal"])
+        le = math.ceil(l / 3)
+        if i == le:
+            ar = np.arange((i - 1) * 3, l).tolist()
+        else:
+            ar = np.arange((i - 1) * 3, i * 3).tolist()
+        row_list.append(ar)
+    data['ses_list'] = row_list
     return data
 
 

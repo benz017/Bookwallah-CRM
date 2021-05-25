@@ -34,6 +34,7 @@ def landing(request):
         return redirect('signin')
 
 
+
 @user_passes_test(lambda u: u.groups.filter(name__in=['HR Head', 'Project Lead', 'Volunteer']).count() == 0)
 @login_required
 @csrf_exempt
@@ -211,8 +212,9 @@ def vol_dashboard(request):
     pid = Profile.objects.filter(user=request.user.profile.user)
     av = pid.values_list("image", flat=True)[0]
     data["image"] = settings.MEDIA_URL + av
+    c = Project.objects.filter(country='India')
     data = dashboard.top_vol(data)
-    data = dashboard.vol_attendance(data, con)
+    data = dashboard.vol_attendance(data, con,c)
     data = dashboard.vol_role(data)
     data = dashboard.no_story_teller(data)
     data = dashboard.vol_bday(data)
@@ -231,13 +233,15 @@ def vol_dashboard(request):
             value = request.POST.get('in_value')
             vol = Profile.objects.filter(user__first_name=value.split()[0], user__last_name=value.split()[1],
                                          user__groups__name="Volunteer")
+
             data = serializers.serialize('json', list(vol))
+            vol_att,vol_att_data = dashboard.indi_vol_att(vol)
             if json.loads(data)[0]["fields"]["image"] == "":
                 img = get_avatar_data_url(value)
             else:
                 img = settings.MEDIA_URL + json.loads(data)[0]["fields"]["image"]
             print(img)
-            json_stuff = json.dumps({'fname': value, 'data': data,'img':img})
+            json_stuff = json.dumps({'fname': value, 'data': data,'img':img,'vol_att':vol_att,'vol_att_data':vol_att_data,'name':value.split()[0].upper()})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'value' in request.POST:
             new_data = {}
@@ -470,6 +474,7 @@ def proj_dashboard(request):
     data = dashboard.volunteer_list(data, c)
     data = dashboard.key_detail(data, c)
     data = dashboard.highlight(data, c)
+    data = dashboard.session_galery(data, c)
     print(data)
     if request.method == "POST":
         if 'fiscalv' in request.POST:
@@ -515,6 +520,7 @@ def proj_dashboard(request):
             new_data = dashboard.monthly_session(new_data, con, f, year)
             new_data = dashboard.volunteer_list(new_data, f)
             new_data = dashboard.highlight(new_data, f, year)
+            new_data = dashboard.session_galery(new_data, f)
             json_stuff = json.dumps(new_data)
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")

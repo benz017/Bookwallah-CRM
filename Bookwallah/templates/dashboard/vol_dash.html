@@ -192,8 +192,8 @@
               <div class="col-md-6 mb">
                 <!-- WHITE PANEL - TOP USER -->
                   <div class="blue-panel pn donut-chart" style="height:350px;">
-                  <div class="blue-header">
-                    <h5 id="va">VOLUNTEER ATTENDANCE</h5>
+                  <div id="va_header" class="blue-header">
+                    <h5 id="va" >VOLUNTEER ATTENDANCE</h5>
                   </div>
                     <div id="graph1">
                   <canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>
@@ -472,11 +472,14 @@
             else if (key !== 'image' ){
             $('#details').append('<div class="row donor" ><div class="col-sm-5 text-capitalize key" style="color:rgba(47, 50, 58, 0.8);">'+key.replaceAll(/_/g," ")+':</div><div class="col-sm-7 text-right value"  style="color:#34495e;">'+value+'</div></div>');
             }
-
-
-
         });
         $('.w1').show();
+        $('#serverstatus01').remove();
+        $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
+        chart(resp.vol_att_data,["#12b0e2","#797979"],[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
+        $('#vol_att').text(resp.vol_att+"%");
+        $('#va_header').css('background','#fec109');
+        $('#va').text(resp.name+"'s ATTENDANCE");
         },
         });
     }

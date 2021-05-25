@@ -222,7 +222,7 @@
               <div class="col-md-6 col-sm-6 mb">
                 <div class="blue-panel pn donut-chart" style="height:350px;">
                   <div class="blue-header">
-                    <h5>VOLUNTEER ATTENDANCE</h5>
+                    <h5>VOLUNTEER ATTENDANCE </h5>
                   </div>
                     <div id="graph1">
                   <canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>
@@ -331,7 +331,7 @@
                   </div>
 
                     <div id="graph2">
-                  <canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:5px;"></canvas>
+                  <canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>
                   </div>
                 </div>
                 </div>
@@ -965,10 +965,10 @@ $("#f_m").val({{config}});
     chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
     chart({{ses_p_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{ses_p_data|length}}),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
-    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
+    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label|safe}},title,'doughnut','serverstatus03');
     //chart({{m_exp}},"",month_list,[''],title,'line','serverstatus05');
     chart({{months}},"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
-    chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+    chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",[true,"Number of Years"],'bar','barchart2');
 
     $("#field").change(function(){
     $selected= $(this).children("option:selected").text();
@@ -1043,7 +1043,7 @@ $("#f_m").val({{config}});
          //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
          $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
-         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
+         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],JSON.parse(resp.k_stat_label),title,'doughnut','serverstatus03');
          //$('#exp_chart').remove();
         // $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
         // chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
@@ -1060,7 +1060,7 @@ $("#f_m").val({{config}});
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
-          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
+          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
           $('.desc').remove();
 
@@ -1127,7 +1127,7 @@ $("#f_m").val({{config}});
          //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
          $('#serverstatus03').remove();
          $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
-         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,title,'doughnut','serverstatus03');
+         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],JSON.parse(resp.k_stat_label),title,'doughnut','serverstatus03');
          //$('#exp_chart').remove();
          //$('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
          //chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
@@ -1143,7 +1143,7 @@ $("#f_m").val({{config}});
           chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
-          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:0 auto;margin-top:10px;"></canvas>');
+          $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');
           chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
           $('.desc').remove();
 

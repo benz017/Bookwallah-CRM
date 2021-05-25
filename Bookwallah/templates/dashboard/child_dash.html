@@ -370,7 +370,7 @@ color:white;
 
             <div class="blue-panel pn mb w2" style="height:100%;">
                   <div class="blue-header" style="margin-bottom:0px;">
-                <h5>UPCOMING MEMBERSHIP ANNIVERSARIES</h5>
+                <h5>UPCOMING MEMBERSHIP ANNIVERSARIES </h5>
                   </div>
                       <div style="overflow:auto; height:150px;">
             <!-- First Member -->
@@ -450,9 +450,9 @@ function interpolateColors(color1, color2, steps) {
     return interpolatedColorArray;
 };
     $(document).ready(function(){
-    title = [true,""]
-    var month_list = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
-    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label}},title,'doughnut','serverstatus03');
+    title = [true,""];
+    var month_list = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    chart({{k_stat|safe}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label|safe}},title,'doughnut','serverstatus03');
      chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
     chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
     $("#field").change(function(){
@@ -534,12 +534,12 @@ function setValue(e){
         success: function(resp){
         $('#img-container').html('');
         $('#sh').html('');
-        $row_list = resp.new_data.row_list
-        $kid_gal = resp.new_data.kid_gal
+        $row_list = resp.new_data.row_list;
+        $kid_gal = resp.new_data.kid_gal;
         $row_list.forEach(function(val,idx,arr){
           $('#img-container').append('<div id="row"><div class="row filter">');
-            val.forEach(function(v,i,a){
-                $('#img-container').append('<div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 desc"><div class="project-wrapper"><div class="project"><div class="photo-wrapper"><div class="photo"><a class="fancybox" href="'+$kid_gal[v]+'"><img class="img-responsive" src="'+$kid_gal[v]+'" alt=""></a></div></div></div></div></div>');
+             $.each(val,function(v){
+                 $('#img-container .filter').append('<div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 desc"><div class="project-wrapper"><div class="project"><div class="photo-wrapper"><div class="photo"><a class="fancybox" href="'+$kid_gal[v]+'"><img class="img-responsive" src="'+$kid_gal[v]+'" alt=""></a></div></div></div></div></div>');
             });
             $('#img-container').append('</div></div>');
         });
