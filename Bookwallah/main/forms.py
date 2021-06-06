@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import Form
+from .models import Project
 from django.forms import DateField, CharField, ChoiceField, TextInput
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
@@ -47,6 +48,10 @@ class SearchForm(forms.ModelForm):
 
 class YourFormSearch(Form):
     gen = (('Male', 'Male'), ('Female', 'Female'))
+    project_ids = Project.objects.all().values_list('pk',flat=True)
+    project_name = Project.objects.all().values_list('project_name',flat=True)
+    projects = tuple(zip(project_ids, project_name))
     first_name = CharField(required=False)
     last_name = CharField(required=False)
-    gender = ChoiceField(required=False,choices=gen)
+    gender = ChoiceField(required=False,choices=gen,widget=forms.RadioSelect)
+    project = ChoiceField(required=False,choices=projects,widget=forms.RadioSelect)

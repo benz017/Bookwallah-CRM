@@ -445,7 +445,13 @@ function showSlides() {
             </tr>
               <tr class="hlt">
               <td style="text-align:left; color:black;">Top Highlights: </td>
-                  <td  style="text-align:right;"><ul id="hlight"></ul></td>
+                  <td  style="text-align:right;"><ul id="hlight">
+                      {% for h in hi %}
+                      {% if forloop.counter < 6 and h != "undefined" %}
+                      <li class="hi">{{h}}</li>
+                      {% endif %}
+                      {% endfor %}
+                  </ul></td>
             </tr>
               </tbody>
             </table>
@@ -1012,7 +1018,9 @@ $("#f_m").val({{config}});
           $('#add').text(resp.p_details.address);
           if ((resp.hi !== '') || (resp.is !== '')){
           for (i=0;i<4;i++){
+                if (resp.hi[i] !== undefined){
                 $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
+                }
           }
           }
             $('#kd').show();
@@ -1097,7 +1105,9 @@ $("#f_m").val({{config}});
           $('#add').text(resp.p_details.address);
           if ((resp.hi !== '') || (resp.is !== '')){
           for (i=0;i<4;i++){
+                if (resp.hi[i] !== undefined){
                 $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
+                }
           }
           }
             $('#kd').show();

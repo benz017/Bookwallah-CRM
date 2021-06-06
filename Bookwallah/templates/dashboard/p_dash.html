@@ -273,34 +273,39 @@
               *********************************************************************************************************************************************************** -->
           <div class="col-lg-3 ds" style="padding-top:15px;">
                   <div id="kd" class="parallax" style="padding-bottom:15px; ">
-                  <div  class="blue-panel pn" style="height:485px;" >
+                  <div  class="blue-panel pn" style="overflow:auto;height:485px;" >
                   <div class="blue-header">
                     KEY DETAILS
                   </div>
             <table style="margin:0 1px; color:black;width:100%;  border-collapse: separate;border-spacing: 2px;">
               <tbody id="details">
-              <tr class="hlt" >
-                  <td style="text-align:left;" >Project Name: <span class="pull-right" id="pname">{{p_details.project_name}}</span></td>
+              <tr class="hlt">
+              <td style="text-align:left;" >Project Name:</td>
+                <td id="pname" style="text-align:right;">{{p_details.project_name}}</td>
               </tr>
-              <tr class="hlt" >
-                  <td style="text-align:left; width:100%">Description: <span class="pull-right" style="text-align:left;" id="pdesc">{{p_details.description}}</span></td>
+              <tr class="hlt">
+              <td style="text-align:left; color:black;">Description:</td>
+                  <td id="pdesc" style="text-align:right;">{{p_details.description}}</td>
               </tr>
-              <tr class="hlt" >
-                  <td style="text-align:left; color:black;">Address:  <span class="pull-right" id="padd">{{p_details.address}}</span></td>
+              <tr class="hlt">
+              <td style="text-align:left; color:black;">Address:</td>
+                  <td id="padd" style="text-align:right;">{{p_details.address}}</td>
               </tr>
-            <tr class="hlt" >
-                <td style="text-align:left; color:black;">Contact:  <span class="pull-right" id="pnum">{{p_details.contact_number}}</span></td>
+            <tr class="hlt">
+              <td style="text-align:left; color:black;">Contact:</td>
+                <td  id="pnum" style="text-align:right;">{{p_details.contact_number}}</td>
             </tr>
-              <tr class="hlt" >
+              <tr class="hlt">
               <td style="text-align:left; color:black;">Top Highlights: </td>
-                    <ul id="hlight" class="pull-right">
+                  <td  style="text-align:right;"><ul id="hlight">
                       {% for h in hi %}
-                      {% if forloop.counter < 6 %}
-                      <li class="hi">{{h}}</li>
+                      {% if forloop.counter < 6 and h != "undefined" %}
+                      <li class="hi">{{hi}}</li>
                       {% endif %}
                       {% endfor %}
-                    </ul>
+                  </ul></td>
             </tr>
+
               </tbody>
             </table>
           </div>
@@ -633,7 +638,22 @@ function interpolateColors(color1, color2, steps) {
         $('#pdesc').text(resp.p_details.description);
         $('#padd').text(resp.p_details.address);
         $('#image').remove();
+        if ((resp.hi !== '') || (resp.is !== '')){
+          for (i=0;i<4;i++){
+                if (resp.hi[i] !== undefined){
+                $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
+                }
+          }
+          }
+            $('#kd').show();
+            for (i=0;i<resp.m.length;i++){
+            $hi = '';
+            $is = '';
+            if (resp.hi[i]!==undefined){$hi=resp.hi[i];}
+            if (resp.is[i]!==undefined){$is=resp.is[i];}
+            $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+$hi+'</td><td>'+$is+'</td></tr>');
 
+          }
          $('#image-container').append('<div id="image" class="col-lg-12 parallax" style="background-image: url(\'/media/'+resp.p_details.image+'\');"></div>');
         $('#pnum').text(resp.p_details.contact_number);
             $('#serverstatus01').remove();
@@ -687,7 +707,22 @@ function interpolateColors(color1, color2, steps) {
         $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
           $('#barchart').remove();
+        if ((resp.hi !== '') || (resp.is !== '')){
+          for (i=0;i<4;i++){
+                if (resp.hi[i] !== undefined){
+                $('#hlight').append('<li class="hi">'+resp.hi[i]+'</li>');
+                }
+          }
+          }
+            $('#kd').show();
+            for (i=0;i<resp.m.length;i++){
+            $hi = '';
+            $is = '';
+            if (resp.hi[i]!==undefined){$hi=resp.hi[i];}
+            if (resp.is[i]!==undefined){$is=resp.is[i];}
+            $('.hvi').append('<tr class="hi" style="height:100%;"><td >'+$hi+'</td><td>'+$is+'</td></tr>');
 
+          }
          $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
           chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 

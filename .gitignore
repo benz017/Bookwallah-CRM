@@ -4,8 +4,20 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+Bookwallah/media/avatar
+Bookwallah/media/documents
+Bookwallah/media/main
+Bookwallah/media/kid
+Bookwallah/media/project
+Bookwallah/media/session
+Bookwallah/media/testimonial
+Bookwallah/static
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+celerybeat.pid
 # C extensions
+
 *.so
 .idea/
 # Distribution / packaging

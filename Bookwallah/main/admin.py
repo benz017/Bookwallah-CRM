@@ -16,7 +16,6 @@ from django.conf.locale.es import formats as es_formats
 es_formats.DATETIME_FORMAT = "d M Y H:i:s"
 
 
-
 class UserResource(resources.ModelResource):
     def before_import_row(self, row, **kwargs):
         from django.apps import apps
@@ -28,11 +27,16 @@ class UserResource(resources.ModelResource):
         name = list(Group.objects.all().values_list('name', flat=True))
         name = [x.lower() for x in name]
         grp = row['groups']
-        row['groups'] = ids[name.index(grp.lower())]
+        if grp.lower() in name:
+            index = name.index(grp.lower())
+            row['groups'] = ids[index]
+        elif grp != "":
+            row['groups'] = int(grp)
+
 
     class Meta:
         model = User
-        exclude = ('password','last_login','date_joined','user_permissions')
+        exclude = ('last_login','user_permissions')
 
     def after_save_instance(self, instance: User, using_transactions: bool, dry_run: bool,):
         from django.apps import apps
@@ -52,8 +56,10 @@ class UserResource(resources.ModelResource):
 class UserAdmin(BaseAdmin, ImportExportModelAdmin):
     resource_class = UserResource
 
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+
 
 class GroupResource(resources.ModelResource):
     class Meta:

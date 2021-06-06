@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from celery.schedules import crontab
+from django.conf.locale.en import formats as en_formats
+
+en_formats.DATETIME_FORMAT = "d M Y H:i:s"
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -144,14 +148,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
+DATE_FORMAT = '%d-%m-%Y'
+DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
+
+DATE_INPUT_FORMATS = [
+    '%d-%m-%Y'
+]
+
+DATETIME_INPUT_FORMATS = [
+    '%d-%m-%Y %H:%M:%S'
+]
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/Chicago'
-
-USE_I18N = True
-
-USE_L10N = True
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_TZ = False
 

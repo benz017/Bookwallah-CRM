@@ -519,7 +519,7 @@ def proj_dashboard(request):
             new_data = dashboard.session_prog(new_data, con, f, year)
             new_data = dashboard.monthly_session(new_data, con, f, year)
             new_data = dashboard.volunteer_list(new_data, f)
-            new_data = dashboard.highlight(new_data, f, year)
+            new_data = dashboard.highlight(new_data, f, year,field)
             new_data = dashboard.session_galery(new_data, f)
             json_stuff = json.dumps(new_data)
             print(new_data)
@@ -878,7 +878,7 @@ def profile(request):
     data['roles'] = list(Role.objects.all().values_list('role',flat=True))
     data['total_ses'] = attendance.count()
     data['cmp_task'] = Task.objects.filter(user=request.user.profile,status="Done").count()
-    print(data['roles'])
+    print("Profile")
     c = 3
     for k, v in json.loads(profile)[0].items():
         if k not in ["signup_confirmation", "id", "user_id", "image"]:
@@ -894,9 +894,10 @@ def profile(request):
                 c += 1
     percent = int((c / 19) * 100)
     data["team_str"] = dashboard.team_strength(request.user.profile)
-    data["city"] = request.user.profile.city or  "N/A"
+    data["city"] = request.user.profile.city or "N/A"
     data["curr_date"] = datetime.today().strftime('%a %b %d, %Y')
     data["curr_time"] = datetime.today().strftime('%I:%M %p')
+    data["joining_date"] = request.user.date_joined.strftime('%Y-%m-%d')
     data['strength'] = percent
     data['first_name'] = request.user.first_name
     data['last_name'] = request.user.last_name
@@ -911,12 +912,12 @@ def profile(request):
     data["instagram"] = request.user.profile.instagram
     task_list = Task.objects.filter(user=request.user.profile, status="Pending").order_by('date')
     data['tasks'] = task_list
-    print(task_list)
+    form = PasswordChangeCustomForm(request.user)
+    data['form'] = form
+    print(data)
     if request.method == "POST":
         form = PasswordChangeCustomForm(request.user,data=request.POST)
         data['form'] = form
-
-
         if 'imgbase64' in request.POST:
             imgdata = request.POST.get('imgbase64')
             print(imgdata)
@@ -1041,9 +1042,6 @@ def profile(request):
                        zoom=zoom, skype=skype, linkedin=linkedin, facebook=facebook,twitter=twitter,
                        instagram=instagram)
         return redirect('profile')
-    else:
-        form = PasswordChangeCustomForm(request.user)
-        data['form'] = form
     return render(request, 'profile/profile.html', context=data)
 
 
