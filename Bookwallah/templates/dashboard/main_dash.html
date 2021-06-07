@@ -935,10 +935,9 @@ $("#f_m").val({{config}});
         {
             $("#year").append('<option class="year" value=' + value + '>' + value + '</option>');
         });
-    title = [false,""];
-    var month_list = {{m_list|safe}};
-    title = [false,""];
-    var month_list = {{m_list|safe}};
+    $title = [false,""];
+    $month_list = {{m_list|safe}};
+
     $("#setf_m").click(function(){
       $s_val= $("#f_m").children("option:selected").val();
       $s_text= $("#f_m").children("option:selected").text();
@@ -966,13 +965,13 @@ $("#f_m").val({{config}});
     groupedbar("schart1",{{nps_label}},{{nps_data|safe}},0);
     groupedbar("schart2",{{cp_label|safe}},{{cp_data|safe}},0);
     groupedbar("schart3",{{sb_label|safe}},{{sb_data|safe}},{{sb_data|list_min}});
-    //chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},title,'pie','exp_chart');
-    chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],title,'doughnut','serverstatus02');
-    chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
-    chart({{ses_p_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{ses_p_data|length}}),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
-    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label|safe}},title,'doughnut','serverstatus03');
-    //chart({{m_exp}},"",month_list,[''],title,'line','serverstatus05');
-    chart({{months}},"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+    //chart({{e_sum}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{e_sum|length}}),[''],{{ex_type|safe}},$title,'pie','exp_chart');
+    chart({{c_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{c_att_data|length}}),[''],['Attended','Not-Attended'],$title,'doughnut','serverstatus02');
+    chart({{vol_att_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{vol_att_data|length}}),[''],["Attended","Not-Attended"],$title,'doughnut','serverstatus01');
+    chart({{ses_p_data}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{ses_p_data|length}}),[''],["Completed","Upcoming"],$title,'doughnut','serverstatus04');
+    chart({{k_stat}},interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",{{k_stat|length}}),[''],{{k_stat_label|safe}},$title,'doughnut','serverstatus03');
+    //chart({{m_exp}},"",$month_list,[''],$title,'line','serverstatus05');
+    chart({{months}},"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
     chart({{k_years}},"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",[true,"Number of Years"],'bar','barchart2');
 
     $("#field").change(function(){
@@ -1007,7 +1006,12 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
-
+        $('#barchart').remove();
+           $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
+          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+        $('#serverstatus03').remove();
+         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
+         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,$title,'doughnut','serverstatus03');
         nps_data = JSON.parse(resp.nps_data);
         $('#schart1').remove();
             $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
@@ -1041,22 +1045,18 @@ $("#f_m").val({{config}});
         $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
         $('#graph4').append('<canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>');
          $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
-        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
-        chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
-        chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
+        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],$title,'doughnut','serverstatus02');
+        chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],$title,'doughnut','serverstatus01');
+        chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],$title,'doughnut','serverstatus04');
         $('#vol_att').text(resp.vol_att+"%");
         $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
         $('#t_exp').text('$'+resp.t_exp);
         //$('#serverstatus05').remove();
         //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
-         //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
-         $('#serverstatus03').remove();
-         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
-         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],JSON.parse(resp.k_stat_label),title,'doughnut','serverstatus03');
-         //$('#exp_chart').remove();
+         //chart(resp.m_exp,[''],$month_list,[''],$title,'line','serverstatus05');        //$('#exp_chart').remove();
         // $('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
-        // chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+        // chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),$title,'pie','exp_chart');
           $('#ccon').text(resp.curr_con);
           $('#ctime').text(resp.curr_date);
           $('$cdate').text(resp.curr_time);
@@ -1064,14 +1064,9 @@ $("#f_m").val({{config}});
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);
           $('#no_k').text(resp.no_k);
-           $('#barchart').remove();
-
-         $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
-          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
-
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');
-          chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+          chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",$title,'bar','barchart2');
           $('.desc').remove();
 
           $('#barchart2').remove();
@@ -1096,6 +1091,13 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
+        $('#serverstatus03').remove();
+         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
+         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],resp.k_stat_label,$title,'doughnut','serverstatus03');
+        $('#barchart').remove();
+           $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
+          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+
         nps_data = JSON.parse(resp.nps_data);
         $('#schart1').remove();
           $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');
@@ -1127,22 +1129,19 @@ $("#f_m").val({{config}});
         $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');
         $('#graph4').append('<canvas id="serverstatus04" height="200" width="300" style="margin:0 auto;"></canvas>');
         $('#graph5').append('<canvas id="serverstatus02" height="200" width="400" style="margin:0 auto;"></canvas>');
-        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus02');
-        chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],title,'doughnut','serverstatus01');
-        chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],title,'doughnut','serverstatus04');
+        chart(resp.c_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.c_att_data.length),[''],["Attended","Not-Attended"],$title,'doughnut','serverstatus02');
+        chart(resp.vol_att_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.vol_att_data.length),[''],["Attended","Not-Attended"],$title,'doughnut','serverstatus01');
+        chart(resp.ses_p_data,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.ses_p_data.length),[''],["Completed","Upcoming"],$title,'doughnut','serverstatus04');
         $('#vol_att').text(resp.vol_att+"%");
         $('#c_att').text(resp.c_att+"%");
         $('#ses_p').text(resp.ses_p+"%");
         $('#t_exp').text('$'+resp.t_exp);
         //$('#serverstatus05').remove();
         //$('#graph6').append('<canvas id="serverstatus05" height="200" width="350" style="margin:0 auto;"></canvas>')
-         //chart(resp.m_exp,[''],month_list,[''],title,'line','serverstatus05');
-         $('#serverstatus03').remove();
-         $('#graph3').append('<canvas id="serverstatus03" height="500" width="500" style="margin:0 auto;"></canvas>');
-         chart(resp.k_stat,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.k_stat.length),[''],JSON.parse(resp.k_stat_label),title,'doughnut','serverstatus03');
+         //chart(resp.m_exp,[''],$month_list,[''],$title,'line','serverstatus05');
          //$('#exp_chart').remove();
          //$('#graph7').append('<canvas id="exp_chart" height="200" width="400" style="margin:0 auto;"></canvas>');
-         //chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),title,'pie','exp_chart');
+         //chart(resp.e_sum,interpolateColors("rgb(18, 176, 226)", "rgb(52, 73, 94)",resp.e_sum.length),[''],JSON.parse(resp.ex_type),$title,'pie','exp_chart');
           $('#ccon').text(resp.curr_con);
           $('#ctime').text(resp.curr_date);
           $('$cdate').text(resp.curr_time);
@@ -1150,13 +1149,10 @@ $("#f_m").val({{config}});
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);
           $('#no_k').text(resp.no_k);
-           $('#barchart').remove();
-           $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
-          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');
-          chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",title,'bar','barchart2');
+          chart(resp.k_years,"rgba(18,176,226,0.7)",[1,2,3,4,5],"No. of Kids",$title,'bar','barchart2');
           $('.desc').remove();
 
           for (i=0;i<Object.keys(resp.v_list).length;i++){

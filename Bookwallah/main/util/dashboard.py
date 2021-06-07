@@ -1,6 +1,7 @@
 from ..models import *
 import math
 import numpy as np
+from collections import Counter
 from django.contrib.auth.models import User,Group
 from datetime import date,datetime,timezone,timedelta
 from django.db.models import Sum,Count,Max
@@ -290,58 +291,66 @@ def no_of_kids(data,con,p=None,year=None):
     data['no_nk'] = nk
     return data
 
+def calculate_age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 def kid_stats(data,con,p=None,year=None):
     age_group = ["<5","5-8", "8-12","12-15","15-18"]
     c1 = c2 = c3 = c4 = c5 = 0
     k_stat = {}
     if p is None:
-        c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
-        print(111,c,list(c.values_list('age', flat=True)))
-        for obj in list(c):
-            if obj["age"] == None:
-                continue
-            elif obj['age'] < 5:
-                c1 += obj["count"]
+        dob = Kid.objects.values('dob').order_by('-dob')
+        c = [calculate_age(d) for d in list(dob)]
+        print(c)
+        c = Counter(c)
+        #c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
+        print(111,c)
+        for k,v in c.items():
+            if k < 5:
+                c1 += v
                 k_stat[age_group[0]] = c1
-            elif obj['age'] >= 5 and obj["age"] < 8:
-                c2 += obj["count"]
+            elif k >= 5 and k < 8:
+                c2 += v
                 k_stat[age_group[1]] = c2
-            elif obj['age'] >= 8 and obj["age"] < 12:
-                c3 += obj["count"]
+            elif k >= 8 and k < 12:
+                c3 += v
                 k_stat[age_group[2]] = c3
-            elif obj['age'] >= 12 and obj["age"] < 15:
-                c4 += obj["count"]
+            elif k >= 12 and k < 15:
+                c4 += v
                 k_stat[age_group[3]] = c4
-            elif obj['age'] >= 15 and obj["age"] < 18:
-                c5 += obj["count"]
+            elif k >= 15 and k < 18:
+                c5 += v
                 k_stat[age_group[4]] = c5
-            print(k_stat,obj["age"],obj["count"],k_stat[age_group[1]])
+            #print(k_stat,k,v,k_stat[age_group[1]])
         data['k_m'] = Kid.objects.filter(gender='Male').count()
         data['k_f'] = Kid.objects.filter(gender='Female').count()
     else:
-        c = Kid.objects.filter(project__in=p).values('age').order_by('age').annotate(count=Count('age'))
 
-        for obj in list(c):
-            if obj["age"] == None:
-                continue
-            elif obj['age'] < 5:
-                c1 +=obj["count"]
+        dob = Kid.objects.filter(project__in=p).values('dob').order_by('-dob')
+        print(list(dob))
+        c = [calculate_age(d["dob"]) for d in list(dob) if d["dob"] != None]
+        print(c)
+        c = Counter(c)
+        # c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
+        print(111, Counter(c))
+        for k,v in c.items():
+            if k < 5:
+                c1 += v
                 k_stat[age_group[0]] = c1
-            elif obj['age'] >= 5 and obj["age"] < 8:
-                c2 += obj["count"]
+            elif k >= 5 and k < 8:
+                c2 += v
                 k_stat[age_group[1]] = c2
-            elif obj['age'] >= 8 and obj["age"] < 12:
-                c3 += obj["count"]
+            elif k >= 8 and k < 12:
+                c3 += v
                 k_stat[age_group[2]] = c3
-            elif obj['age'] >= 12 and obj["age"] < 15:
-                c4 += obj["count"]
+            elif k >= 12 and k < 15:
+                c4 += v
                 k_stat[age_group[3]] = c4
-            elif obj['age'] >= 15 and obj["age"] < 18:
-                c5 += obj["count"]
+            elif k >= 15 and k < 18:
+                c5 += v
                 k_stat[age_group[4]] = c5
-            print(k_stat, obj["age"], obj["count"],k_stat[age_group[1]])
-        print(111, c, list(c.values_list('age', flat=True)))
+            #print(k_stat, k, v, k_stat[age_group[1]])
         data['k_m'] = Kid.objects.filter(project__in=p,gender='Male').count()
         data['k_f'] = Kid.objects.filter(project__in=p,gender='Female').count()
     data['k_stat'] = []

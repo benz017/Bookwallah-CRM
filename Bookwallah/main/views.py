@@ -91,8 +91,7 @@ def main_dashboard(request):
         if 'fiscalv' in request.POST:
             fv = request.POST.get('fiscalv')
             ft = request.POST.get('fiscalt')
-            config = AppConfig.objects.first()
-            config.update(fiscal_month=fv)
+            config = AppConfig.objects.all().order_by('-pk').update(fiscal_month=fv)
         elif 'select' in request.POST:
             sel = request.POST.get('select')
             print(sel)
