@@ -50,7 +50,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="Bookwallah"/></a>
       <!--logo end-->
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
@@ -164,14 +164,13 @@
                     <div class="col-md-4 col-sm-4 " >
                         <select id="field" name="field"  class="form-control" style="text-align:center; padding: .375rem .75rem;">
                             <option value="0">Filter with...</option>
-                            <option value="1">All</option>
-                            <option value="2">Project</option>
-                            <option value="3">Chapter</option>
-                            <option value="4">Country</option>
+                            <option value="1">Project</option>
+                            <option value="2">Chapter</option>
+                            <option value="3">Country</option>
                         </select>
                     </div>
                         <div class="col-md-4 col-sm-4 " >
-                        <select id="value" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;">
+                        <select id="value" name="value" class="form-control" style="text-align:center; padding: .375rem .75rem;" disabled>
                           <option class="filter_value" value="">Select Value...</option>
                           {% for c in country_list %}
                           <option class="filter_value" value="{{c}}">{{c}}</option>
@@ -683,7 +682,7 @@ function showSlides() {
   <script src="{% static 'lib/google-maps/data/points.js' %}"></script>
   <script>
     $(function () {
-    $('#field').val('4');
+    $('#field').val('3');
     $('#value').val('India');
 });
 </script>
@@ -706,7 +705,7 @@ function showSlides() {
     }).Load();
     var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
-        title: 'Welcome to BookWallah!',
+        title: 'Welcome to Bookwallah!',
         // (string | mandatory) the text inside the notification
         text: 'Have a Good Day!!',
         // (string | optional) the image to display on the left
@@ -983,14 +982,16 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{select: $selected},
         success: function(resp){
+        $("#value").prop('disabled', true);
         $(".filter_value").remove();
-            $value_list = resp.value;
-           $("#value").attr('disabled', false);
+        $value_list = resp.value;
+
            $("#value").append('<option class="filter_value" value="0">Select value..</option>');
         $.each($value_list,function(index, value)
         {
             $("#value").append('<option class="filter_value" value=' + (index+1) + '>' + value + '</option>');
         });
+        $("#value").attr('disabled', false);
         }
         });
     });
@@ -1006,6 +1007,7 @@ $("#f_m").val({{config}});
         url: "{% url 'main_dashboard' %}",
         data:{value: $value, field:$field, year:$year},
         success: function(resp){
+
         nps_data = JSON.parse(resp.nps_data);
         $('#schart1').remove();
             $('#sgraph1').append('<canvas id="schart1" height="200" width="350" style="margin:0 auto;margin-top:5px;"></canvas>');

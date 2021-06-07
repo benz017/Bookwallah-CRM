@@ -135,6 +135,8 @@ def main_dashboard(request):
             new_data = dashboard.nps_score(new_data, f,year)
             new_data = dashboard.child_psychology(new_data, f,year)
             new_data = dashboard.social_behavior(new_data, f,year)
+            new_data = dashboard.kid_bday(new_data,f)
+            new_data = dashboard.mem_ani(new_data,f)
             json_stuff = json.dumps(new_data)
             print(new_data)
             return HttpResponse(json_stuff, content_type="application/json")
@@ -459,12 +461,12 @@ def proj_dashboard(request):
         c = Project.objects.filter(pk=pid.values_list('project', flat=True)[0])
     elif dp is not None:
         c = Project.objects.filter(pk=dp)
-        data["def_field"] = "2"
+        data["def_field"] = "1"
         data["def_value"] = c.values_list('project_name',flat=True)[0]
         data["def_list"] = list(set(Project.objects.all().values_list('project_name', flat=True)))
     else:
         c = Project.objects.filter(country='India')
-        data["def_field"] = "4"
+        data["def_field"] = "3"
         data["def_value"] = 'India'
         data["def_list"] = list(set(Project.objects.all().values_list('country', flat=True)))
     data = dashboard.monthly_session(data, con, c)

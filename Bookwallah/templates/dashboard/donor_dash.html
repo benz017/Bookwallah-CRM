@@ -52,7 +52,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="BookWallah"/></a>
+      <a href="{% url 'profile' %}" class="logo" style="margin-top:5px;"><img src="{% static 'img/logo.png' %}" alt="Bookwallah"/></a>
       <!--logo end-->
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
@@ -606,7 +606,7 @@
     }).Load();
     var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
-        title: 'Welcome to BookWallah!',
+        title: 'Welcome to Bookwallah!',
         // (string | mandatory) the text inside the notification
         text: 'Have a Good Day!!',
         // (string | optional) the image to display on the left
@@ -651,7 +651,7 @@
 
       var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
-        title: 'Welcome to BookWallah!',
+        title: 'Welcome to Bookwallah!',
         // (string | mandatory) the text inside the notification
         text: 'Have a Good Day!!',
         // (string | optional) the image to display on the left
@@ -1084,18 +1084,20 @@ function interpolateColors(color1, color2, steps) {
         url: "{% url 'donor_dashboard' %}",
         data:{select: $selected},
         success: function(resp){
+        $("#value").prop('disabled', true);
         if ($selected === 'All'){
         $('#barchart2').remove();
         $('#graph3').append('<canvas id="barchart2" height="400" width="550" style="margin:0 auto;"></canvas>');
         chart(resp.d_list,"rgba(18,176,226,0.7)",resp.dy_list,"Amount of Donation",[true,"Donations (by Year)"],'bar','barchart2');
         }
            $value_list = resp.value;
-           $("#value").attr('disabled', false);
+
            $("#value").append('<option class="filter_value" value="0">Select value..</option>');
         $.each($value_list,function(index, value)
         {
             $("#value").append('<option class="filter_value" value=' + (index+1) + '>' + value + '</option>');
         });
+        $("#value").attr('disabled', false);
        }
       });
         });

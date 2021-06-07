@@ -330,12 +330,12 @@ class Kid_Picture(models.Model):
 def create_kid_pic_obj(sender, **kwargs):
     print(kwargs)
     if kwargs['created']:
-        print(kwargs['instance'].image)
+
         kp = Kid_Picture.objects.create(kid=kwargs['instance'],image=kwargs['instance'].image)
         print(kp)
     else:
-
-        obj = Kid_Picture.objects.filter(kid=kwargs['instance'],image__exact='')[0]
+        print(kwargs['instance'])
+        obj = Kid_Picture.objects.filter(kid=kwargs['instance'])[0]
         setattr(obj, 'image', kwargs['instance'].image)
         obj.save()
 

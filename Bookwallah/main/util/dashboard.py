@@ -14,6 +14,9 @@ import json
 from django.core import serializers
 from django.conf import settings
 from collections import defaultdict
+import operator
+from django.db.models import Q
+import functools
 today = date.today()
 now =datetime.now()
 
@@ -517,39 +520,81 @@ def kid_session_history(data,k,year=None):
     data['ksh'] = dict(sh)
     return data
 
-def kid_bday(data):
+
+def date_range_query(days,field):
+
+    now = datetime.now()
+    then = now + timedelta(days)
+
+    # Build the list of month/day tuples.
+    monthdays = [(now.month, now.day)]
+    while now <= then:
+        monthdays.append((now.month, now.day))
+        now += timedelta(days=1)
+
+    # Tranform each into queryset keyword args.
+    monthdays = (dict(zip((field+"__month", field+"__day"), t))
+                 for t in monthdays)
+
+
+    # Compose the djano.db.models.Q objects together for a single query.
+    query = functools.reduce(operator.or_, (Q(**d) for d in monthdays))
+
+    # Run the query.
+    return query
+
+
+def kid_bday(data,p=None):
     try:
-        b = Kid.objects.filter(dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        if p is None:
+            b = Kid.objects.filter(date_range_query(30, "dob")).annotate(
+                fullname=Concat('first_name', Value(' '), 'last_name'))
+        else:
+            b = Kid.objects.filter(date_range_query(30, "dob"), project__in=p).annotate(
+                fullname=Concat('first_name', Value(' '), 'last_name'))
+        print(b)
         dl = b.values_list('dob',flat=True)
         name = b.values_list('fullname',flat=True)
         av = b.values_list('image',flat=True)
         d = dict(zip(list(name),list(dl)))
         bday_dict = defaultdict(list)
         for a in list(av):
-            if a == "" and b:
+            if a == "" :
                 for k,v in d.items():
                     bday_dict[k].append(get_avatar_data_url(k))
                     bday_dict[k].append(datetime.strftime(v,"%d %b"))
+            else:
+                for k, v in d.items():
+                    bday_dict[k].append(settings.MEDIA_URL + a)
+                    bday_dict[k].append(datetime.strftime(v, "%d %b"))
         data['k_bday'] = dict(bday_dict)
     except Exception as ex:
         print(str(ex))
     return data
 
 
-
-def mem_ani(data):
+def mem_ani(data,p=None):
     try:
-        b = Kid.objects.filter(date__year__lte=today.year, date__month=today.month,date__day__gte=today.day).annotate(fullname=Concat('first_name', Value(' '), 'last_name'))
+        if p is None:
+            b = Kid.objects.filter(date_range_query(30, "date")).annotate(
+                fullname=Concat('first_name', Value(' '), 'last_name'))
+        else:
+            b = Kid.objects.filter(date_range_query(30, "date"), project__in=p).annotate(
+                fullname=Concat('first_name', Value(' '), 'last_name'))
         dl = b.values_list('date', flat=True)
         name = b.values_list('fullname', flat=True)
         av = b.values_list('image', flat=True)
         d = dict(zip(list(name), list(dl)))
         mem_list = defaultdict(list)
         for a in list(av):
-            if a == "" and b:
+            if a == "":
                 for k,v in d.items():
                     mem_list[k].append(get_avatar_data_url(k))
                     mem_list[k].append(datetime.strftime(v,"%d %b"))
+            else:
+                for k, v in d.items():
+                    mem_list[k].append(settings.MEDIA_URL + a)
+                    mem_list[k].append(datetime.strftime(v, "%d %b"))
         data['k_mem'] = dict(mem_list)
     except Exception as ex:
         print(str(ex))
@@ -581,12 +626,14 @@ def volunteer_list(data,p=None,year=None):
     return data
 
 
+
 def vol_bday(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
-        b = Profile.objects.filter(user__in=uid,dob__day__gte=today.day,dob__month=today.month).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+        b = Profile.objects.filter(date_range_query(30,"dob"),user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
     else:
-        b = Profile.objects.filter(project__in=p,user__in=uid, dob__day__gte=today.day, dob__month=today.month).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+        b = Profile.objects.filter(date_range_query(30,"dob"),project__in=p,user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+    print(b)
     dl = b.values_list('dob',flat=True)
     name = b.values_list('fullname',flat=True)
     av = b.values_list('image',flat=True)
@@ -608,9 +655,9 @@ def vol_bday(data,p=None):
 def vol_ani(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
-        b = Profile.objects.filter(user__in=uid, user__date_joined__month=today.month,user__date_joined__day__gte=today.day).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+        b = Profile.objects.filter(date_range_query(30, "user__date_joined"),user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
     else:
-        b = Profile.objects.filter(project__in=p,user__in=uid, user__date_joined__month=today.month,user__date_joined__day__gte=today.day).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
+        b = Profile.objects.filter(date_range_query(30, "user__date_joined"),project__in=p,user__in=uid).annotate(fullname=Concat('user__first_name', Value(' '), 'user__last_name'))
     dl = b.values_list('user__date_joined', flat=True)
     name = b.values_list('fullname', flat=True)
     av = b.values_list('image', flat=True)
