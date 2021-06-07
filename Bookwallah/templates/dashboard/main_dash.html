@@ -1064,10 +1064,10 @@ $("#f_m").val({{config}});
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);
           $('#no_k').text(resp.no_k);
-          $('#barchart').remove();
+           $('#barchart').remove();
 
          $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
-          chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');
@@ -1150,9 +1150,9 @@ $("#f_m").val({{config}});
           $('#female').text(resp.k_f);
           $('#no_nk').text(resp.no_nk);
           $('#no_k').text(resp.no_k);
-          $('#barchart').remove();
-          $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
-          chart(resp.months,"rgba(18,176,226,0.7)",month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
+           $('#barchart').remove();
+           $('#graph').append('<canvas id="barchart" height="500" width="1200" style="margin:0 auto;"></canvas>');
+          chart(resp.months,"rgba(18,176,226,0.7)",$month_list,"No. of Sessions",[true,"Number of Sessions (per month)"],'bar','barchart');
 
           $('#barchart2').remove();
           $('#graph2').append('<canvas id="barchart2" height="500" width="550" style="margin:25px auto 0px;"></canvas>');

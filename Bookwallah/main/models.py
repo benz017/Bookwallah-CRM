@@ -358,7 +358,7 @@ def create_session_pic_obj(sender, **kwargs):
         print(kwargs['instance'].image)
         kp = Session_Picture.objects.create(session=kwargs['instance'],image=kwargs['instance'].image)
     else:
-        obj = Session_Picture.objects.filter(session=kwargs['instance'],image__exact='')[0]
+        obj = Session_Picture.objects.filter(session=kwargs['instance'])[0]
         setattr(obj, 'image', kwargs['instance'].image)
         obj.save()
 
