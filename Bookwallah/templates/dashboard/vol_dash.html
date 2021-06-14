@@ -434,6 +434,7 @@
         $data = JSON.parse(resp.data);
         $('#av').append('<div class="profile-pic centered donor" ><p><img width="128px" height="128px" src="'+resp.img+'" class="img-circle"></p></div>');
         $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Full Name:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.fname+'</div></div>');
+
         Object.entries($data[0].fields).forEach(function([key, value]){
             if (key === 'role'){
             $('#stage').append('<h3 class="donor" style="color:#34495e;">Role</h3><div class="btn-group donor"> <button type="button" class="btn btn-theme03">'+value+'</button></div>');
@@ -472,6 +473,7 @@
             $('#details').append('<div class="row donor" ><div class="col-sm-5 text-capitalize key" style="color:rgba(47, 50, 58, 0.8);">'+key.replaceAll(/_/g," ")+':</div><div class="col-sm-7 text-right value"  style="color:#34495e;">'+value+'</div></div>');
             }
         });
+         $('#details').append('<div class="row donor"><div class="col-sm-4" style="color:rgba(47, 50, 58, 0.8);">Joining Date:</div><div class="col-sm-8 text-right" style="color:#34495e;">'+resp.joining_date+'</div></div>');
         $('.w1').show();
         $('#serverstatus01').remove();
         $('#graph1').append('<canvas id="serverstatus01" height="200" width="400" style="margin:0 auto;"></canvas>');

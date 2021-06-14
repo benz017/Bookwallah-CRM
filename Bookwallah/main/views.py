@@ -234,7 +234,7 @@ def vol_dashboard(request):
             value = request.POST.get('in_value')
             vol = Profile.objects.filter(user__first_name=value.split()[0], user__last_name=value.split()[1],
                                          user__groups__name="Volunteer")
-
+            jd = vol.values_list('user__date_joined',flat=True)[0].strftime("%d-%m-%Y")
             data = serializers.serialize('json', list(vol))
             vol_att,vol_att_data = dashboard.indi_vol_att(vol)
             if json.loads(data)[0]["fields"]["image"] == "":
@@ -242,7 +242,7 @@ def vol_dashboard(request):
             else:
                 img = settings.MEDIA_URL + json.loads(data)[0]["fields"]["image"]
             print(img)
-            json_stuff = json.dumps({'fname': value, 'data': data,'img':img,'vol_att':vol_att,'vol_att_data':vol_att_data,'name':value.split()[0].upper()})
+            json_stuff = json.dumps({'fname': value, 'data': data,'img':img,'vol_att':vol_att,'vol_att_data':vol_att_data,'name':value.split()[0].upper(),'joining_date':jd})
             return HttpResponse(json_stuff, content_type="application/json")
         elif 'value' in request.POST:
             new_data = {}

@@ -300,8 +300,9 @@ def kid_stats(data,con,p=None,year=None):
     c1 = c2 = c3 = c4 = c5 = 0
     k_stat = {}
     if p is None:
-        dob = Kid.objects.values('dob').order_by('-dob')
-        c = [calculate_age(d) for d in list(dob)]
+        dob = Kid.objects.values_list('dob',flat=True).order_by('-dob')
+        print(list(dob))
+        c = [calculate_age(d) for d in list(dob) if d != None]
         print(c)
         c = Counter(c)
         #c = Kid.objects.values('age').order_by('age').annotate(count=Count('age'))
