@@ -378,10 +378,11 @@ def kid_years(data,con,p=None,year=None):
 
 def vol_role(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
+    print(Profile.objects.exclude(role__exact='').filter(user__in=uid))
     if p is None:
-        c = Profile.objects.filter(user__in=uid).values('role').order_by('role').annotate(count=Count('role'))
+        c = Profile.objects.filter(user__in=uid,role__isnull=False).exclude(role__exact='').values('role').order_by('role').annotate(count=Count('role'))
     else:
-        c = Profile.objects.filter(project__in=p,user__in=uid).values('role').order_by('role').annotate(count=Count('role'))
+        c = Profile.objects.filter(project__in=p,user__in=uid,role__isnull=False).exclude(role__exact='').values('role').order_by('role').annotate(count=Count('role'))
     data['v_role'] = list(c.values_list('count',flat=True))
     data['v_role_label'] = list(c.values_list('role', flat=True))
     return data
@@ -390,9 +391,9 @@ def vol_role(data,p=None):
 def no_story_teller(data,p=None):
     uid = User.objects.filter(groups__name="Volunteer")
     if p is None:
-        c = Profile.objects.filter(user__in=uid,role="Storyteller").values('project__project_name').order_by('project').annotate(count=Count('role'))
+        c = Profile.objects.filter(user__in=uid,role="Storyteller").exclude(role__exact='').values('project__project_name').order_by('project').annotate(count=Count('role'))
     else:
-        c = Profile.objects.filter(user__in=uid, role="Storyteller").values('project__project_name').order_by(
+        c = Profile.objects.filter(user__in=uid, role="Storyteller").exclude(role__exact='').values('project__project_name').order_by(
             'project').annotate(count=Count('role'))
     print(uid,c)
     data['v_st'] = list(c.values_list('count',flat=True))
